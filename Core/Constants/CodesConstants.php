@@ -23,6 +23,7 @@ class CodesConstants
             8009 => 'username already exist',
             8010 => 'email already exist',
             8011 => 'password must be more than six characters',
+            8012 => 'this role already exist',
         ];
         return $code_array;
     }

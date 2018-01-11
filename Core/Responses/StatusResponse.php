@@ -43,10 +43,10 @@ class StatusResponse
         return $response;
     }
 
-    public function state_output_format($statuses, $code,$success_message = null, $data = null, $http_status_code, $media_type, array $headers = [])
+    public function state_output_format($statuses, $code, $message = null, $data = null, $http_status_code, $media_type, array $headers = [])
     {
         if ($media_type === StatusConstant::JSON_MEDIA_TYPE) {
-            return $this->response_error_or_success($statuses, $code,$success_message, $data, $http_status_code, $headers);
+            return $this->response_error_or_success($statuses, $code,$message, $data, $http_status_code, $headers);
         } else if ($media_type === StatusConstant::XML_MEDIA_TYPE) {
             // return xml format
         }

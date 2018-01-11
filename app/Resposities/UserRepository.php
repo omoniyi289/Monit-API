@@ -25,4 +25,10 @@ class UserRepository extends BaseRepository
         $user->save();
         return $user;
     }
+
+    public function update(User $user, array $data){
+        $user->fill($data);
+        $user->save();
+        return $user;
+    }
 }

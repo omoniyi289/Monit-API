@@ -46,7 +46,21 @@ class UserService
         return $user;
     }
 
-    public function get_user_email($email)
+    public function update($user_id, array $data)
+    {
+        $user = $this->get_requested_user($user_id);
+        $this->database->beginTransaction();
+        try {
+            $this->user_repository->update($user, $data);
+        } catch (Exception $exception) {
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $user;
+    }
+
+    public function get_user_by_email($email)
     {
         return $this->user_repository->get_where("email", $email);
     }
@@ -54,6 +68,15 @@ class UserService
     public function get_user_by_username($username)
     {
         return $this->user_repository->get_where("username", $username);
+    }
+
+    private function get_requested_user($user_id, array $options = [])
+    {
+        return $this->user_repository->get_by_id($user_id, $options);
+    }
+
+    public function get_by_id($user_id, array $options = []){
+        return $this->get_requested_user($user_id);
     }
 
 }

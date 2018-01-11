@@ -10,7 +10,7 @@ namespace App\Requests;
 
 use Core\Requests\APIRequest;
 
-class CreatUserRequest extends APIRequest
+class CreateUserRequest extends APIRequest
 {
     public function authorize(){
         return true;

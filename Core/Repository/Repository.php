@@ -36,9 +36,9 @@ abstract class Repository
     }
 
     /*
-     * this create a our custom build with core
+     * this create  our custom build with core
      * it helps querying the db, it serves as
-     * a base query, mind apply_resouces_options
+     * a base query, mind you apply_resouces_options
      * are limit,includes,page,filter_groups,sort
      * this is parsed by the router
      * **/

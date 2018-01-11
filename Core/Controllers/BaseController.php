@@ -17,10 +17,10 @@ abstract class BaseController extends Controller
 {
     protected $defaults = [];
 
-    protected function response($statuses, $code, $success_message = null, $data, $status_code = 200, $media_type = "application/json", array $headers = [])
+    protected function response($statuses, $code, $message = null, $data, $status_code = 200, $media_type = "application/json", array $headers = [])
     {
         $response_with_status = new StatusResponse();
-        return $response_with_status->state_output_format($statuses, $code, $success_message, $data, $status_code, $media_type, $headers);
+        return $response_with_status->state_output_format($statuses, $code, $message, $data, $status_code, $media_type, $headers);
     }
 
     protected function parse_data($data, array $options, $key = null)
@@ -98,7 +98,7 @@ abstract class BaseController extends Controller
         $filter_groups = $this->parse_filter_groups($request->get('filter_groups', $this->defaults['filter_groups']));
         if ($page !== null && $limit === null) {
             $response = new StatusResponse();
-            return $response->state_output_format(0, 8005, null, 400,
+            return $response->state_output_format(0, 8005, null, null,400,
                 StatusConstant::JSON_MEDIA_TYPE);
         }
         return [

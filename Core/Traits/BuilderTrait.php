@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
  */
 /*
  * A base controller class that gives sorting,
- *  filtering, eager loading and pagination for your endpoints
+ *  filtering, eager loading and pagination for our endpoints
  * ***/
 
 trait BuilderTrait
