@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateRolesTable extends Migration
+class CreateCompaniesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,11 +16,16 @@ class CreateRolesTable extends Migration
     {
         DB::beginTransaction();
         try {
-            Schema::create('roles', function (Blueprint $table) {
+            Schema::create('companies', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
-                $table->boolean('active');
-                $table->string('role_type');
+                $table->string('email')->unique();
+                $table->string('registration_number', 6)->unique()->nullable();
+                $table->string('country');
+                $table->string('state');
+                $table->string('city');
+                $table->string('address');
+                $table->string('logo')->nullable();
                 $table->timestamps();
             });
         }catch (Exception $exception){
@@ -39,7 +44,7 @@ class CreateRolesTable extends Migration
     {
         DB::beginTransaction();
         try {
-            Schema::dropIfExists('roles');
+            Schema::dropIfExists('companies');
         }catch (Exception $exception){
             DB::rollBack();
             throw $exception;

@@ -11,13 +11,14 @@ namespace Core\Controllers;
 use Core\Constants\StatusConstant;
 use Core\Lib\Libtect;
 use Core\Responses\StatusResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
 abstract class BaseController extends Controller
 {
     protected $defaults = [];
 
-    protected function response($statuses, $code, $message = null, $data, $status_code = 200, $media_type = "application/json", array $headers = [])
+    protected function response($statuses, $code, $message = null, $data, $status_code = JsonResponse::HTTP_OK, $media_type = "application/json", array $headers = [])
     {
         $response_with_status = new StatusResponse();
         return $response_with_status->state_output_format($statuses, $code, $message, $data, $status_code, $media_type, $headers);

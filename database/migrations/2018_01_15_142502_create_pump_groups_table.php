@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-
-class CreateRolesTable extends Migration
+class CreatePumpGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,11 +15,12 @@ class CreateRolesTable extends Migration
     {
         DB::beginTransaction();
         try {
-            Schema::create('roles', function (Blueprint $table) {
+            Schema::create('pump_groups', function (Blueprint $table) {
                 $table->increments('id');
+                $table->string('code');
                 $table->string('name');
-                $table->boolean('active');
-                $table->string('role_type');
+                $table->integer('station_id');
+                $table->integer('company_id');
                 $table->timestamps();
             });
         }catch (Exception $exception){
@@ -32,18 +32,11 @@ class CreateRolesTable extends Migration
 
     /**
      * Reverse the migrations.
+     *
      * @return void
-     * @throws Exception
      */
     public function down()
     {
-        DB::beginTransaction();
-        try {
-            Schema::dropIfExists('roles');
-        }catch (Exception $exception){
-            DB::rollBack();
-            throw $exception;
-        }
-        DB::commit();
+        Schema::dropIfExists('pump_groups');
     }
 }

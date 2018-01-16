@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: e360
+ * User: funmiayinde
  * Date: 1/11/18
  * Time: 10:42 AM
  */
@@ -42,7 +42,6 @@ class RoleService
     public function get_role_by_name($name){
         return $this->role_repository->get_where("name",$name);
     }
-
     public function get_id($role_id, array $options = []){
         return $this->get_requested_role($role_id);
     }

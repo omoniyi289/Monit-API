@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-
-class CreateRolesTable extends Migration
+class CreateStationUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,11 +15,15 @@ class CreateRolesTable extends Migration
     {
         DB::beginTransaction();
         try {
-            Schema::create('roles', function (Blueprint $table) {
+            Schema::create('station_users', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('name');
-                $table->boolean('active');
-                $table->string('role_type');
+                $table->string('fullname');
+                $table->string('email')->unique();
+                $table->string('username')->unique();
+                $table->string('password')->nullable();
+                $table->boolean('is_password_reset');
+                $table->string('phone_number');
+                $table->integer('company_id');
                 $table->timestamps();
             });
         }catch (Exception $exception){
@@ -39,7 +42,7 @@ class CreateRolesTable extends Migration
     {
         DB::beginTransaction();
         try {
-            Schema::dropIfExists('roles');
+            Schema::dropIfExists('station_users');
         }catch (Exception $exception){
             DB::rollBack();
             throw $exception;

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: e360
+ * User: funmiayinde
  * Date: 1/10/18
  * Time: 11:46 AM
  */
@@ -10,7 +10,7 @@ namespace App\Requests;
 
 use Core\Requests\APIRequest;
 
-class CreateRoleRequest extends APIRequest
+class ApiRoleRequest extends APIRequest
 {
     public function authorize(){
         return true;
@@ -19,6 +19,8 @@ class CreateRoleRequest extends APIRequest
         return [
             'role' => 'array|required',
             'role.name' => 'required|string',
+            'role.role_type' => 'required|string',
+            'role.active' => 'required|boolean',
         ];
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: e360
+ * User: funmiayinde
  * Date: 1/10/18
  * Time: 11:15 AM
  */
@@ -14,13 +14,13 @@ use Core\Repository\BaseRepository;
 
 class UserRepository extends BaseRepository
 {
-    function getModel()
+    function get_model()
     {
         return new User();
     }
 
     public function create(array $data){
-        $user = $this->getModel();
+        $user = $this->get_model();
         $user->fill($data);
         $user->save();
         return $user;
@@ -30,5 +30,30 @@ class UserRepository extends BaseRepository
         $user->fill($data);
         $user->save();
         return $user;
+    }
+
+    public function set_role(User $user, array $add_roles, array $remove_roles = []) {
+        $this->database->beginTransaction();
+        try{
+            if (count($remove_roles) > 0){
+                $query = $this->database->table($user->roles()->getTable());
+                $query->where('user_id',$user->id)
+                    ->whereIn('role',$remove_roles)
+                    ->delete();
+            }
+            if (count($add_roles) > 0){
+                $query = $this->database->table($user->roles()->getTable());
+                $query->insert(array_map(function ($role_id) use ($user) {
+                    return [
+                        'role_id' => $role_id,
+                        'user_id' => $user->id
+                    ];
+                },$add_roles));
+            }
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
     }
 }

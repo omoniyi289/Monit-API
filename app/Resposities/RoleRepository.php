@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: e360
+ * User: funmiayinde
  * Date: 1/11/18
  * Time: 9:35 AM
  */
@@ -12,13 +12,13 @@ use Core\Repository\BaseRepository;
 
 class RoleRepository extends BaseRepository
 {
-    public function getModel()
+    public function get_model()
     {
         return new Role();
     }
 
     public function create(array $data){
-        $role = $this->getModel();
+        $role = $this->get_model();
         $role->fill($data);
         $role->save();
         return $role;

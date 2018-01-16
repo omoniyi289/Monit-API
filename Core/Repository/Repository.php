@@ -3,6 +3,7 @@
 namespace Core\Repository;
 
 use Core\Traits\BuilderTrait;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -15,15 +16,17 @@ use Illuminate\Database\Eloquent\Builder;
 abstract class Repository
 {
     use BuilderTrait;
+    protected $database;
     protected $model;
     protected $sort_prop = null;
     protected $sort_direction = 0; // ASC = 1, DESC =0
 
-    abstract protected function getModel();
+    abstract protected function get_model();
 
-    final public function __construct()
+    final public function __construct(DatabaseManager $database)
     {
-        $this->model = $this->getModel();
+        $this->database = $database;
+        $this->model = $this->get_model();
     }
 
     /*
