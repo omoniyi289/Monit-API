@@ -23,5 +23,7 @@ class Company extends Model
         return $this->hasMany(TankGroups::class);
     }
 
-
+    public function product_prices(){
+        return $this->hasMany(ProductPrices::class);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App;
 
 use Core\Models\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Role extends Model
 {
@@ -15,5 +16,7 @@ class Role extends Model
     public function permissions(){
 
     }
+
+
 
 }

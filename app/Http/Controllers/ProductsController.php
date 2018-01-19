@@ -10,14 +10,14 @@ namespace App\Http\Controllers;
 use App\Requests\ApiCompanyRequest;
 use App\Requests\ApiProductsRequest;
 use App\Services\CompanyService;
-use App\Services\ProductsService;
+use App\Services\ProductService;
 use Core\Controllers\BaseController;
 
 class ProductsController extends BaseController
 {
     private $product_service;
 
-    public function __construct(ProductsService $product_service)
+    public function __construct(ProductService $product_service)
     {
         $this->product_service = $product_service;
     }

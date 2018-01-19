@@ -56,4 +56,10 @@ class UserRepository extends BaseRepository
         }
         $this->database->commit();
     }
+
+    public function filterIsAdministrator(Builder $query,$method,$clause_operator,$value,$in){
+        if ($value){
+            $query->whereIn('roles.name',['Adminstrator']);
+        }
+    }
 }

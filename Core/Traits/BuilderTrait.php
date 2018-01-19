@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 /**
  * Created by PhpStorm.
- * User: funmi ayinde
+ * User: funmiayinde
  * Date: 1/9/18
  * Time: 6:09 PM
  */
@@ -89,10 +89,10 @@ trait BuilderTrait
         return $joins;
     }
 
-    protected function apply_filter_groups(Builder $query, array $filter_grops = [], array $previously_joined = [])
+    protected function apply_filter_groups(Builder $query, array $filter_groups = [], array $previously_joined = [])
     {
         $joins = [];
-        foreach ($filter_grops as $group) {
+        foreach ($filter_groups as $group) {
             $or = $group['or'];
             $filters = $group['filters'];
             $query->where(function (Builder $query) use ($filters, $or, &$joins) {

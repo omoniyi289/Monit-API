@@ -22,7 +22,6 @@ class ApiUserRequest extends APIRequest
             'user.email' => 'required|email',
             'user.username' => 'required|string',
             'user.password' => 'required|string|min:8',
-            'user.phone_number' => 'required|string',
         ];
     }
 
@@ -37,4 +36,15 @@ class ApiUserRequest extends APIRequest
     {
         return true;
     }
+
+    public function expectsJson()
+    {
+        return true;
+    }
+
+    public function validationData()
+    {
+      return $this->json()->all();
+    }
+
 }

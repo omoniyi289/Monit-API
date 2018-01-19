@@ -19,11 +19,14 @@ class ApiPumpsRequest extends APIRequest
 
     public function rules(){
         return [
-            'pumps' => 'array|required',
-            'pump_group.name' => 'required|string',
-            'pump_group.code' => 'required|string',
-            'pump_group.station_id' => 'required|integer',
-            'pump_group.company_id' => 'required|integer',
+            'pump' => 'array|required',
+            'pump.number' => 'required|string',
+            'pump.brand' => 'required|string',
+            'pump.serial_number' => 'required|string',
+            'pump.type' => 'required|string',
+            'pump.pump_group_id' => 'required|integer',
+            'pump.station_id' => 'required|integer',
+            'pump.company_id' => 'required|integer',
         ];
     }
 

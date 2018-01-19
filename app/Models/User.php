@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -15,7 +16,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'fullname','username', 'email', 'password', 'phone_number',
+        'fullname','username', 'email', 'password', 'phone_number', 'is_verified',
+        'auth_key'
     ];
 
     /**
@@ -24,11 +26,26 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token','auth_key',
     ];
 
     public function roles() {
         return $this->belongsToMany(Role::class,"user_roles","user_id","role_id");
     }
+
+    public function isAdminstrator(){
+        return $this->roles();
+    }
+
+    public function getJWTIdentifier(){
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(){
+        return [];
+    }
+
+
+
 
 }

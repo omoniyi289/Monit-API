@@ -8,12 +8,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegistrationMail;
 use App\Requests\ApiUserRolesRequest;
 use App\Requests\ApiUserRequest;
 use App\Services\UserService;
+use App\User;
+use App\Util;
 use Core\Controllers\BaseController;
+use Core\Traits\BuilderTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Mail;
 
 class UserController extends BaseController
 {
@@ -33,10 +39,16 @@ class UserController extends BaseController
         return $this->response(1, 8000, "all users", $data);
     }
 
+    /**
+     * @param ApiUserRequest $request
+     * @return JsonResponse
+     */
     public function create(ApiUserRequest $request)
     {
         $user_request = $request->get('user', []);
         $user_request['password'] = bcrypt($user_request['password']);
+        $user_request['is_verified'] = false;
+        $user_request['auth_key'] = str_random(6);
         $exist_email = $this->user_service->get_user_by_email($user_request['email']);
         $exist_username = $this->user_service->get_user_by_username($user_request['username']);
         if (count($exist_username) == 1) {
@@ -48,6 +60,17 @@ class UserController extends BaseController
                 JsonResponse::HTTP_BAD_REQUEST);
         }
         $data = $this->user_service->create($user_request);
+        $verification_code = str_random(30);
+        DB::table("user_verifications")->insert([
+            'user_id' => $data['id'],
+            'token' => $verification_code,
+        ]);
+        $mail_data = [
+            'fullname' => $data['fullname'],
+            'email' => $data['email'],
+            'verification_code' => $verification_code,
+        ];
+        Mail::to($user_request['email'])->send(new RegistrationMail($mail_data));
         return $this->response(1, 8000, "user successfully created", $data,
             JsonResponse::HTTP_CREATED);
     }
@@ -71,4 +94,27 @@ class UserController extends BaseController
         return $this->response(1, 8000, "role successfully added", $data);
     }
 
+    public function  get_users(){
+        $resource_options = $this->parse_resource_options();
+        $query = User::query();
+        $this->apply_resource_options($query,$resource_options);
+        $roles = $query->get();
+        $data = $this->parse_data($roles,$resource_options);
+        return $this->response(1, 8000, "users", $data);
+    }
+
+    public function verify_user($verification_code){
+        $check = DB::table('user_verifications')->where('token',$verification_code)->first();
+        if (!is_null($check)){
+            $user = $this->user_service->get_by_id($check->user_id);
+            if ($user->is_verified == 1){
+                return $this->response(0, 8000, "account already verified",null);
+            }
+            $this->user_service->update($user->id,['is_verified' => 1]);
+            DB::table('user_verifications')->where('token',$verification_code)->delete();
+            return $this->response(1, 8000, "You have successfully verified your email"
+                , $user);
+        }
+        return $this->response(0, 8000, "verification code is invalid", null);
+    }
 }

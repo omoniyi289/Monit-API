@@ -22,4 +22,8 @@ class Station extends Model
     public function tanks(){
         return $this->hasMany(Tanks::class);
     }
+
+    public function product_prices(){
+        return $this->hasMany(ProductPrices::class);
+    }
 }

@@ -14,13 +14,22 @@ use Illuminate\Http\Request;
 */
 
 /*
+ * AUTH ENDPOINT
+ * */
+Route::post('/v1/auth','AuthController@auth');
+
+
+/*
  * USER ENDPOINT
  * */
 Route::get('/v1/users','UserController@get_all');
+Route::get('/v1/users','UserController@get_all');
+//Route::get('/v1/users','UserController@get_users');
 Route::post('/v1/users','UserController@create');
 Route::get('/v1/users/{user_id}','UserController@get_by_id');
 Route::post('/v1/users/{user_id}/roles','UserController@add_roles');
 Route::put('/v1/users/{user_id}','UserController@update');
+Route::get('/v1/users/verify/{verification_code}','UserController@verify_user');
 
 /*
  * ROLE ENDPOINT
@@ -88,3 +97,25 @@ Route::get('/v1/pump_groups','PumpGroupsController@get_all');
 Route::post('/v1/pump_groups','PumpGroupsController@create');
 Route::get('/v1/pump_groups/{pump_group_id}','PumpGroupsController@get_by_id');
 Route::put('/v1/pump_groups/{pump_group_id}','PumpGroupsController@update');
+
+/*
+ * PRODUCT PRICE CHANGE LOGS ENDPOINT
+ * */
+Route::get('/v1/product_price_change','ProductPriceChangeLogsController@get_all');
+Route::post('/v1/product_price_change','ProductPriceChangeLogsController@create');
+Route::get('/v1/product_price_change/{product_price_change_id}','ProductPriceChangeLogsController@get_by_id');
+Route::put('/v1/product_price_change/{product_price_change_id}','ProductPriceChangeLogsController@update');
+
+/*
+ * PUMPS ENDPOINT
+ * */
+Route::get('/v1/pumps','PumpController@get_all');
+Route::post('/v1/pumps','PumpController@create');
+Route::get('/v1/pumps/{pump_id}','PumpController@get_by_id');
+Route::put('/v1/pumps/{pump_id}','PumpController@update');
+
+Route::group(['middleware' => ['jwt.auth']], function (){
+    Route::get('/v1/test',function (){
+       return response()->json(['foo' => 'bar']);
+    });
+});

@@ -15,6 +15,10 @@ class CreateDispensersTable extends Migration
     {
         Schema::create('dispensers', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nozzle_number');
+            $table->string('oem_nozzle_id');
+            $table->integer('pump_id');
+            $table->integer('station_id');
             $table->timestamps();
         });
     }
