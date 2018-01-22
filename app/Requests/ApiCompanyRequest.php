@@ -27,6 +27,7 @@ class ApiCompanyRequest extends APIRequest
             'company.state' => 'required|string',
             'company.city' => 'required|string',
             'company.address' => 'required|string',
+            'company.user_id' => 'required|integer',
         ];
     }
     public function attributes()

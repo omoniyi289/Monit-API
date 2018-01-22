@@ -17,7 +17,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'fullname','username', 'email', 'password', 'phone_number', 'is_verified',
-        'auth_key'
+        'auth_key', 'gender', 'is_term_agreed'
     ];
 
     /**
@@ -33,6 +33,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class,"user_roles","user_id","role_id");
     }
 
+    public function compaines(){
+        return $this->hasOne(User::class);
+    }
+
     public function isAdminstrator(){
         return $this->roles();
     }
@@ -44,8 +48,6 @@ class User extends Authenticatable
     public function getJWTCustomClaims(){
         return [];
     }
-
-
 
 
 }

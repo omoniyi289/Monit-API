@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: e360
+ * User: funmiayinde
  * Date: 1/18/18
  * Time: 12:47 AM
  */
@@ -28,21 +28,7 @@ class AuthController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function auth(Request $request){
-        $rules = [
-            'email' => 'required|email',
-            'password' => 'required'
-        ];
-
-//        $input = $request->only('email','password');
-//        $validator =  Validator::make($input,$rules);
-//        if ($validator->fails()){
-//            $errors = $validator->messages()->toJson();
-//            return $this->response(0, 8000, "account already verified",[
-//                'error' => $errors
-//            ],400);
-//        }
-        $user =  $this->user_service->get_user_by_email($request->get('email'));
-//
+        $this->user_service->get_user_by_email($request->get('email'));
         if (!empty($user) || $user != null){
             if ($user[0]['is_verified'] == 0){
                 return $this->response(0, 8000, "account yet to be verified",null,400);

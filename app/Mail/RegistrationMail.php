@@ -32,7 +32,7 @@ class RegistrationMail extends Mailable
     public function build()
     {
         $subject = "Station Manager Support";
-        return $this->view('email.verify')
+        return $this->view('email.verify2')
             ->from("stationmanager@e360a.com", "stationmanager")
             ->replyTo(  "stationmanager@e360a.com", "stationmanager")
             ->subject($subject)

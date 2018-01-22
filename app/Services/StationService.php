@@ -9,7 +9,7 @@
 namespace App\Services;
 
 
-use App\Resposities\StationRepository;
+use App\Reposities\StationRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 

@@ -9,9 +9,9 @@
 namespace App\Services;
 
 
-use App\Resposities\CompanyRepository;
-use App\Resposities\PumpGroupsRepository;
-use App\Resposities\PumpsRepository;
+use App\Reposities\CompanyRepository;
+use App\Reposities\PumpGroupsRepository;
+use App\Reposities\PumpsRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 

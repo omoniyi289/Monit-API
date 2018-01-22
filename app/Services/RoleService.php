@@ -9,7 +9,7 @@
 namespace App\Services;
 
 
-use App\Resposities\RoleRepository;
+use App\Reposities\RoleRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 

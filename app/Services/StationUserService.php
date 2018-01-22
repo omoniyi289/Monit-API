@@ -8,10 +8,10 @@
 
 namespace App\Services;
 
-use App\Resposities\PermissionRepository;
-use App\Resposities\RoleRepository;
-use App\Resposities\StationUserRepository;
-use App\Resposities\UserRepository;
+use App\Reposities\PermissionRepository;
+use App\Reposities\RoleRepository;
+use App\Reposities\StationUserRepository;
+use App\Reposities\UserRepository;
 use Exception;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;

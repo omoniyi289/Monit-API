@@ -8,11 +8,16 @@ class Company extends Model
 {
     protected $fillable = [
         'name', 'email', 'registration_number', 'country', 'state', 'city',
-        'address',
+        'address', 'user_id',
     ];
+
 
     public function users() {
         return $this->hasMany(StationUsers::class);
+    }
+
+    public function user_compaines(){
+        return $this->hasOne(User::class);
     }
 
     public function stations() {

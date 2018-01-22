@@ -13,5 +13,8 @@ use Core\Controllers\BaseController;
 
 class PermissonController extends BaseController
 {
-
+    private $permission_service;
+    public function __construct()
+    {
+    }
 }

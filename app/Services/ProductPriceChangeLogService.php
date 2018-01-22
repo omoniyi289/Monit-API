@@ -9,8 +9,8 @@
 namespace App\Services;
 
 
-use App\Resposities\CompanyRepository;
-use App\Resposities\ProductPricesLogsRepository;
+use App\Reposities\CompanyRepository;
+use App\Reposities\ProductPricesLogsRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 
