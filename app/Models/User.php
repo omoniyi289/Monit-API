@@ -17,7 +17,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'fullname','username', 'email', 'password', 'phone_number', 'is_verified',
-        'auth_key', 'gender', 'is_term_agreed'
+        'auth_key', 'gender', 'is_term_agreed', 'is_company_set_up',
     ];
 
     /**
@@ -48,6 +48,7 @@ class User extends Authenticatable
     public function getJWTCustomClaims(){
         return [];
     }
+
 
 
 }

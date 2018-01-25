@@ -25,8 +25,6 @@ class ApiStationRequest extends APIRequest
             'station.state' => 'required|string',
             'station.daily_budget' => 'required|string',
             'station.expenses_type' => 'required|string',
-            'station.company_id' => 'required|integer',
-            'station.station_user_id' => 'required|integer',
             'station.is_station_enabled' => 'required|boolean',
         ];
     }

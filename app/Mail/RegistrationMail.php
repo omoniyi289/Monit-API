@@ -33,8 +33,8 @@ class RegistrationMail extends Mailable
     {
         $subject = "Station Manager Support";
         return $this->view('email.verify2')
-            ->from("stationmanager@e360a.com", "stationmanager")
-            ->replyTo(  "stationmanager@e360a.com", "stationmanager")
+            ->from("stationmanager@e360a.com", "Stationmanager")
+            ->replyTo(  "stationmanager@e360a.com", "Stationmanager")
             ->subject($subject)
             ->with([
                 'fullname' => $this->data["fullname"],

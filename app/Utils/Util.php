@@ -1,28 +1,26 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: e360
+ * User: funmiayinde
  * Date: 1/18/18
  * Time: 12:48 AM
  */
 
 namespace App;
-
-
-use Mail;
+use JWTAuth;
 
 class Util
 {
-    public static function send_registration_mail($fullname, $email, $verfication_code)
-    {
-        $subject = "ACCOUNT VERIFICATION";
-        Mail::send('email.verify', [
-            'Full name' => $fullname,
-            'verification_code' => $verfication_code
-        ], function ($mail) use ($email, $fullname, $subject) {
-            $mail->from("stationmanager2.0@gmail.com", "Station Manager");
-            $mail->to($email, $fullname);
-            $mail->subject($subject);
-        });
+    public static function get_token (){
+        return JWTAuth::parseToken()->authenticate();
+    }
+    public static function get_user_details_from_token($value){
+        $token_details = self::get_token();
+        if (is_array($value)){
+            foreach ($value as $val => $item){
+                $token_details[$item];
+            }
+        }
+        return $token_details[$value];
     }
 }

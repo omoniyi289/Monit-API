@@ -42,6 +42,10 @@ class CompanyService
         return $this->company_repository->get_where('name',$name);
     }
 
+    public function get_company_by_user_id($user_id){
+        return $this->company_repository->get_where('user_id',$user_id);
+    }
+
     public function get_all(array $options = []){
         return $this->company_repository->get($options);
     }

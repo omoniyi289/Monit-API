@@ -153,7 +153,7 @@
                                     <table border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td align="center" style="border-radius: 3px;" bgcolor="#398bf7">
-                                                <a href="{{ url('/api/v1/users/verify', $verification_code)}}" target="_blank"
+                                                <a href="http://127.0.0.1:8082/verify/{{ $verification_code }}"
                                                    style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
                                                     Confirm Account</a>
                                             </td>
@@ -176,7 +176,7 @@
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 20px 30px 20px 30px; color: #666666; font-family: &apos;Lato&apos;, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;"><a href="http://127.0.0.1:8000/api/v1/users/verify/{{ $verification_code }}}" target="_blank" style="color: #398bf7;">http://127.0.0.1:8000/api/v1/users/verify/{{ $verification_code }}}</a>
+                        <p style="margin: 0;"><a href="http://127.0.0.1:8082/verify/{{ $verification_code }}}" target="_blank" style="color: #398bf7;">http://127.0.0.1:8082/verify/{{ $verification_code }}</a>
                         </p>
                     </td>
                 </tr>

@@ -93,13 +93,13 @@ class UserService
         $roles = $this->check_validity_of_roles($role_ids);
         // set the role to the current user
         $this->user_repository->set_role($user, $role_ids);
-        // iterate through the roles id and add
-        // the role to the users, to use in the response
+        // iterate through the roles id and add the role to the users
         $roles->filter(function ($role) use ($current_roles) {
             return !in_array($role->id, $current_roles);
         })->each(function ($role) use ($user) {
             $user->roles->add($role);
         });
+        $this->dispatcher->fire(new RolesAssigned($user));
         return $user;
     }
 

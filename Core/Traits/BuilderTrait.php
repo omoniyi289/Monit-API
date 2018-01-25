@@ -1,7 +1,12 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: funmiayinde
+ * Date: 1/9/18
+ * Time: 6:09 PM
+ */
 
 namespace Core\Traits;
-
 
 use Core\Constants\StatusConstant;
 use Core\Responses\StatusResponse;
@@ -11,12 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use DB;
 use Illuminate\Support\Str;
 
-/**
- * Created by PhpStorm.
- * User: funmiayinde
- * Date: 1/9/18
- * Time: 6:09 PM
- */
+
 /*
  * A base controller class that gives sorting,
  *  filtering, eager loading and pagination for our endpoints

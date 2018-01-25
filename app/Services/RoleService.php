@@ -9,6 +9,7 @@
 namespace App\Services;
 
 
+use App\Notifications\RolesAssigned;
 use App\Reposities\RoleRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
@@ -31,6 +32,7 @@ class RoleService
         $this->database->beginTransaction();
         try{
             $role = $this->role_repository->create($data);
+
         }catch (Exception $exception){
             $this->database->rollBack();
             throw $exception;

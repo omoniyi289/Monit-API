@@ -43,7 +43,7 @@ abstract class Repository
      * it helps querying the db, it serves as
      * a base query, mind you apply_resouces_options
      * are limit,includes,page,filter_groups,sort
-     * this is parsed by the router
+     * this is passed by the router
      * **/
     public function create_base_builder(array $options = [])
     {

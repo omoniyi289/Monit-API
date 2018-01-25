@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\RegistrationMail;
+use App\Notifications\RolesAssigned;
 use App\Requests\ApiUserRolesRequest;
 use App\Requests\ApiUserRequest;
 use App\Services\UserService;
@@ -49,6 +50,7 @@ class UserController extends BaseController
         $user_request['password'] = bcrypt($user_request['password']);
         $user_request['is_verified'] = false;
         $user_request['auth_key'] = str_random(6);
+        $user_request['is_company_set_up'] =false;
         $exist_email = $this->user_service->get_user_by_email($user_request['email']);
         $exist_username = $this->user_service->get_user_by_username($user_request['username']);
         if (count($exist_username) == 1) {
@@ -87,10 +89,10 @@ class UserController extends BaseController
         $data = $this->user_service->get_by_id($user_id,$resource_options);
         return $this->response(1, 8000, "user details", $data);
     }
-
     public function add_roles($user_id, ApiUserRolesRequest $request){
         $roles = $request->get('roles',[]);
         $data =  $this->user_service->add_roles($user_id, $roles);
+        $user->notify(new RolesAssigned($data));
         return $this->response(1, 8000, "role successfully added", $data);
     }
 

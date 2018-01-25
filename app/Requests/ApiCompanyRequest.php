@@ -22,12 +22,10 @@ class ApiCompanyRequest extends APIRequest
             'company' => 'array|required',
             'company.name' => 'required|string',
             'company.email' => 'required|email',
-            'company.registration_number' => 'required|string',
             'company.country' => 'required|string',
             'company.state' => 'required|string',
             'company.city' => 'required|string',
             'company.address' => 'required|string',
-            'company.user_id' => 'required|integer',
         ];
     }
     public function attributes()

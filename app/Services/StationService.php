@@ -42,4 +42,18 @@ class StationService
     public function get_all(array $options = []){
         return $this->station_repository->get($options);
     }
+
+    public function get_station_by_company($company){
+        return $this->station_repository->get_where("company_id",$company["id"]);
+    }
+
+    public function get_by_id($station_id, array $options = [])
+    {
+        return $this->get_requested_station($station_id);
+    }
+
+    private function get_requested_station($station_id, array $options = [])
+    {
+        return $this->station_repository->get_by_id($station_id, $options);
+    }
 }
