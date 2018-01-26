@@ -6,8 +6,9 @@
  * Time: 11:54 AM
  */
 namespace Core\Models;
+use Core\AuditTrail\AuditTable;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 abstract class Model extends BaseModel
 {
-
+  use AuditTable;
 }

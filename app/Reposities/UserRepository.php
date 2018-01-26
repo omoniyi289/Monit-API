@@ -10,6 +10,8 @@ namespace App\Reposities;
 
 use App\User;
 use Core\Repository\BaseRepository;
+use Illuminate\Database\Eloquent\Builder;
+use Exception;
 
 
 class UserRepository extends BaseRepository
