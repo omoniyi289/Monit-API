@@ -11,6 +11,7 @@ use App\Requests\ApiCompanyRequest;
 use App\Services\CompanyService;
 use App\Services\UserService;
 use App\Util;
+use Core\AuditTrail\Audit;
 use Core\Controllers\BaseController;
 use JWTAuth;
 use Exception;
@@ -40,6 +41,8 @@ class CompanyController extends BaseController
             $data = $this->company_service->create($company_request);
             // update user detail that a company is set up
             $this->user_service->update($data['user_id'],['is_company_set_up' => 1]);
+//            Audit::logger("Setup Company",(string) $data['user_id'],"Company","`{$data['fullname']}` created a new company");
+//            $company->logger("Setup Company","1","Company Setup","Company","1");
             return $this->response(1, 8000, "company successfully created", $data);
         }catch (Exception $exception){
             return $this->response(0, 8000, $exception->getMessage(), null,500);

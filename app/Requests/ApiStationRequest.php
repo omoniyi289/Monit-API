@@ -19,6 +19,8 @@ class ApiStationRequest extends APIRequest
         return [
             'station' => 'array|required',
             'station.name' => 'required|string',
+            'station.manager_email' => 'required|string',
+            'station.manager_phone' => 'string',
             'station.address' => 'required|string',
             'station.opening_time' => 'required|string',
             'station.city' => 'required|string',
@@ -26,6 +28,8 @@ class ApiStationRequest extends APIRequest
             'station.daily_budget' => 'required|string',
             'station.expenses_type' => 'required|string',
             'station.is_station_enabled' => 'required|boolean',
+            'station.monthly_budget' => 'required|string',
+            'station.license_type' => 'required|string',
         ];
     }
 }

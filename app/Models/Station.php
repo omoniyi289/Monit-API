@@ -15,6 +15,10 @@ class Station extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function activations(){
+        return $this->hasOne(Activations::class);
+    }
+
     public function tanks_groups(){
         return $this->hasMany(TankGroups::class);
     }

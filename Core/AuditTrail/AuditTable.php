@@ -8,7 +8,7 @@
 
 namespace Core\AuditTrail;
 
-use Core\AuditTrail\Entity\Logger;
+use Core\AuditTrail\Entity\AuditTrails;
 
 trait AuditTable
 {
@@ -21,14 +21,14 @@ trait AuditTable
             'subject_id' => $subject_id,
             'comment' => $comment,
         ];
-        Logger::create($data);
+        AuditTrails::create($data);
     }
 
     public function get_logs(){
-        return Logger::where('model', get_class($this));
+        return AuditTrails::where('model', get_class($this));
     }
 
     public function delete_logs(){
-        return Logger::delete('model')->where('model', get_class($this));
+        return AuditTrails::delete('model')->where('model', get_class($this));
     }
 }

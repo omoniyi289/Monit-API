@@ -10,10 +10,8 @@ namespace Core\AuditTrail\Entity;
 
 use Core\Models\Model;
 
-class Logger extends Model
-{
+class AuditTrails extends Model{
     protected $fillable = [
         'model', 'user_id', 'action', 'comment', 'subject', 'subject_id',
     ];
-
 }

@@ -9,20 +9,21 @@
 namespace Core\AuditTrail;
 
 
-use Core\AuditTrail\Entity\Logger;
+use Core\AuditTrail\Entity\AuditTrails;
 
 class Audit
 {
     public static function get_audit_by_user_id($user_id){
-        return Logger::where('user_id',$user_id)->get();
+        return AuditTrails::where('user_id',$user_id)->get();
     }
 
-    public static function logger($action,$user_id = null, $comment = null){
+    public static function logger($action,$user_id = null,$subject, $comment = null){
         $data = array(
             'user' => $user_id,
             'action' => $action,
+            'subject' => $subject,
             'comment' => $comment,
         );
-        return Logger::create($data);
+        return AuditTrails::create($data);
     }
 }

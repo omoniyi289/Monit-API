@@ -11,7 +11,6 @@ class Company extends Model
         'address', 'user_id',
     ];
 
-
     public function users() {
         return $this->hasMany(StationUsers::class);
     }
@@ -30,5 +29,10 @@ class Company extends Model
 
     public function product_prices(){
         return $this->hasMany(ProductPrices::class);
+    }
+
+    public function logger($action, $user_id = null, $comment = null, $subject = null, $subject_id = null)
+    {
+        return $this;
     }
 }

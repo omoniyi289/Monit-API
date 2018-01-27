@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 use App\interfaces\GenericInterface;
 use App\Requests\ApiStationRequest;
+use App\Services\ActivationService;
 use App\Services\CompanyService;
 use App\Services\StationService;
 use App\Services\UserService;
@@ -20,13 +21,16 @@ class StationController extends BaseController implements GenericInterface
     private $station_service;
     private $company_service;
     private $user_service;
+    private $activation_service;
 
     public function __construct(StationService $station_service,
-                                CompanyService $company_service,UserService $user_service)
+                                CompanyService $company_service,
+                                UserService $user_service, ActivationService $activation_service)
     {
         $this->station_service = $station_service;
         $this->company_service = $company_service;
         $this->user_service = $user_service;
+        $this->activation_service = $activation_service;
     }
 
     public function create(ApiStationRequest $request){
@@ -36,6 +40,14 @@ class StationController extends BaseController implements GenericInterface
         $station_req['company_id'] = $company_details['id'];
         $station_req['station_user_id'] = $user_id;
         $data = $this->station_service->create($station_req);
+        $activation_code = $this->activation_code(6);
+         $this->activation_service->create([
+            "activation_code" => $activation_code,
+            "license_type" => $station_req["license_type"],
+            "activation_date" => date('Y-m-d'),
+            "station_id" => $data["id"],
+            'is_activated' => false,
+        ]);
         return $this->response(1, 8000, "station successfully created", $data);
     }
 
@@ -66,5 +78,12 @@ class StationController extends BaseController implements GenericInterface
     {
         $user_id = Util::get_user_details_from_token('id');
         return $this->company_service->get_company_by_user_id($user_id)->first();
+    }
+
+    public function activation_code($count){
+        $arr = array();
+        for ($i= 0; $i <= $count; $i++){
+            $arr[] = mt_rand();
+        }
     }
 }
