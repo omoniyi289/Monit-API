@@ -22,7 +22,7 @@ class ApiCompanyRequest extends APIRequest
             'company' => 'array|required',
             'company.name' => 'required|string',
             'company.email' => 'required|email',
-            'company.country' => 'required|string',
+            //'company.country' => 'required|string',
             'company.state' => 'required|string',
             'company.city' => 'required|string',
             'company.address' => 'required|string',
@@ -31,7 +31,7 @@ class ApiCompanyRequest extends APIRequest
     public function attributes()
     {
         return [
-            'company.email' => 'the user\'s email'
+            'company.email' => 'the company\'s email'
         ];
     }
 }
