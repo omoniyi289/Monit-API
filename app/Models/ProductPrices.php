@@ -11,7 +11,7 @@ class ProductPrices extends Model
         'new_price_tag', 'products_id' , 'company_id', 'station_id'
     ];
 
-    public function compaines() {
+    public function companies() {
         return $this->belongsTo(Company::class);
     }
 

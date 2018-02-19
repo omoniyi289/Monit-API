@@ -21,7 +21,7 @@ class Tanks extends Model
         return $this->belongsTo(Station::class);
     }
 
-    public function compaines(){
+    public function companies(){
         return $this->belongsTo(Company::class);
     }
 

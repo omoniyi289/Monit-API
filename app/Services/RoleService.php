@@ -13,6 +13,7 @@ use App\Notifications\RolesAssigned;
 use App\Reposities\RoleRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
+use Exception;
 
 class RoleService
 {
@@ -29,16 +30,20 @@ class RoleService
     }
 
     public function create(array $data){
-        $this->database->beginTransaction();
-        try{
-            $role = $this->role_repository->create($data);
+        try {
+            $this->database->beginTransaction();
+            try {
+                $role = $this->role_repository->create($data);
 
-        }catch (Exception $exception){
-            $this->database->rollBack();
-            throw $exception;
+            } catch (Exception $exception) {
+                $this->database->rollBack();
+                throw $exception;
+            }
+            $this->database->commit();
+            return $role;
+        }catch (\Exception $exception){
+            throw new $exception;
         }
-        $this->database->commit();
-        return $role;
     }
 
     public function get_role_by_name($name){

@@ -11,7 +11,7 @@ class TankGroups extends Model
       'code','name','company_id','station_id',
     ];
 
-    public function compaines(){
+    public function companies(){
         return $this->belongsTo(Company::class);
     }
 

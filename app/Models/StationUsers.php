@@ -11,7 +11,7 @@ class StationUsers extends Model
         'type','is_password_reset',
     ];
 
-    public function compaines() {
+    public function companies() {
         return $this->belongsTo(Company::class,'company_id');
     }
 
