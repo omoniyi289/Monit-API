@@ -30,13 +30,17 @@ class CompanyController extends BaseController
         try {
             $company_request = $request->get('company', []);
             $company_exist = $this->company_service->get_company_by_name($company_request['name']);
+            $company_reg_no_exist = $this->company_service->get_company_by_reg_no($company_request['registration_number']);
             $company_request['user_id'] = Util::get_user_details_from_token('id');
             $user_id_exist = $this->company_service->get_company_by_user_id($company_request['user_id'])->first();
             if (count($user_id_exist) == 1){
-                return $this->response(0, 8000, "you have register a company before now", $user_id_exist, 400);
+                return $this->response(0, 8000, "a company already registered with this account", $user_id_exist, 400);
             }
             if (count($company_exist) == 1) {
                 return $this->response(0, 8000, "company already exist", null, 400);
+            }
+            if (count($company_reg_no_exist) == 1) {
+                return $this->response(0, 8000, "registration number already used", null, 400);
             }
             $data = $this->company_service->create($company_request);
             // update user detail that a company is set up

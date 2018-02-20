@@ -21,7 +21,7 @@ class CreateCompaniesTable extends Migration
                 $table->string('name');
                 $table->string('email')->unique();
                 $table->string('registration_number', 6)->unique()->nullable();
-                $table->string('country');
+                $table->string('country')->nullable();
                 $table->string('state');
                 $table->string('city');
                 $table->string('address');

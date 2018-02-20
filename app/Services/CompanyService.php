@@ -53,6 +53,10 @@ class CompanyService
     {
         return $this->get_requested_user($user_id);
     }
+    public function get_company_by_reg_no($reg_no)
+    {
+        return $this->company_repository->get_where('registration_number',$reg_no);
+    }
     private function get_requested_user($user_id, array $options = [])
     {
         return $this->company_repository->get_by_id($user_id, $options);
