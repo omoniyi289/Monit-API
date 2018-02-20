@@ -27,9 +27,9 @@ class ApiStationRequest extends APIRequest
             'station.state' => 'required|string',
             'station.daily_budget' => 'required|string',
             'station.expenses_type' => 'required|string',
-            'station.is_station_enabled' => 'required|boolean',
+           // 'station.is_station_enabled' => 'required|boolean',
             'station.monthly_budget' => 'required|string',
-            'station.license_type' => 'required|string',
+           // 'station.license_type' => 'required|string',
         ];
     }
 }

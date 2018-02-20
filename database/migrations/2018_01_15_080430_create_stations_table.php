@@ -27,7 +27,7 @@ class CreateStationsTable extends Migration
                 $table->string("expenses_type")->nullable();
                 $table->string("company_id");
                 $table->integer("station_user_id");
-                $table->boolean("is_station_enabled");
+                $table->boolean("is_station_enabled")->default(0);;
                 $table->timestamps();
             });
         }catch (Exception $exception){
