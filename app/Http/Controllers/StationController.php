@@ -15,6 +15,7 @@ use App\Services\StationService;
 use App\Services\UserService;
 use App\Util;
 use Core\Controllers\BaseController;
+use Illuminate\Http\Request;
 
 class StationController extends BaseController implements GenericInterface
 {
@@ -78,6 +79,13 @@ class StationController extends BaseController implements GenericInterface
     {
         $user_id = Util::get_user_details_from_token('id');
         return $this->company_service->get_company_by_user_id($user_id)->first();
+    }
+
+    public function update($station_id, Request $request)
+    {
+        $station_update_request = $request->get('station', []);
+        $data = $this->station_service->update($station_id, $station_update_request);
+        return $this->response(1, 8000, "station successfully updated", $data);
     }
 
     public function activation_code($count){

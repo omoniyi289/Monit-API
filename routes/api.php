@@ -64,7 +64,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/stations', 'StationController@get_all');
     Route::post('/v1/stations', 'StationController@create');
     Route::get('/v1/stations/{station_id}', 'StationController@get_by_id');
-    Route::put('/v1/stations/{station_id}', 'StationController@update');
+    Route::patch('/v1/stations/{station_id}', 'StationController@update');
     Route::get('/v1/stations', 'StationController@get_company_by_station');
 
     /*

@@ -9,7 +9,7 @@ class Station extends Model
     protected $fillable = [
         'name','address', 'opening_time','city','state','daily_budget','expenses_type',
         'company_id','station_user_id','is_station_enabled', 'monthly_budget' , 'license_type'
-        , 'manager_email' ,
+        , 'manager_email' , 'manager_name' , 'manager_phone' ,
     ];
 
     public function companies() {

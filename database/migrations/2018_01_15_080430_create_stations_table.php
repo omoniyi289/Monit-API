@@ -21,13 +21,16 @@ class CreateStationsTable extends Migration
                 $table->string("name");
                 $table->string("address");
                 $table->string("opening_time");
+                $table->string("manager_name");
+                $table->string("manager_phone");
+                $table->string("manager_email");
                 $table->string("city");
                 $table->string("state");
                 $table->string("daily_budget");
                 $table->string("expenses_type")->nullable();
                 $table->string("company_id");
                 $table->integer("station_user_id");
-                $table->boolean("is_station_enabled")->default(0);;
+                $table->integer("is_station_enabled")->default(0);;
                 $table->timestamps();
             });
         }catch (Exception $exception){

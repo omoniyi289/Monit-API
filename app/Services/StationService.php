@@ -39,6 +39,20 @@ class StationService
         return $station;
     }
 
+    public function update($station_id, array $data)
+    {
+        $station = $this->get_requested_station($station_id);
+        $this->database->beginTransaction();
+        try {
+            $this->station_repository->update($station, $data);
+        } catch (Exception $exception) {
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $station;
+    }
+
     public function get_all(array $options = []){
         return $this->station_repository->get($options);
     }

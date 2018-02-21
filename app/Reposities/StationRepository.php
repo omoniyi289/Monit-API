@@ -25,8 +25,10 @@ class StationRepository extends BaseRepository
         return $station;
     }
 
-    public function update(){
-
+    public function update(Station $station, array $data){
+        $station->fill($data);
+        $station->save();
+        return $station;
     }
 
 
