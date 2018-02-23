@@ -66,6 +66,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/stations/{station_id}', 'StationController@get_by_id');
     Route::patch('/v1/stations/{station_id}', 'StationController@update');
     Route::get('/v1/stations', 'StationController@get_company_by_station');
+    Route::get('/v1/stations/companies/{company_name}', 'StationController@get_stations_by_company_id');
 
     /*
      * TANK GROUPS ENDPOINT
