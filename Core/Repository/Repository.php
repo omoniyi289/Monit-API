@@ -1,11 +1,8 @@
 <?php
-
 namespace Core\Repository;
-
 use Core\Traits\BuilderTrait;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Builder;
-
 /**
  * Created by PhpStorm.
  * User: funmi ayinde

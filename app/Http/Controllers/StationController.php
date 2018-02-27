@@ -38,7 +38,7 @@ class StationController extends BaseController implements GenericInterface
         $station_req = $request->get('station',[]);
         $user_id = $this->get_user();
         $company_details = $this->company_service->get_company_by_user_id($user_id)->first();
-        $station_req['company_id'] = $company_details['id'];
+        //$station_req['company_id'] = $company_details['id'];
         $station_req['station_user_id'] = $user_id;
         $data = $this->station_service->create($station_req);
         $activation_code = $this->activation_code(6);
@@ -70,11 +70,11 @@ class StationController extends BaseController implements GenericInterface
         return $this->response(1, 8000, "station with company details", $company_stations);
     }
     //niyi
-    public function get_stations_by_company_id($company_name){
+    public function get_stations_by_company_id($company_id){
         //$company_name = $request->get('company_name');
         //$company_name = $request->input('company_name');
-        $company = $this->company_service->get_company_by_name($company_name)->first();
-        $company_stations = $this->station_service->get_station_by_company($company);
+       // $company = $this->company_service->get_company_by_name($company_name)->first();
+        $company_stations = $this->station_service->get_station_by_company_id($company_id);
         return $this->response(1, 8000, "registered stations", $company_stations);
     }
 

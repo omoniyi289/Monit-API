@@ -66,7 +66,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/stations/{station_id}', 'StationController@get_by_id');
     Route::patch('/v1/stations/{station_id}', 'StationController@update');
     Route::get('/v1/stations', 'StationController@get_company_by_station');
-    Route::get('/v1/stations/companies/{company_name}', 'StationController@get_stations_by_company_id');
+    Route::get('/v1/stations/companies/{company_id}', 'StationController@get_stations_by_company_id');
 
     /*
      * TANK GROUPS ENDPOINT
@@ -91,6 +91,8 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('/v1/tanks', 'TanksController@create');
     Route::get('/v1/tanks/{tank_id}', 'TanksController@get_by_id');
     Route::put('/v1/tanks/{tank_id}', 'TanksController@update');
+    Route::get('/v1/tanks/stations/{station_id}', 'TanksController@get_tanks_by_station_id');
+
 
     /*
      * PUMP GROUPS ENDPOINT

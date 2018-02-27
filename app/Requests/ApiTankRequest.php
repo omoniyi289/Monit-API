@@ -21,7 +21,7 @@ class ApiTankRequest extends APIRequest
         return [
             'tank' => 'array|required',
             'tank.code' => 'required|string',
-            'tank.name' => 'required|string',
+            //'tank.name' => 'required|string',
             'tank.width' => 'string',
             'tank.height' => 'string',
             'tank.shape' => 'string',
@@ -32,7 +32,7 @@ class ApiTankRequest extends APIRequest
             'tank.max_temperate' => 'required|string',
             'tank.max_water_level' => 'required|integer',
             'tank.daily_budget' => 'required|integer',
-            'tank.tank_group_id' => 'required|integer',
+            //'tank.tank_group_id' => 'required|integer',
             'tank.station_id' => 'required|integer',
             'tank.company_id' => 'required|integer',
             'tank.product_id' => 'required|integer',

@@ -42,6 +42,10 @@ class TankService
     {
         return $this->tank_repository->get($options);
     }
+     public function get_by_station_id($station_id)
+    {
+       return $this->tank_repository->get_where("station_id", $station_id);
+    }
 
     public function get_by_id($user_id, array $options = [])
     {

@@ -57,8 +57,8 @@ class StationService
         return $this->station_repository->get($options);
     }
 
-    public function get_station_by_company($company){
-        return $this->station_repository->get_where("company_id",$company["id"]);
+    public function get_station_by_company_id($company_id){
+        return $this->station_repository->get_where("company_id",$company_id);
     }
 
     public function get_by_id($station_id, array $options = [])

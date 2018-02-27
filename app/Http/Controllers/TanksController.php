@@ -40,5 +40,10 @@ class TanksController extends BaseController
         $data = $this->tank_service->get_by_id($tank_id,$resource_options);
         return $this->response(1, 8000, "tank details", $data);
     }
+    public function get_tanks_by_station_id($station_id) {
+        $resource_options = $this->parse_resource_options();
+        $data = $this->tank_service->get_by_station_id($station_id,$resource_options);
+        return $this->response(1, 8000, "requested tanks", $data);
+    }
 
 }
