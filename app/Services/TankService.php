@@ -38,6 +38,22 @@ class TankService
         $this->database->commit();
         return $tanks;
     }
+
+
+    public function update($tank_id, array $data)
+    {
+        $tank = $this->get_requested_tank($tank_id);
+        $this->database->beginTransaction();
+        try {
+            $this->tank_repository->update($tank, $data);
+        } catch (Exception $exception) {
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $tank;
+    }
+
     public function get_all(array $options = [])
     {
         return $this->tank_repository->get($options);
@@ -47,13 +63,13 @@ class TankService
        return $this->tank_repository->get_where("station_id", $station_id);
     }
 
-    public function get_by_id($user_id, array $options = [])
+     public function get_by_id($station_id, array $options = [])
     {
-        return $this->get_requested_tank($user_id);
+        return $this->get_requested_tank($station_id);
     }
 
-    private function get_requested_tank($user_id, array $options = [])
+    private function get_requested_tank($station_id, array $options = [])
     {
-        return $this->tank_repository->get_by_id($user_id, $options);
+        return $this->tank_repository->get_by_id($station_id, $options);
     }
 }

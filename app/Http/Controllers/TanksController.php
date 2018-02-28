@@ -14,6 +14,8 @@ use App\Services\CompanyService;
 use App\Services\TankGroupService;
 use App\Services\TankService;
 use Core\Controllers\BaseController;
+use Illuminate\Http\Request;
+
 
 class TanksController extends BaseController
 {
@@ -28,6 +30,12 @@ class TanksController extends BaseController
         $tank_request = $request->get('tank',[]);
         $data = $this->tank_service->create($tank_request);
         return $this->response(1, 8000, "tank successfully created", $data);
+    }
+     public function update($tank_id, Request $request)
+    {
+        $tank_update_request = $request->get('tank', []);
+        $data = $this->tank_service->update($tank_id, $tank_update_request);
+        return $this->response(1, 8000, "tank successfully updated", $data);
     }
 
     public function get_all(){

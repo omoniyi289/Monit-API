@@ -26,5 +26,10 @@ class TanksRepository extends BaseRepository
         $tanks->save();
         return $tanks;
     }
+    public function update(Tanks $tank, array $data){
+        $tank->fill($data);
+        $tank->save();
+        return $tank;
+    }
 
 }

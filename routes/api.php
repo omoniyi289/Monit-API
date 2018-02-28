@@ -90,7 +90,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/tanks', 'TanksController@get_all');
     Route::post('/v1/tanks', 'TanksController@create');
     Route::get('/v1/tanks/{tank_id}', 'TanksController@get_by_id');
-    Route::put('/v1/tanks/{tank_id}', 'TanksController@update');
+    Route::patch('/v1/tanks/{tank_id}', 'TanksController@update');
     Route::get('/v1/tanks/stations/{station_id}', 'TanksController@get_tanks_by_station_id');
 
 
