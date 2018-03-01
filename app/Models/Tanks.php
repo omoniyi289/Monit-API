@@ -2,7 +2,9 @@
 
 namespace App;
 
-use Core\Models\Model;
+//use Core\Models\Model;
+use Illuminate\Database\Eloquent\Model;
+
 
 class Tanks extends Model
 {
@@ -25,7 +27,7 @@ class Tanks extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function products(){
-        return $this->belongsTo(Products::class);
+    public function product(){
+        return $this->belongsTo(Products::class, 'product_id');
     }
 }

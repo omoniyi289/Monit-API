@@ -12,6 +12,7 @@ use App\Requests\ApiPumpsRequest;
 use App\Services\CompanyService;
 use App\Services\PumpService;
 use Core\Controllers\BaseController;
+use Illuminate\Http\Request;
 
 class PumpController extends BaseController
 {
@@ -27,6 +28,12 @@ class PumpController extends BaseController
         $data = $this->pump_service->create($pump_request);
         return $this->response(1, 8000, "pump successfully created", $data);
     }
+      public function update($pump_id, Request $request)
+    {
+        $pump_update_request = $request->get('pump', []);
+        $data = $this->pump_service->update($pump_id, $pump_update_request);
+        return $this->response(1, 8000, "pump successfully updated", $data);
+    }
 
     public function get_all(){
         $resource_options = $this->parse_resource_options();
@@ -38,6 +45,11 @@ class PumpController extends BaseController
         $resource_options = $this->parse_resource_options();
         $data = $this->pump_service->get_by_id($pump_id,$resource_options);
         return $this->response(1, 8000, "pump details", $data);
+    }
+     public function get_by_station_id($station_id) {
+        $resource_options = $this->parse_resource_options();
+        $data = $this->pump_service->get_by_station_id($station_id,$resource_options);
+        return $this->response(1, 8000, "requested pumps", $data);
     }
 
 }

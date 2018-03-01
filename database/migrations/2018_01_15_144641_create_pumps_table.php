@@ -25,7 +25,8 @@ class CreatePumpsTable extends Migration
                 $table->integer("dispenser_id");
                 $table->integer("company_id");
                 $table->integer("station_id");
-                $table->integer("pump_group_id");
+                $table->integer("pump_group_id")->nullable();
+                $table->string("nozzle_code")->nullable();
                 $table->integer("product_id");
                 $table->timestamps();
             });

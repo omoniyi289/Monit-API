@@ -14,6 +14,7 @@ use App\Reposities\TankGroupRepository;
 use App\Reposities\TanksRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
+use App\Tanks;
 
 class TankService
 {
@@ -60,12 +61,12 @@ class TankService
     }
      public function get_by_station_id($station_id)
     {
-       return $this->tank_repository->get_where("station_id", $station_id);
+       return Tanks::where('station_id',$station_id)->with('product')->get();
     }
 
      public function get_by_id($station_id, array $options = [])
     {
-        return $this->get_requested_tank($station_id);
+        return Tanks::where('station_id',$station_id)->with('product')->get();
     }
 
     private function get_requested_tank($station_id, array $options = [])

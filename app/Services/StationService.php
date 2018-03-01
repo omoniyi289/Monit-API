@@ -65,7 +65,7 @@ class StationService
     {
         return $this->get_requested_station($station_id);
     }
-
+   
     private function get_requested_station($station_id, array $options = [])
     {
         return $this->station_repository->get_by_id($station_id, $options);

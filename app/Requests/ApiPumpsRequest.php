@@ -24,7 +24,7 @@ class ApiPumpsRequest extends APIRequest
             'pump.brand' => 'required|string',
             'pump.serial_number' => 'required|string',
             'pump.type' => 'required|string',
-            'pump.pump_group_id' => 'required|integer',
+            //'pump.pump_group_id' => 'required|integer',
             'pump.station_id' => 'required|integer',
             'pump.company_id' => 'required|integer',
         ];

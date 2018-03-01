@@ -11,6 +11,8 @@ class PumpGroups extends Model
     ];
 
     public function pumps(){
-        return $this->hasMany(PumpGroups::class);
+        return $this->hasMany(Pumps::class);
     }
 }
+
+

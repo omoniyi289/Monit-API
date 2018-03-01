@@ -25,6 +25,11 @@ class PumpsRepository extends BaseRepository
         $pumps->save();
         return $pumps;
     }
+     public function update(Pumps $pump, array $data){
+        $pump->fill($data);
+        $pump->save();
+        return $pump;
+    }
 
 
 }
