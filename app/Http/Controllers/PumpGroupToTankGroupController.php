@@ -14,21 +14,21 @@ class PumpGroupToTankGroupController extends BaseController
         $this->pump_group_to_tank_group_service = $pump_group_to_tank_group_service;
     }
 
-    public function create(ApiPumpGroups $request) {
-        $company_request = $request->get('pump_group',[]);
+    public function create(ApiPumpGroupToTankGroup $request) {
+        $company_request = $request->get('pump-tank-group',[]);
         $data = $this->pump_group_to_tank_group_service->create($company_request);
-        return $this->response(1, 8000, "Pump group successfully created", $data);
+        return $this->response(1, 8000, "Pump-tank group successfully created", $data);
     }
 
     public function get_all(){
         $resource_options = $this->parse_resource_options();
         $data = $this->pump_group_to_tank_group_service->get_all($resource_options);
-        return $this->response(1, 8000, "all pump groups", $data);
+        return $this->response(1, 8000, "all pump-tank groups", $data);
     }
     public function get_by_id($pump_group_id) {
         $resource_options = $this->parse_resource_options();
         $data = $this->pump_group_to_tank_group_service->get_by_id($pump_group_id,$resource_options);
-        return $this->response(1, 8000, "pump group details", $data);
+        return $this->response(1, 8000, "pump-tank group details", $data);
     }
 
 }

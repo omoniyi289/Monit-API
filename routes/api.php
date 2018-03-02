@@ -119,6 +119,15 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/pumps/by_station/{station_id}', 'PumpController@get_by_station_id');
     Route::patch('/v1/pumps/{pump_id}', 'PumpController@update');
 
+     /*
+     * PUMPS to Tanks ENDPOINT
+     * */
+    Route::get('/v1/pumps-tanks', 'PumpGroupToTankGroupController@get_all');
+    Route::post('/v1/pumps-tanks', 'PumpGroupToTankGroupController@create');
+    Route::get('/v1/pumps-tanks/{pump_id}', 'PumpGroupToTankGroupController@get_by_id');
+    Route::get('/v1/pumps-tanks/by_station/{station_id}', 'PumpGroupToTankGroupController@get_by_station_id');
+    Route::patch('/v1/pumps-tanks/{pump_id}', 'PumpGroupToTankGroupController@update');
+
     Route::get('/v1/test', function () {
         return response()->json(['foo' => 'bar']);
     });
