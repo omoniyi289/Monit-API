@@ -24,6 +24,7 @@ class PumpGroupsController extends BaseController
 
     public function create(ApiPumpGroups $request) {
         $company_request = $request->get('pump_group',[]);
+        //return $company_request['selected_pumps'];
         $data = $this->pump_groups_service->create($company_request);
         return $this->response(1, 8000, "Pump group successfully created", $data);
     }

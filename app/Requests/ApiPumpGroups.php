@@ -22,6 +22,7 @@ class ApiPumpGroups extends APIRequest
             'pump_group' => 'array|required',
             'pump_group.name' => 'required|string',
             'pump_group.code' => 'required|string',
+            'pump_group.selected_pumps' => 'array|required',
             'pump_group.station_id' => 'required|integer',
             'pump_group.company_id' => 'required|integer',
         ];

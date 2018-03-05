@@ -9,6 +9,7 @@
 namespace App\Reposities;
 
 use App\PumpGroups;
+use App\Pumps;
 use Core\Repository\BaseRepository;
 
 class PumpGroupsRepository extends BaseRepository
@@ -22,6 +23,10 @@ class PumpGroupsRepository extends BaseRepository
         $pump_groups = $this->get_model();
         $pump_groups->fill($data);
         $pump_groups->save();
+        //update the pumps
+        foreach ($data['selected_pumps'] as  $value) {
+             Pumps::where('id', $value)->update(['pump_group_id'=> $pump_groups['id']]);
+            }
         return $pump_groups;
     }
 
