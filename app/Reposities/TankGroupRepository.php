@@ -10,6 +10,7 @@ namespace App\Reposities;
 
 use App\Company;
 use App\TankGroups;
+use App\Tanks;
 use Core\Repository\BaseRepository;
 
 class TankGroupRepository extends BaseRepository
@@ -23,6 +24,10 @@ class TankGroupRepository extends BaseRepository
         $tank_group = $this->get_model();
         $tank_group->fill($data);
         $tank_group->save();
+        //update the tanks
+        foreach ($data['selected_tanks'] as  $value) {
+             Tanks::where('id', $value)->update(['tank_group_id'=> $tank_group['id']]);
+            }
         return $tank_group;
     }
 

@@ -4,7 +4,7 @@ namespace App;
 
 use Core\Models\Model;
 
-class StationUsers extends Model
+class CompanyUsers extends Model
 {
     protected $fillable = [
         'fullname','username', 'email', 'password', 'phone_number','company_id',

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-class CreateStationUsersTable extends Migration
+class CreateCompanyUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateStationUsersTable extends Migration
     {
         DB::beginTransaction();
         try {
-            Schema::create('station_users', function (Blueprint $table) {
+            Schema::create('company_users', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('fullname');
                 $table->string('email')->unique();
@@ -42,7 +42,7 @@ class CreateStationUsersTable extends Migration
     {
         DB::beginTransaction();
         try {
-            Schema::dropIfExists('station_users');
+            Schema::dropIfExists('company_users');
         }catch (Exception $exception){
             DB::rollBack();
             throw $exception;

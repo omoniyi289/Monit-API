@@ -13,7 +13,7 @@ class Pumps extends Model
         'station_id' , 'pump_group_id' , 'product_id','nozzle_code'
     ];
 
-    public function pump_groups() {
+    public function pump_group() {
         return $this->belongsTo(PumpGroups::class);
     }
     public function product(){

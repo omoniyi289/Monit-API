@@ -15,7 +15,7 @@ class Tanks extends Model
         'max_water_level','daily_budget','tank_group_id'
     ];
 
-    public function tank_groups() {
+    public function tank_group() {
         return $this->belongsTo(TankGroups::class);
     }
 
