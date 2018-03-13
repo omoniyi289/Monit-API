@@ -19,8 +19,10 @@ class CreateRolesTable extends Migration
             Schema::create('roles', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
-                $table->boolean('active');
-                $table->string('role_type');
+                $table->string('description');
+                $table->boolean('active')->default(0);
+                $table->unsignedInteger('company_id');
+                $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade');
                 $table->timestamps();
             });
         }catch (Exception $exception){

@@ -14,7 +14,7 @@ use Core\Controllers\BaseController;
 use Illuminate\Http\JsonResponse;
 use Exception;
 
-class PermissonController extends BaseController
+class PermissionController extends BaseController
 {
     private $permission_service;
     public function __construct(PermissionService $permission_service)
@@ -35,5 +35,27 @@ class PermissonController extends BaseController
         }catch (Exception $exception){
             return $this->response(0, 8000, $exception->getMessage(), null,500);
         }
+    }
+
+    public function get_by_id($role_id){
+        $resource_options = $this->parse_resource_options();
+        $data = $this->role_service->get_id($role_id,$resource_options);
+        return $this->response(1, 8000, "role details", $data);
+    }
+    public function get_by_company_id($company_id) {
+        $resource_options = $this->parse_resource_options();
+        $data = $this->role_service->get_by_company_id($company_id,$resource_options);
+        return $this->response(1, 8000, "requested roles", $data);
+    }
+
+    public function get_all(){
+        $resource_options = $this->parse_resource_options();
+        $data = $this->permission_service->get_all($resource_options);
+        return $this->response(1, 8000, "all permissions", $data);
+    }
+    public function update($role_id, Request $request){
+        $role_update_request = $request->get('role',[]);
+        $data = $this->role_service->update($role_id,$role_update_request);
+        return $this->response(1, 8000, "role successfully updated", $data);
     }
 }

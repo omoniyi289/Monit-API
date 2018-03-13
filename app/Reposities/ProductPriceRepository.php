@@ -12,7 +12,7 @@ use App\Company;
 use App\ProductPrices;
 use Core\Repository\BaseRepository;
 
-class ProductPricesRepository extends BaseRepository
+class ProductPriceRepository extends BaseRepository
 {
 
     public function get_model()

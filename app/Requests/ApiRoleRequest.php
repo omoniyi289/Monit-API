@@ -19,8 +19,9 @@ class ApiRoleRequest extends APIRequest
         return [
             'role' => 'array|required',
             'role.name' => 'required|string',
-            'role.role_type' => 'required|string',
-            'role.active' => 'required|boolean',
+            'role.description' => 'required|string',
+            'role.company_id' => 'required|integer',
+           
         ];
     }
 

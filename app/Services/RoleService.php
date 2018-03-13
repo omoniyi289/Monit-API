@@ -14,6 +14,8 @@ use App\Reposities\RoleRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use Exception;
+use App\Role;
+use App\RolePermission;
 
 class RoleService
 {
@@ -34,6 +36,10 @@ class RoleService
             $this->database->beginTransaction();
             try {
                 $role = $this->role_repository->create($data);
+                foreach ($data['selected_privileges'] as $value) {
+                    RolePermission::create(['role_id' => $role['id'], 'permission_id' => $value]);
+                }
+                
 
             } catch (Exception $exception) {
                 $this->database->rollBack();
@@ -42,7 +48,7 @@ class RoleService
             $this->database->commit();
             return $role;
         }catch (\Exception $exception){
-            throw new $exception;
+            throw  $exception;
         }
     }
 
@@ -68,6 +74,10 @@ class RoleService
         }
         $this->database->commit();
         return $role;
+    }
+      public function get_by_company_id($company_id)
+    {
+       return Role::where("company_id",$company_id)->with('permissions')->get();
     }
 
     public function get_all($options = []){

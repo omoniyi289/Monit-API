@@ -8,7 +8,14 @@ class ProductChangeLogs extends Model
 {
     //
     protected $fillable = [
-        'old_price_tag','new_price_tag', 'company_id', 'product_id' , 'updated_by',
+        'current_price_tag','requested_price_tag', 'company_id', 'product_id' , 'updated_by',
         'approved_by','station_id', 'is_approved'
     ];
+
+    public function station(){
+        return $this->belongsTo(Station::class, 'id');
+    }
+    public function product(){
+        return $this->hasOne(Products::class ,'id');
+    }
 }

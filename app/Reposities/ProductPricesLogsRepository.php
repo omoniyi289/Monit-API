@@ -26,4 +26,9 @@ class ProductPricesLogsRepository extends BaseRepository
         $product_prices_change_logs->save();
         return $product_prices_change_logs;
     }
+    public function update(Tanks $tank, array $data){
+        $tank->fill($data);
+        $tank->save();
+        return $tank;
+    }
 }

@@ -8,16 +8,16 @@ class CompanyUsers extends Model
 {
 	
     protected $fillable = [
-        'fullname','username', 'email', 'password', 'phone_number','company_id',
-        'type','is_password_reset',
+        'fullname','username', 'email', 'password', 'phone_number','company_id'
     ];
 
     public function companies() {
         return $this->belongsTo(Company::class,'company_id');
     }
-    public function station() {
-        return $this->belongsTo(Company::class,'station_id');
-    }
+
+//public function role() {
+  //      return $this->belongsTo(App\Models\CompanyUserRole::class,'company_user_id');
+   // }
 
 
 }

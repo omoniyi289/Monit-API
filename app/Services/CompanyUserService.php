@@ -12,6 +12,9 @@ use App\Reposities\PermissionRepository;
 use App\Reposities\RoleRepository;
 use App\Reposities\CompanyUserRepository;
 use App\Reposities\UserRepository;
+use App\Models\CompanyUserRole;
+use App\Models\StationUsers;
+use App\CompanyUsers;
 use Exception;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
@@ -46,6 +49,13 @@ class CompanyUserService
         $this->database->beginTransaction();
         try {
             $company_user = $this->company_user_repository->create($data);
+            ///add station_company_user
+            foreach($data['selected_stations'] as $value) {
+                    StationUsers::create(['company_user_id' => $company_user['id'], 'station_id' => $value]);
+                }
+            ////add user role
+                CompanyUserRole::create(['role_id' => $data['role_id'], 'company_user_id' => $company_user['id']]);
+
         } catch (Exception $exception) {
             // this means don't insert
             $this->database->rollBack();
@@ -87,6 +97,11 @@ class CompanyUserService
     public function get_by_id($user_id, array $options = [])
     {
         return $this->get_requested_user($user_id);
+    }
+
+      public function get_by_company_id($company_id)
+    {
+       return CompanyUsers::where('company_id',$company_id)->get();
     }
 
     public function add_roles($user_id, array $role_ids)

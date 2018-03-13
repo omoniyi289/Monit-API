@@ -37,6 +37,11 @@ class RoleController extends BaseController
         $data = $this->role_service->get_id($role_id,$resource_options);
         return $this->response(1, 8000, "role details", $data);
     }
+    public function get_by_company_id($company_id) {
+        $resource_options = $this->parse_resource_options();
+        $data = $this->role_service->get_by_company_id($company_id,$resource_options);
+        return $this->response(1, 8000, "requested roles", $data);
+    }
 
     public function get_all(){
         $resource_options = $this->parse_resource_options();

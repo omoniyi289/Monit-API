@@ -8,6 +8,7 @@
 
 namespace App\Reposities;
 
+use App\CpyUsers;
 use App\CompanyUsers;
 use Core\Repository\BaseRepository;
 

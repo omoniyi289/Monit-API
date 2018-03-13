@@ -17,9 +17,12 @@ class CreateUserRolesTable extends Migration
         DB::beginTransaction();
         try {
             Schema::create('user_roles', function (Blueprint $table) {
-                $table->integer('role_id');
-                $table->integer('user_id');
-                $table->primary(['user_id', 'role_id']);
+                $table->increments('id');
+                $table->unsignedInteger('user_id');
+            $table->unsignedInteger('role_id');
+                $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade');
+                $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
+                $table->timestamps();
             });
         }catch (Exception $exception){
             DB::rollBack();

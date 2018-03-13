@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\StationUserService;
+use App\Services\CompanyUserService;
 use App\Services\UserService;
 use Core\Controllers\BaseController;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class AuthController extends BaseController
     private $user_service;
     private $station_user_service;
 
-    public function __construct(UserService $user_service, StationUserService $station_user_service)
+    public function __construct(UserService $user_service, CompanyUserService $station_user_service)
     {
         $this->user_service = $user_service;
         $this->station_user_service = $station_user_service;

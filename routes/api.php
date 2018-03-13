@@ -37,7 +37,17 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/roles', 'RoleController@get_all');
     Route::post('/v1/roles', 'RoleController@create');
     Route::get('/v1/roles/{rol_id}', 'RoleController@get_by_id');
+    Route::get('/v1/roles/by_company/{rol_id}', 'RoleController@get_by_company_id');
     Route::put('/v1/roles/{role_id}', 'RoleController@update');
+
+    /*
+     * Permissions ENDPOINT
+     * */
+    Route::get('/v1/permissions', 'PermissionController@get_all');
+    Route::post('/v1/permissions', 'PermissionController@create');
+    Route::get('/v1/permissions/{rol_id}', 'PermissionController@get_by_id');
+    Route::get('/v1/permissions/by_company/{rol_id}', 'PermissionController@get_by_company_id');
+    Route::put('/v1/permissions/{role_id}', 'PermissionController@update');
 
 
     /*
@@ -51,11 +61,12 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     /*
      * STATION USER ENDPOINT
      * */
-    Route::get('/v1/station_users', 'StationUserController@get_all');
-    Route::post('/v1/station_users', 'StationUserController@create');
-    Route::get('/v1/station_users/{user_id}', 'StationUserController@get_by_id');
-    Route::post('/v1/station_users/{user_id}/roles', 'StationUserController@add_roles');
-    Route::put('/v1/station_users/{user_id}', 'StationUserController@update');
+    Route::get('/v1/company_users', 'CompanyUserController@get_all');
+    Route::post('/v1/company_users', 'CompanyUserController@create');
+    Route::get('/v1/company_users/{user_id}', 'CompanyUserController@get_by_id');
+    Route::get('/v1/company_users/by_company/{company_id}', 'CompanyUserController@get_by_company_id');
+    Route::post('/v1/company_users/{user_id}/roles', 'CompanyUserController@add_roles');
+    Route::put('/v1/company_users/{user_id}', 'CompanyUserController@update');
 
 
     /*
@@ -103,11 +114,20 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::put('/v1/pump_groups/{pump_group_id}', 'PumpGroupsController@update');
 
     /*
+     * PRODUCT PRICE  ENDPOINT
+     * */
+    Route::get('/v1/product_price', 'ProductPriceController@get_all');
+    Route::post('/v1/product_price', 'ProductPriceController@create');
+    Route::get('/v1/product_price/{product_price}', 'ProductPriceController@get_by_id');
+     Route::get('/v1/product_price/by_station/{station_id}', 'ProductPriceController@get_by_station_id');
+    Route::put('/v1/product_price/{product_price}', 'ProductPriceController@update');
+    /*
      * PRODUCT PRICE CHANGE LOGS ENDPOINT
      * */
     Route::get('/v1/product_price_change', 'ProductPriceChangeLogsController@get_all');
     Route::post('/v1/product_price_change', 'ProductPriceChangeLogsController@create');
     Route::get('/v1/product_price_change/{product_price_change_id}', 'ProductPriceChangeLogsController@get_by_id');
+     Route::get('/v1/product_price_change/by_station/{product_price_change_id}', 'ProductPriceChangeLogsController@get_by_station_id');
     Route::put('/v1/product_price_change/{product_price_change_id}', 'ProductPriceChangeLogsController@update');
 
     /*
@@ -119,6 +139,8 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/pumps/by_station/{station_id}', 'PumpController@get_by_station_id');
     Route::patch('/v1/pumps/{pump_id}', 'PumpController@update');
 
+
+
      /*
      * PUMPS to Tanks ENDPOINT
      * */
@@ -127,6 +149,33 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/pumps-tanks/{pump_id}', 'PumpGroupToTankGroupController@get_by_id');
     Route::get('/v1/pumps-tanks/by_station/{station_id}', 'PumpGroupToTankGroupController@get_by_station_id');
     Route::patch('/v1/pumps-tanks/{pump_id}', 'PumpGroupToTankGroupController@update');
+
+    /*
+     * Totalizers READINGS ENDPOINT
+     * */
+    Route::get('/v1/totalizer-readings', 'DailyTotalizersReadingsController@get_all');
+    Route::post('/v1/totalizer-readings', 'DailyTotalizersReadingsController@create');
+    Route::get('/v1/totalizer-readings/{pump_id}', 'DailyTotalizersReadingsController@get_by_id');
+    Route::get('/v1/totalizer-readings/by_station/{station_id}', 'DailyTotalizersReadingsController@get_by_station_id');
+    Route::patch('/v1/totalizer-readings/{pump_id}', 'DailyTotalizersReadingsController@update');
+
+    /*
+     * Stock READINGS ENDPOINT
+     * */
+    Route::get('/v1/stock-readings', 'DailyStockReadingsController@get_all');
+    Route::post('/v1/stock-readings', 'DailyStockReadingsController@create');
+    Route::get('/v1/stock-readings/{params}', 'DailyStockReadingsController@get_by_params');
+    //Route::get('/v1/stock-readings/by_station', 'DailyStockReadingsController@get_by_station_id');
+    Route::patch('/v1/stock-readings/{pump_id}', 'DailyStockReadingsController@update');
+
+     /*
+     * TOTALIZERS READINGS ENDPOINT
+     * */
+    Route::get('/v1/pump-readings', 'DailyTotalizersReadingsController@get_all');
+    Route::post('/v1/pump-readings', 'DailyTotalizersReadingsController@create');
+    Route::get('/v1/pump-readings/{pump_id}', 'DailyTotalizersReadingsController@get_by_params');
+    //Route::get('/v1/pump-readings/by_station', 'DailyTotalizersReadingsController@get_by_station_id');
+    Route::patch('/v1/pump-readings', 'DailyTotalizersReadingsController@update');
 
     Route::get('/v1/test', function () {
         return response()->json(['foo' => 'bar']);

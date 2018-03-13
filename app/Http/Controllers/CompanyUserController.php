@@ -36,7 +36,7 @@ class CompanyUserController extends BaseController
         }
         $exist_email = $this->company_service->get_user_by_email($company_user_req['email']);
         if (count($exist_email) == 1) {
-            return $this->response(0, 8010, "some have register with this email", null,
+            return $this->response(0, 8010, "email already exist", null,
                 JsonResponse::HTTP_BAD_REQUEST);
         }
         $data = $this->company_user_service->create($company_user_req);
@@ -46,8 +46,12 @@ class CompanyUserController extends BaseController
     public function get_all(){
         $resource_options = $this->parse_resource_options();
         $data = $this->company_user_service->get_all($resource_options);
-        return $this->response(1, 8000, "all stations", $data);
+        return $this->response(1, 8000, "all users", $data);
     }
-
+    public function get_by_company_id($company_id) {
+        $resource_options = $this->parse_resource_options();
+        $data = $this->company_user_service->get_by_company_id($company_id,$resource_options);
+        return $this->response(1, 8000, "requested users", $data);
+    }
 
 }
