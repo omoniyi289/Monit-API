@@ -15,7 +15,7 @@ ssh root@185.130.207.215 <<-EOF
     mv ./live ./backup # Create new backup
     mv ./temp ./live
     mkdir ./temp # create new temp directory for next deployment
-    cp ./config/.env ./live
+    cp ./lara-config/.env ./live
     #cp ./config/env.js ./live/public/js
     cd ./live
     composer install --no-dev --optimize-autoloader --no-plugins --no-scripts
