@@ -30,6 +30,7 @@ class StockReceivedService
           ////no waybill processed
                     $pump = StockReceived::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'quantity_requested' => $data['quantity_requested'], 'quantity_supplied' => $data['quantity_supplied'],'driver_name' => $data['driver_name'], 'request_code' => $data['request_code'], 'truck_reg_number' => $data['truck_reg_number'],'arrival_time' => $data['arrival_time'], 'quantity_before_discharge' => $data['quantity_before_discharge'],'quantity_after_discharge' => $data['quantity_after_discharge'], 'stock_received_by' => $data['stock_received_by'], 'waybill_number' =>$data['waybill_number']]);
                   }
+
                   
               else{
                 ///waybill was gotten
