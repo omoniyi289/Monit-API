@@ -33,7 +33,7 @@ class CreateDailyStockReadingsTable extends Migration
             $table->foreign('tank_id')->references('id')->on('tanks')->onUpdate('cascade');
             $table->foreign('station_id')->references('id')->on('stations')->onUpdate('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade');
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
 
         });
     }

@@ -23,7 +23,7 @@ class CreateRolesTable extends Migration
                 $table->boolean('active')->default(0);
                 $table->unsignedInteger('company_id');
                 $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade');
-                $table->timestamps();
+                $table->timestamps();$table->softDeletes();
             });
         }catch (Exception $exception){
             DB::rollBack();

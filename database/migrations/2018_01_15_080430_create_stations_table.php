@@ -27,11 +27,13 @@ class CreateStationsTable extends Migration
                 $table->string("city");
                 $table->string("state");
                 $table->string("daily_budget");
+                $table->string("monthly_budget");
+                $table->string("license_type");
                 $table->string("expenses_type")->nullable();
                 $table->string("company_id");
                 $table->integer("station_user_id");
                 $table->integer("is_station_enabled")->default(0);;
-                $table->timestamps();
+                $table->timestamps();$table->softDeletes();
             });
         }catch (Exception $exception){
             DB::rollBack();

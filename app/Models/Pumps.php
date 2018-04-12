@@ -9,9 +9,8 @@ class Pumps extends Model
 {
     //
     protected $fillable = [
-        'number' , 'brand' , 'serial_number' , 'type' , 'company_id',
-        'station_id' , 'pump_group_id' , 'product_id','nozzle_code'
-    ];
+        'pump_nozzle_code' , 'brand' , 'serial_number' , 'fcc_pump_nozzle_id' , 'company_id',
+        'station_id' , 'pump_group_id' , 'product_id' ];
 
     public function pump_group() {
         return $this->belongsTo(PumpGroups::class);

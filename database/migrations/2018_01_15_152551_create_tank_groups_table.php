@@ -19,7 +19,7 @@ class CreateTankGroupsTable extends Migration
             $table->string('name');
             $table->string('company_id');
             $table->string('station_id');
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
         });
     }
 

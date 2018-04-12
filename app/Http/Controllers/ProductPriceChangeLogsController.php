@@ -12,6 +12,7 @@ use App\Requests\ApiProductsPriceRequest;
 use App\Services\CompanyService;
 use App\Services\ProductPriceChangeLogService;
 use Core\Controllers\BaseController;
+use Illuminate\Http\Request;
 
 class ProductPriceChangeLogsController extends BaseController
 {
@@ -25,9 +26,17 @@ class ProductPriceChangeLogsController extends BaseController
     public function create(ApiProductsPriceRequest $request){
         $product_change_log_request = $request->get('product_change_log',[]);
         $data = $this->product_price_change_logs_service->create($product_change_log_request);
+         if($data == 'ERROR 400'){
+           return $this->response(0, 8013, null,null, 400);
+        }
         return $this->response(1, 8000, "product changed, but yet to be approved", $data);
     }
-
+    public function create_new_log(ApiProductsPriceRequest $request){
+        $product_change_log_request = $request->get('product_change_log',[]);
+        $data = $this->product_price_change_logs_service->create_new_log($product_change_log_request);
+        return $this->response(1, 8000, "product changed, but yet to be approved", $data);
+    }
+    
     public function get_all(){
         $resource_options = $this->parse_resource_options();
         $data = $this->product_price_change_logs_service->get_all($resource_options);

@@ -26,7 +26,7 @@ class TankGroupRepository extends BaseRepository
         $tank_group->save();
         //update the tanks
         foreach ($data['selected_tanks'] as  $value) {
-             Tanks::where('id', $value)->update(['tank_group_id'=> $tank_group['id']]);
+             Tanks::where('id', $value['id'])->update(['tank_group_id'=> $tank_group['id']]);
             }
         return $tank_group;
     }

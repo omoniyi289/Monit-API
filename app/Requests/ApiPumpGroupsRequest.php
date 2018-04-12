@@ -20,8 +20,10 @@ class ApiPumpGroupsRequest extends APIRequest
     public function rules(){
         return [
             'pump_group' => 'array|required',
-            'pump_group.code' => 'required|string',
-            'pump_group.name' => 'required|email',
+            'pump_group.name' => 'required|string',
+            'pump_group.selected_pumps' => 'array|required',
+            'pump_group.station_id' => 'required|integer',
+            'pump_group.company_id' => 'required|integer',
         ];
     }
     public function attributes()

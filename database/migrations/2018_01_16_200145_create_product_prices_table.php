@@ -19,7 +19,7 @@ class CreateProductPricesTable extends Migration
             $table->integer('product_id');
             $table->integer('company_id');
             $table->integer('station_id');
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
         });
     }
 

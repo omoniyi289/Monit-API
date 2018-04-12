@@ -11,7 +11,7 @@ namespace App\Requests;
 
 use Core\Requests\APIRequest;
 
-class ApiPumpGroupToTankGroup extends APIRequest
+class ApiPumpGroupToTankGroupRequest extends APIRequest
 {
     public function authorize(){
         return true;
@@ -19,15 +19,15 @@ class ApiPumpGroupToTankGroup extends APIRequest
 
     public function rules(){
         return [
-         //   'pump_group_to_tank_group' => 'array|required',
-         //   'pump_group_to_tank_group.pump_group' => 'required|integer',
-         //   'pump_group_to_tank_group.name' => 'required|string',
+           'p_t_group' => 'array|required',
+           'p_t_group.pump_group_id' => 'required|integer',
+           'p_t_group.name' => 'required|string',
         ];
     }
     public function attributes()
     {
         return [
-            'pump_group_to_tank_group.name' => ''
+            'p_t_group.name' => ''
         ];
     }
 }

@@ -24,7 +24,7 @@ class CreateDailyTotalizerReadingsTable extends Migration
             $table->integer("close_shift_totalizer_reading")->nullable();
 
             $table->integer("shift_1_totalizer_reading")->nullable();
-            $table->integer("shift_2_totalizer__reading")->nullable();
+            $table->integer("shift_2_totalizer_reading")->nullable();
             $table->integer("shift_1_cash_collected")->nullable();
             $table->integer("shift_2_cash_collected")->nullable();
             $table->integer("cash_collected")->nullable();
@@ -38,7 +38,7 @@ class CreateDailyTotalizerReadingsTable extends Migration
             $table->foreign('station_id')->references('id')->on('stations')->onUpdate('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade');
 
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
         });
     }
 

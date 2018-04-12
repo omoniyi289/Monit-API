@@ -19,7 +19,7 @@ class CreateDispensersTable extends Migration
             $table->string('oem_nozzle_id');
             $table->integer('pump_id');
             $table->integer('station_id');
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
         });
     }
 

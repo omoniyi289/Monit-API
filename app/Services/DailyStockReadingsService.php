@@ -25,7 +25,7 @@ class DailyStockReadingsService
         $this->database->beginTransaction();
         try{
             foreach ($data['readings'] as $value) {
-                    $stock = DailyStockReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'tank_id' => $value['tank_id'],'tank_code' => $value['tank_code'], 'phy_shift_start_volume_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened']);
+                    $stock = DailyStockReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'tank_id' => $value['tank_id'],'tank_code' => $value['tank_code'], 'phy_shift_start_volume_reading' => $value['opening_reading'],'created_by' => $data['created_by'],'created_at' => $data['created_at'], 'status' =>'Opened']);
                 }
             
         }catch (Exception $exception){
@@ -35,12 +35,19 @@ class DailyStockReadingsService
         $this->database->commit();
         return $stock;
     }
-     public function update($stock_id, array $data)
+     public function update(array $data)
     {
-        $stock = $this->get_requested_stock($stock_id);
         $this->database->beginTransaction();
         try {
-            DailyStockReadings::update($stock, $data);
+            //DailyStockReadings::update($stock, $data);
+            foreach ($data['readings'] as $value) {
+                    if($value['status'] == 'Closed'){
+                    $stock = DailyStockReadings::where('created_at', $data['created_at'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'return_to_tank'=>$value['rtt'],'end_delivery'=>$value['qty_received'] ,'status' =>'Closed']);
+                    }else if($value['status'] == 'Modified'){
+                    $stock = DailyStockReadings::where('created_at', $value['created_at'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'phy_shift_start_volume_reading' => $value['opening_reading'],'return_to_tank'=>$value['rtt'],
+                        'end_delivery'=>$value['qty_received'],'last_modified_by'=>$data['last_modified_by']]);
+              }
+              }  
         } catch (Exception $exception) {
             $this->database->rollBack();
             throw $exception;
@@ -52,6 +59,16 @@ class DailyStockReadingsService
     public function get_all(array $options = []){
         return DailyStockReadings::all();
     }
+     public function get_filtered($company_id, $station_id){
+        $query = DailyStockReadings::with('tank.product');
+        if($company_id != 'all'){
+            $query = $query->where('company_id', $company_id);
+        }
+        if($station_id != 'all'){
+            $query = $query->where('station_id', $station_id);
+        }
+        return $query->get();
+    }
     public function get_by_id($stock_id, array $options = [])
     {
         return $this->get_requested_stock($stock_id);
@@ -60,12 +77,29 @@ class DailyStockReadingsService
     {   
 
        $result = DailyStockReadings::where('station_id',$params['station_id']);
+       //return date_format(date_create($params['date']),"Y-m-d");
        if(isset($params['date'])){
-            $result->where('created_at', 'LIKE', $params['date'].'%');
+            $result->where('created_at', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
        }
        else{
-        $result->where('created_at', 'LIKE', date('Y-m-d').'%');
+        //$timecheck = DailyStockReadings::where('station_id',$params['station_id'])->get();
+        //$result->where('created_at', 'LIKE', date('Y-m-d').'%');
+        $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
+        $result->where('created_at', 'LIKE',"%".date_format(date_create($timecheck['created_at']),"Y-m-d")."%");
+        $result->orderBy('id', 'desc');
        }
+       return $result->get();
+    }
+       public function close_station($params)
+    {   
+
+       $result = DailyStockReadings::where('station_id',$params['station_id']);
+       //return date_format(date_create($params['date']),"Y-m-d");
+      
+        $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
+        $result->where('created_at', 'LIKE', "%".date_format(date_create($timecheck['created_at']),"Y-m-d")."%");
+        $result->orderBy('id', 'desc');
+       
        return $result->get();
     }
     private function get_requested_stock($stock_id, array $options = [])

@@ -34,7 +34,8 @@ class PumpService
             throw $exception;
         }
         $this->database->commit();
-        return $pumps;
+        return Pumps::where('station_id',$data['station_id'])->with('product')->get();
+        //return $pumps;
     }
      public function update($pump_id, array $data)
     {
@@ -47,7 +48,11 @@ class PumpService
             throw $exception;
         }
         $this->database->commit();
-        return $pump;
+     return Pumps::where('station_id',$data['station_id'])->with('product')->get();
+    }
+    public function delete($pump_id, array $options = [])
+    {
+        return  Pumps::where('id',$pump_id)->delete();
     }
 
     public function get_all(array $options = []){
@@ -57,9 +62,13 @@ class PumpService
     {
         return $this->get_requested_pump($user_id);
     }
+    public function get_pump_by_code($name)
+    {
+        return $this->pump_repository->get_where("pump_nozzle_code", $name);
+    }
       public function get_by_station_id($station_id)
     {
-       return Pumps::where('station_id',$station_id)->where('pump_group_id', null)->with('product')->get();
+       return Pumps::where('station_id',$station_id)->with('product')->get();
     }
     private function get_requested_pump($user_id, array $options = [])
     {

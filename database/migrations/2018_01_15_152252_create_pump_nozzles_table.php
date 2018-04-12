@@ -17,7 +17,7 @@ class CreatePumpNozzlesTable extends Migration
             $table->increments('id');
             $table->string('nozzles');
             $table->integer('pump_id');
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
         });
     }
 

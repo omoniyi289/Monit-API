@@ -13,6 +13,7 @@ use App\Reposities\CompanyRepository;
 use App\Reposities\PumpGroupsRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
+use App\PumpGroups;
 
 class PumpGroupService
 {
@@ -39,6 +40,10 @@ class PumpGroupService
 
     public function get_all(array $options = []){
         return $this->pump_groups_repository->get($options);
+    }
+     public function delete($id, array $options = [])
+    {
+        return  PumpGroups::where('id',$id)->delete();
     }
     public function get_by_id($user_id, array $options = [])
     {

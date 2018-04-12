@@ -24,7 +24,9 @@ class CreateCompanyUsersTable extends Migration
                 $table->boolean('is_password_reset')->default(0);
                 $table->string('phone_number');
                 $table->integer('company_id');
-                $table->timestamps();
+                 $table->unsignedInteger('role_id');
+                $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade');
+                $table->timestamps();$table->softDeletes();
             });
         }catch (Exception $exception){
             DB::rollBack();

@@ -11,6 +11,7 @@ use App\Requests\ApiCompanyRequest;
 use App\Services\CompanyService;
 use App\Services\UserService;
 use App\Util;
+use Illuminate\Http\Request;
 use Core\AuditTrail\Audit;
 use Core\Controllers\BaseController;
 use JWTAuth;
@@ -33,8 +34,8 @@ class CompanyController extends BaseController
             $company_reg_no_exist = $this->company_service->get_company_by_reg_no($company_request['registration_number']);
             $company_request['user_id'] = Util::get_user_details_from_token('id');
             $user_id_exist = $this->company_service->get_company_by_user_id($company_request['user_id'])->first();
-            if (count($user_id_exist) == 1){
-                return $this->response(0, 8000, "a company already registered with this account", $user_id_exist, 400);
+           if (count($user_id_exist) == 1){
+               return $this->response(0, 8000, "a company already registered with this account", $user_id_exist, 400);
             }
             if (count($company_exist) == 1) {
                 return $this->response(0, 8000, "company already exist", null, 400);
@@ -62,15 +63,45 @@ class CompanyController extends BaseController
             return $this->response(0, 8000, $exception->getMessage(), null,500);
         }
     }
-    public function get_by_id($company_id) {
-        try {
-            $resource_options = $this->parse_resource_options();
-            $data = $this->company_service->get_by_id($company_id, $resource_options);
-            return $this->response(1, 8000, "company details", $data);
+        public function update($company_id,Request $request)
+    {   try {
+        $totalizer_update_request = $request->get('company', []);
+        $data = $this->company_service->update($company_id,$totalizer_update_request); 
+            return $this->response(1, 8000, "request successfully updated", $data);     
         }catch (Exception $exception){
             return $this->response(0, 8000, $exception->getMessage(), null,500);
         }
     }
+    public function get_by_id($company_id) {
+        try {
+            $resource_options = $this->parse_resource_options();
+            $data = $this->company_service->get_by_id($company_id, $resource_options);
+            return $this->response(1, 8000, "company", $data);
+        }catch (Exception $exception){
+            return $this->response(0, 8000, $exception->getMessage(), null,500);
+        }
+    }
+    
+    public function get_for_prime_user($user_id) {
+        try {
+           // return $user_id;
+            $resource_options = $this->parse_resource_options();
+            $data = $this->company_service->get_for_prime_user($user_id, $resource_options);
+            return $this->response(1, 8000, "company", $data);
+        }catch (Exception $exception){
+            return $this->response(0, 8000, $exception->getMessage(), null,500);
+        }
+    }
+
+     public function delete($company_id) {
+            try {
+                $resource_options = $this->parse_resource_options();
+                $data = $this->company_service->delete($company_id, $resource_options);
+                return $this->response(1, 8000, "company deleted", $data);
+            }catch (Exception $exception){
+                return $this->response(0, 8000, $exception->getMessage(), null,500);
+            }
+        }
 
     public function get_token(){
         $token_details = Util::get_user_details_from_token("email");

@@ -11,6 +11,8 @@ namespace App\Services;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use App\Models\DailyTotalizerReadings;
+use App\Pumps;
+use App\ProductPrices;
 class DailyTotalizersReadingsService
 {
     private $database;
@@ -22,8 +24,10 @@ class DailyTotalizersReadingsService
     public function create(array $data) {
         $this->database->beginTransaction();
         try{
+          //return $data['created_at'];
             foreach ($data['readings'] as $value) {
-                    $pump = DailyTotalizerReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['nozzle_code'],'pump_number' => $value['pump_number'], 'open_shift_totalizer_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened']);
+
+                    $pump = DailyTotalizerReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['pump_nozzle_code'], 'open_shift_totalizer_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened', 'created_at'=> $data['created_at']]);
                 }
             
         }catch (Exception $exception){
@@ -39,8 +43,28 @@ class DailyTotalizersReadingsService
         $this->database->beginTransaction();
         try {
              foreach ($data['readings'] as $value) {
-        $single_pump = DailyTotalizerReadings::where('created_at', 'LIKE', date("Y-m-d").'%')->where('pump_id', $value['pump_id'])->update(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['nozzle_code'],'shift_1_cash_collected' => $value['cash_collected'], 'shift_1_totalizer_reading' => $value['closing_reading'],'created_by' => $data['created_by'], 'status' =>'Closed']);
-                }
+         if($value['status'] == 'Shift End'){   
+         $pump = Pumps::where('id', $value['pump_id'])->with('product')->get()->first();
+
+         $price = ProductPrices::where('product_id', $pump['product']['id'])->where('station_id', $data['station_id'])->get()->first(); 
+            if($data['shift_batch']== 'First Shift'){
+               $single_pump = DailyTotalizerReadings::where('created_at', $data['created_at'])->where('pump_id', $value['pump_id'])->update(['shift_1_cash_collected' => $value['cash_collected'],'ppv'=>$price['new_price_tag'], 'shift_1_totalizer_reading' => $value['closing_reading'],'status' =>$value['status']]);
+            }else if($data['shift_batch']== 'Second Shift'){
+              $single_pump = DailyTotalizerReadings::where('created_at', $data['created_at'])->where('pump_id', $value['pump_id'])->update(['shift_2_cash_collected' => $value['cash_collected'],'ppv'=>$price['new_price_tag'], 'shift_2_totalizer_reading' => $value['closing_reading'],'status' =>$value['status']]);
+            }
+              }
+              else if($value['status']== 'Closed'){
+                //it is closed
+                $pump = Pumps::where('id', $value['pump_id'])->with('product')->get()->first();
+
+                $price = ProductPrices::where('product_id', $pump['product']['id'])->where('station_id', $data['station_id'])->get()->first();
+
+               $single_pump = DailyTotalizerReadings::where('created_at', $data['created_at'])->where('pump_id', $value['pump_id'])->update(['cash_collected' => $value['cash_collected'],'ppv'=>$price['new_price_tag'],'close_shift_totalizer_reading' => $value['closing_reading'], 'status' =>$value['status']]);
+              }
+              else if($value['status'] == 'Modified'){
+                $single_pump = DailyTotalizerReadings::where('created_at', $value['created_at'])->where('pump_id', $value['pump_id'])->update(['cash_collected' => $value['cash_collected'],'shift_1_cash_collected' => $value['first_shift_cash_collected'],'shift_2_cash_collected' => $value['second_shift_cash_collected'],'ppv' => $value['ppv'], 'open_shift_totalizer_reading' => $value['opening_reading'],'shift_1_totalizer_reading' => $value['first_shift_reading'],'shift_2_totalizer_reading' => $value['second_shift_reading'],'close_shift_totalizer_reading' => $value['closing_reading'],'last_modified_by'=>$data['last_modified_by']]);
+              }
+              }  
 
             // DailyTotalizerReadings::update($stock, $data);
         } catch (Exception $exception) {
@@ -53,6 +77,17 @@ class DailyTotalizersReadingsService
 
     public function get_all(array $options = []){
         return DailyTotalizerReadings::all();
+    }
+    public function get_filtered($company_id, $station_id){
+        //return DailyTotalizerReadings::with('pump.product')->get();
+        $query = DailyTotalizerReadings::with('pump.product');
+        if($company_id != 'all'){
+            $query = $query->where('company_id', $company_id);
+        }
+        if($station_id != 'all'){
+            $query = $query->where('station_id', $station_id);
+        }
+        return $query->get();
     }
     public function get_by_id($stock_id, array $options = [])
     {
@@ -67,10 +102,12 @@ class DailyTotalizersReadingsService
 
        $result = DailyTotalizerReadings::where('station_id',$params['station_id']);
        if(isset($params['date'])){
-            $result->where('created_at', 'LIKE', $params['date'].'%');
+            $result->where('created_at', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
        }
        else{
-        $result->where('created_at', 'LIKE', date('Y-m-d').'%');
+        $timecheck = DailyTotalizerReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
+        $result->where('created_at', 'LIKE',"%".date_format(date_create($timecheck['created_at']),"Y-m-d")."%");
+        $result->orderBy('id', 'desc');
        }
        return $result->get();
     }

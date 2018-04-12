@@ -12,7 +12,8 @@ namespace App\Services;
 use App\Reposities\StationRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
-
+use App\Station;
+use App\Models\StationUsers;
 class StationService
 {
     private $database;
@@ -52,6 +53,10 @@ class StationService
         $this->database->commit();
         return $station;
     }
+    public function delete($user_id, array $options = [])
+    {
+        return  Station::where('id',$user_id)->delete();
+    }
 
     public function get_all(array $options = []){
         return $this->station_repository->get($options);
@@ -60,7 +65,14 @@ class StationService
     public function get_station_by_company_id($company_id){
         return $this->station_repository->get_where("company_id",$company_id);
     }
-
+    public function get_stations_by_user_id($user_id){
+        //return $this->station_repository->get_where("company_id",$company_id);
+        return  StationUsers::where('company_user_id',$user_id)->with('station')->get();
+    }
+    public function get_station_by_name($name)
+    {
+        return $this->station_repository->get_where("name", $name);
+    }
     public function get_by_id($station_id, array $options = [])
     {
         return $this->get_requested_station($station_id);

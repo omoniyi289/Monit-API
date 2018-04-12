@@ -14,10 +14,11 @@ use App\Reposities\CompanyUserRepository;
 use App\Reposities\UserRepository;
 use App\Models\CompanyUserRole;
 use App\Models\StationUsers;
-use App\CompanyUsers;
+use App\Models\CompanyUsers;
 use Exception;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
+
 
 class CompanyUserService
 {
@@ -51,10 +52,9 @@ class CompanyUserService
             $company_user = $this->company_user_repository->create($data);
             ///add station_company_user
             foreach($data['selected_stations'] as $value) {
-                    StationUsers::create(['company_user_id' => $company_user['id'], 'station_id' => $value]);
+                    StationUsers::create(['company_user_id' => $company_user['id'], 'station_id' => $value['id']]);
                 }
-            ////add user role
-                CompanyUserRole::create(['role_id' => $data['role_id'], 'company_user_id' => $company_user['id']]);
+            
 
         } catch (Exception $exception) {
             // this means don't insert
@@ -62,7 +62,7 @@ class CompanyUserService
             throw $exception;
         }
         $this->database->commit();
-        return $company_user;
+        return CompanyUsers::where('id',$company_user['id'])->with('station_users.station')->with('role')->get()->first();
     }
 
     public function update($company_user_id, array $data)
@@ -70,7 +70,27 @@ class CompanyUserService
         $company_user = $this->get_requested_user($company_user_id);
         $this->database->beginTransaction();
         try {
+            StationUsers::where('company_user_id',$company_user_id)->delete();
             $this->company_user_repository->update($company_user, $data);
+            if(isset($data['selected_stations'])){
+            foreach($data['selected_stations'] as $value) {
+                    StationUsers::create(['company_user_id' => $company_user_id, 'station_id' => $value['id']]);
+                }
+            }
+        } catch (Exception $exception) {
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return CompanyUsers::where('company_id',$data['company_id'])->with('station_users.station')->with('role')->get();
+    }
+      public function profile_update($company_user_id, array $data)
+    {
+        $company_user = $this->get_requested_user($company_user_id);
+        $this->database->beginTransaction();
+        try {
+            $this->company_user_repository->update($company_user, $data);
+          
         } catch (Exception $exception) {
             $this->database->rollBack();
             throw $exception;
@@ -96,12 +116,18 @@ class CompanyUserService
 
     public function get_by_id($user_id, array $options = [])
     {
-        return $this->get_requested_user($user_id);
+        //return $this->get_requested_user($user_id);
+        return CompanyUsers::where('id',$user_id)->with('station_users.station')->with('role')->get()->first();
     }
-
+    public function delete($user_id, array $options = [])
+    {   
+        StationUsers::where('company_user_id',$user_id)->delete();
+        CompanyUserRole::where('company_user_id',$user_id)->delete();
+        return  CompanyUsers::where('id',$user_id)->delete();
+    }
       public function get_by_company_id($company_id)
     {
-       return CompanyUsers::where('company_id',$company_id)->get();
+       return CompanyUsers::where('company_id',$company_id)->with('station_users.station')->with('role')->get();
     }
 
     public function add_roles($user_id, array $role_ids)

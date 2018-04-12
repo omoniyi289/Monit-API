@@ -21,7 +21,7 @@ class CreatePumpGroupsTable extends Migration
                 $table->string('name');
                 $table->integer('station_id');
                 $table->integer('company_id');
-                $table->timestamps();
+                $table->timestamps();$table->softDeletes();
             });
         }catch (Exception $exception){
             DB::rollBack();

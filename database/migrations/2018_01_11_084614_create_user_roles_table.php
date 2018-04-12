@@ -22,7 +22,7 @@ class CreateUserRolesTable extends Migration
             $table->unsignedInteger('role_id');
                 $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade');
                 $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
-                $table->timestamps();
+                $table->timestamps();$table->softDeletes();
             });
         }catch (Exception $exception){
             DB::rollBack();

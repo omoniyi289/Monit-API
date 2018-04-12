@@ -15,7 +15,7 @@ class CreatePumpGroupToTankGroupTable extends Migration
     {
         Schema::create('pump_group_to_tank_group', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
 
             $table->unsignedInteger('tank_group_id');
             $table->unsignedInteger('pump_group_id');

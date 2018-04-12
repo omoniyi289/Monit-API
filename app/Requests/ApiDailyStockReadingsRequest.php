@@ -19,7 +19,7 @@ class ApiDailyStockReadingsRequest extends APIRequest
 
     public function rules(){
         return [
-            'stock' => 'array|required'
+            'stocks' => 'array|required'
         ];
     }
 

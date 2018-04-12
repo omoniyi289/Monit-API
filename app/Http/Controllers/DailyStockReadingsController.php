@@ -19,14 +19,14 @@ class DailyStockReadingsController extends BaseController
 
     public function create(ApiDailyStockReadingsRequest $request) {
 
-        $stock_request = $request->get('stock',[]);
+        $stock_request = $request->get('stocks',[]);
         $data = $this->daily_stock_readings_service->create($stock_request);
         return $this->response(1, 8000, "stock successfully created", $data);
     }
-      public function update($stock_id, Request $request)
+      public function update(Request $request)
     {
-        $stock_update_request = $request->get('stock_reading', []);
-        $data = $this->daily_stock_readings_service->update($stock_id, $stock_update_request);
+        $stock_update_request = $request->get('stocks', []);
+        $data = $this->daily_stock_readings_service->update($stock_update_request);
         return $this->response(1, 8000, "stock successfully updated", $data);
     }
 
@@ -38,6 +38,7 @@ class DailyStockReadingsController extends BaseController
 
     
      public function get_by_params(Request $request) {
+        //return $request;
         $stock_update_request = $request->all();
         $resource_options = $this->parse_resource_options();
         $data = $this->daily_stock_readings_service->get_by_params($stock_update_request);

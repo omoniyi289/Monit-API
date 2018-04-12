@@ -28,6 +28,10 @@ class TanksController extends BaseController
 
     public function create(ApiTankRequest $request){
         $tank_request = $request->get('tank',[]);
+        $exist_name = $this->tank_service->get_tank_by_code($tank_request['code']);
+        if (count($exist_name) == 1){
+               return $this->response(0, 8000, "error! tank with this same code already exist", $exist_name, 400);
+            }
         $data = $this->tank_service->create($tank_request);
         return $this->response(1, 8000, "tank successfully created", $data);
     }
@@ -53,5 +57,14 @@ class TanksController extends BaseController
         $data = $this->tank_service->get_by_station_id($station_id,$resource_options);
         return $this->response(1, 8000, "requested tanks", $data);
     }
+    public function delete($tank_id) {
+            try {
+                $resource_options = $this->parse_resource_options();
+                $data = $this->tank_service->delete($tank_id, $resource_options);
+                return $this->response(1, 8000, "tank deleted", $data);
+            }catch (Exception $exception){
+                return $this->response(0, 8000, $exception->getMessage(), null,500);
+            }
+        }
 
 }

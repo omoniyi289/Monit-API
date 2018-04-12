@@ -24,6 +24,10 @@ class CompanyRepository extends BaseRepository
         $company->save();
         return $company;
     }
-
+public function update(Company $pump, array $data){
+        $pump->fill($data);
+        $pump->save();
+        return $pump;
+    }
 
 }

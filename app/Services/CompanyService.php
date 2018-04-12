@@ -12,7 +12,8 @@ namespace App\Services;
 use App\Reposities\CompanyRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
-
+use Illuminate\Http\Request;
+use App\Company;
 class CompanyService
 {
     private $database;
@@ -37,7 +38,19 @@ class CompanyService
         $this->database->commit();
         return $company;
     }
-
+     public function update($pump_id, array $data)
+    {
+        $pump = $this->get_requested_user($pump_id);
+        $this->database->beginTransaction();
+        try {
+            $this->company_repository->update($pump, $data);
+        } catch (Exception $exception) {
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $pump;
+    }
     public function get_company_by_name($name){
         return $this->company_repository->get_where('name',$name);
     }
@@ -47,11 +60,22 @@ class CompanyService
     }
 
     public function get_all(array $options = []){
-        return $this->company_repository->get($options);
+        return Company::all();
     }
     public function get_by_id($user_id, array $options = [])
     {
-        return $this->get_requested_user($user_id);
+        ///leave it at get, else trouble in frontend
+        return Company::where('id', $user_id)->get();
+    }
+    public function get_for_prime_user($user_id, array $options = [])
+    {
+        ///leave it at get, else trouble in frontend
+        
+        return Company::where('user_id', $user_id)->get();
+    }
+    public function delete($user_id, array $options = [])
+    {
+        return  Company::where('id',$user_id)->delete();
     }
     public function get_company_by_reg_no($reg_no)
     {

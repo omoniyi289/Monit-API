@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Core\Models\Model;
-
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Station extends Model
 {
     protected $fillable = [

@@ -13,6 +13,8 @@ use App\Notifications\RolesAssigned;
 use App\Requests\ApiUserRolesRequest;
 use App\Requests\ApiUserRequest;
 use App\Services\UserService;
+use App\Services\CompanyService;
+use App\Services\CompanyUserService;
 use App\User;
 use App\Util;
 use Core\Controllers\BaseController;
@@ -25,10 +27,12 @@ use Mail;
 class UserController extends BaseController
 {
     private $user_service;
+    private $company_user_service;
 
-    public function __construct(UserService $user_service)
+    public function __construct(CompanyUserService $company_user_service, UserService $user_service)
     {
         $this->user_service = $user_service;
+        $this->company_user_service = $company_user_service;
     }
 
     public function get_all()
@@ -53,11 +57,13 @@ class UserController extends BaseController
         $user_request['is_company_set_up'] =false;
         $exist_email = $this->user_service->get_user_by_email($user_request['email']);
         $exist_username = $this->user_service->get_user_by_username($user_request['username']);
-        if (count($exist_username) == 1) {
+        $exist_email2 = $this->company_user_service->get_user_by_email($user_request['email']);
+        $exist_username2 = $this->company_user_service->get_user_by_username($user_request['username']);
+        if (count($exist_username) == 1 or count($exist_username2) == 1) {
             return $this->response(0, 8009, null, null,
                 JsonResponse::HTTP_BAD_REQUEST);
         }
-        if (count($exist_email) == 1) {
+        if (count($exist_email) == 1 or count($exist_email2) == 1) {
             return $this->response(0, 8010, null, null,
                 JsonResponse::HTTP_BAD_REQUEST);
         }
@@ -74,6 +80,54 @@ class UserController extends BaseController
         ];
         Mail::to($user_request['email'])->send(new RegistrationMail($mail_data));
         return $this->response(1, 8000, "user successfully created", $data,
+            JsonResponse::HTTP_CREATED);
+    }
+     public function profile_update($user_id, Request $request)
+    {
+        $user_request = $request->get('user', []);
+        $password_message = '';
+        if(isset($user_request['currentpassword'])){
+            if(isset($user_request['password']) and isset($user_request['repeatPassword']) and ($user_request['password'] != $user_request['repeatPassword'])){
+             return $this->response(0, 8000, "new and repeat new password do not match",null,400);
+            }else if(!isset($user_request['password']) or !isset($user_request['repeatPassword'])){
+                return $this->response(0, 8000, "incomplete parameters for password change ",null,400);
+            }
+            $user =  $this->user_service->get_by_id($user_id);
+            if (!empty($user) || $user != null){
+                $check_password = password_verify($user_request['currentpassword'],$user['password']);
+                //return $user;
+                if ($check_password){
+                    $user_request['password'] = bcrypt($user_request['password']);
+                    $password_message=", password changed";
+                   
+                }else{
+                     return $this->response(0, 8000, "invalid current password",null,400);
+                }
+            }
+            }
+                 $exist_email = $this->user_service->get_user_by_email($user_request['email']);
+                 $exist_username = $this->user_service->get_user_by_username($user_request['username']);
+                  $exist_email2 = $this->company_user_service->get_user_by_email($user_request['email']);
+                 $exist_username2 = $this->company_user_service->get_user_by_username($user_request['username']);
+                    //return $exist_email;
+                    if (count($exist_username) == 1 and $exist_username[0]['id']!=$user_request['id']) {
+                        return $this->response(0, 8009, null, null,
+                            JsonResponse::HTTP_BAD_REQUEST);
+                    }else if (count($exist_username2) == 1 and $exist_username2[0]['id']!=$user_request['id']) {
+                        return $this->response(0, 8009, null, null,
+                            JsonResponse::HTTP_BAD_REQUEST);
+                    }
+
+                    //\eturn $user_request;
+                    if (count($exist_email) == 1 and $exist_email[0]['id'] != $user_request['id']){
+                        return $this->response(0, 8010, null, null,
+                            JsonResponse::HTTP_BAD_REQUEST);
+                    }else if (count($exist_email2) == 1 and $exist_email2[0]['id'] != $user_request['id']){
+                        return $this->response(0, 8010, null, null,
+                            JsonResponse::HTTP_BAD_REQUEST);
+                    }
+                    $data = $this->user_service->update($user_id, $user_request);
+                return $this->response(1, 8000, "user profile successfully updated".$password_message, $data,
             JsonResponse::HTTP_CREATED);
     }
 
@@ -105,6 +159,7 @@ class UserController extends BaseController
         return $this->response(1, 8000, "users", $data);
     }
 
+   
     public function verify_user($verification_code){
         $check = DB::table('user_verifications')->where('token',$verification_code)->first();
         if (!is_null($check)){
@@ -114,9 +169,8 @@ class UserController extends BaseController
             }
             $this->user_service->update($user->id,['is_verified' => 1]);
             DB::table('user_verifications')->where('token',$verification_code)->delete();
-            return $this->response(1, 8000, "You have successfully verified your email"
-                , $user);
+            return $this->response(1, 8000, "passed", $user);
         }
-        return $this->response(0, 8000, "verification code is invalid", null);
+        return $this->response(0, 8000, "Error!!! verification code is invalid", null);
     }
 }

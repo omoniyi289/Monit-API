@@ -22,7 +22,7 @@ class ApiUserRequest extends APIRequest
             'user.email' => 'required|email',
             'user.username' => 'required|string',
             'user.password' => 'required|string|min:6',
-            'user.gender' => 'required|string',
+            
           //  'user.is_term_agreed' => 'required|boolean',
         ];
     }

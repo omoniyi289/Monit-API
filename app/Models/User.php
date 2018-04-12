@@ -17,7 +17,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'fullname','username', 'email', 'password', 'phone_number', 'is_verified',
-        'auth_key', 'gender', 'is_term_agreed', 'is_company_set_up',
+        'auth_key', 'is_term_agreed', 'is_company_set_up',
     ];
 
     /**
@@ -32,10 +32,12 @@ class User extends Authenticatable
     public function roles() {
         return $this->belongsToMany(Role::class,"user_roles","user_id","role_id");
     }
+    
 
     public function companies(){
         return $this->hasOne(User::class);
     }
+   
 
     public function isAdminstrator(){
         return $this->roles();

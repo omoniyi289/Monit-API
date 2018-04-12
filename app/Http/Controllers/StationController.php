@@ -38,6 +38,11 @@ class StationController extends BaseController implements GenericInterface
         $station_req = $request->get('station',[]);
         $user_id = $this->get_user();
         $company_details = $this->company_service->get_company_by_user_id($user_id)->first();
+        $exist_name = $this->station_service->get_station_by_name($station_req['name']);
+        if (count($exist_name) == 1){
+               return $this->response(0, 8000, "error! station with this same name already exist", $exist_name, 400);
+            }
+
         //$station_req['company_id'] = $company_details['id'];
         $station_req['station_user_id'] = $user_id;
         $data = $this->station_service->create($station_req);
@@ -71,10 +76,12 @@ class StationController extends BaseController implements GenericInterface
     }
     //niyi
     public function get_stations_by_company_id($company_id){
-        //$company_name = $request->get('company_name');
-        //$company_name = $request->input('company_name');
-       // $company = $this->company_service->get_company_by_name($company_name)->first();
         $company_stations = $this->station_service->get_station_by_company_id($company_id);
+        return $this->response(1, 8000, "registered stations", $company_stations);
+    }
+
+     public function get_stations_by_user_id($company_id){
+        $company_stations = $this->station_service->get_stations_by_user_id($company_id);
         return $this->response(1, 8000, "registered stations", $company_stations);
     }
 
@@ -95,6 +102,15 @@ class StationController extends BaseController implements GenericInterface
         $data = $this->station_service->update($station_id, $station_update_request);
         return $this->response(1, 8000, "station successfully updated", $data);
     }
+     public function delete($station_id) {
+            try {
+                $resource_options = $this->parse_resource_options();
+                $data = $this->station_service->delete($station_id, $resource_options);
+                return $this->response(1, 8000, "station deleted", $data);
+            }catch (Exception $exception){
+                return $this->response(0, 8000, $exception->getMessage(), null,500);
+            }
+        }
 
     public function activation_code($count){
         $arr = array();

@@ -14,6 +14,8 @@ use Core\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Mail\ForgotPassMail;
+use Mail;
 class AuthController extends BaseController
 {
 
@@ -95,5 +97,36 @@ class AuthController extends BaseController
             }
         }
     }
-
+   public function passwordreset(Request $request){
+        //= $request->get('email');
+        $user =  $this->user_service->get_user_by_email($request->get('email'))->first();
+        $station_user =  $this->station_user_service->get_user_by_email($request->get('email'))->first();
+        $identifier ='';
+        if (!empty($user) || $user != null) {
+             $data = $user;
+             $identifier= 'user';
+            
+        }else if(!empty($station_user) || $station_user != null){
+            $data = $station_user;
+            $identifier = 'company_user';
+        }else{
+            return $this->response(0, 8000, "emil not found",null,400);
+        }   
+            $user_request=[];
+             $new_pass= 'TP'.substr(uniqid(), 8);
+             $user_request['password'] = bcrypt($new_pass);
+             //$identifier = '';
+            if($identifier == 'user'){
+                $result = $this->user_service->update($user['id'],$user_request);
+            }else if($identifier == 'company_user'){
+                $result =  $this->station_user_service->profile_update($station_user['id'],$user_request);
+            }
+          $mail_data = [
+            'fullname' => $data['fullname'],
+            'email' => $data['email'],
+            'new_pass' =>$new_pass,
+        ];
+        Mail::to($data['email'])->send(new ForgotPassMail($mail_data));
+        return $this->response(1, 8000, "password successfully reset", $data);
+    }
 }

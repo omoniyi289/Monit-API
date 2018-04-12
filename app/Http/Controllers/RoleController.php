@@ -42,6 +42,19 @@ class RoleController extends BaseController
         $data = $this->role_service->get_by_company_id($company_id,$resource_options);
         return $this->response(1, 8000, "requested roles", $data);
     }
+     public function  get_role_permissions($role_id){
+        $data =  $this->role_service->get_role_permissions($role_id);
+        return $this->response(1, 8000, "user permissions", $data);
+    }
+    public function delete($role_id) {
+            try {
+                $resource_options = $this->parse_resource_options();
+                $data = $this->role_service->delete($role_id, $resource_options);
+                return $this->response(1, 8000, "role deleted", $data);
+            }catch (Exception $exception){
+                return $this->response(0, 8000, $exception->getMessage(), null,500);
+            }
+        }
 
     public function get_all(){
         $resource_options = $this->parse_resource_options();

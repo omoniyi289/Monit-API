@@ -27,7 +27,7 @@ class CreateProductChangeLogsTable extends Migration
             $table->foreign('station_id')->references('id')->on('stations')->onUpdate('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade');
     
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
         });
     }
 

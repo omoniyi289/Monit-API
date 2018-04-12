@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class DailyTotalizersReadingsController extends BaseController
 {
     private $daily_totalizers_readings_service;
-
+    
     public function __construct(DailyTotalizersReadingsService $daily_totalizers_readings_service)
     {
         $this->daily_totalizers_readings_service = $daily_totalizers_readings_service;

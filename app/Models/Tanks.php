@@ -10,9 +10,9 @@ class Tanks extends Model
 {
     //
     protected $fillable = [
-        'name','code', 'company_id', 'station_id', 'width' , 'height' , 'shape',
-        'capacity' , 'product_id', 'low_volume' , 'reorder_volume','deadstock', 'max_temperate',
-        'max_water_level','daily_budget','tank_group_id'
+        'code', 'company_id', 'station_id', 'width' , 'height' , 'probe_id',
+        'capacity' , 'product_id' , 'reorder_volume','deadstock', 'atg_tank_id',
+        'max_water_level','tank_group_id', 'type',
     ];
 
     public function tank_group() {

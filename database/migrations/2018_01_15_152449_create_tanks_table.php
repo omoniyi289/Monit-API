@@ -28,10 +28,10 @@ class CreateTanksTable extends Migration
             $table->string('max_temperate');
             $table->string('max_water_level');
             $table->integer('daily_budget');
-            $table->integer('tank_group_id');
+            $table->integer('tank_group_id')->nullable();
             $table->integer('company_id');
             $table->integer('station_id');
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
         });
     }
 

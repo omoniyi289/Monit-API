@@ -15,7 +15,14 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use App\ProductChangeLogs;
 use App\ProductPrices;
-
+use App\Mail\PriceChangeMail;
+use Mail;
+use App\Station;
+use App\Products;
+use App\User;
+use App\Services\ProductPriceService;
+use App\Models\CompanyUsers;
+use App\Models\CompanyUserRole;
 class ProductPriceChangeLogService
 {
     private $database;
@@ -33,19 +40,22 @@ class ProductPriceChangeLogService
     public function create(array $data){
         $this->database->beginTransaction();
         try{
+
+            if($data['mode']=='create'){
             $exist = $this->get_by_station_and_product_id($data['station_id'], $data['product_id']);
             if (count($exist) > 0) {
-                $company = $this->product_price_change_log_repository->create($data);
+                return 'ERROR 400';
             }else{   
              $data['new_price_tag'] = $data['requested_price_tag'];      
-             $company = ProductPrices::create($data);
+             $product_price = ProductPrices::create($data);
                 }
+            }
         }catch (Exception $exception){
             $this->database->rollBack();
             throw $exception;
         }
         $this->database->commit();
-        return $company;
+        return $product_price;
     }
 
     public function get_company_by_name($name){
@@ -59,9 +69,21 @@ class ProductPriceChangeLogService
     {
         return $this->get_requested_product_price_change($user_id);
     }
+    public function create_new_log($new_data)
+    {
+                $data = ProductChangeLogs::create($new_data);
+              // return $product_price;
+                    $sss= Products::where('id', $data['product_id'])->first();
+                    $data['product_name'] = $sss['name'];
+                    $station = Station::where('id', $data['station_id'])->get()->first();
+                    
+                    $approver_details = CompanyUsers::where('id', $data['approved_by'])->get()->first();
+                    Mail::to($approver_details['email'])->send(new PriceChangeMail($station,$approver_details,$new_data['creator_name'], $data ));
+                  return $data;
+    }
     public function get_by_station_id($station_id, array $options = [])
     {
-        return ProductChangeLogs::where("station_id", $station_id)->with('product')->get();
+        return ProductChangeLogs::where("station_id", $station_id)->with('product')->with('approver')->get();
     }
     public function get_by_station_and_product_id($station_id, $product_id, array $options = [])
     {

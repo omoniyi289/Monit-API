@@ -19,14 +19,16 @@ class CreateCompaniesTable extends Migration
             Schema::create('companies', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
-                $table->string('email')->unique();
-                $table->string('registration_number', 6)->unique()->nullable();
+                $table->string('email');
+                $table->string('registration_number')->nullable();
                 $table->string('country')->nullable();
                 $table->string('state');
                 $table->string('city');
                 $table->string('address');
+                $table->unsignedInteger('user_id');
+                $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
                 $table->string('logo')->nullable();
-                $table->timestamps();
+                $table->timestamps();$table->softDeletes();
             });
         }catch (Exception $exception){
             DB::rollBack();

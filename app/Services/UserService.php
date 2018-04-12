@@ -13,6 +13,7 @@ use App\Reposities\UserRepository;
 use Exception;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
+use App\Users;
 
 class UserService
 {
@@ -34,6 +35,7 @@ class UserService
     {
         return $this->user_repository->get($options);
     }
+   
 
     public function create($data)
     {

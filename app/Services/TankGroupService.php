@@ -13,7 +13,7 @@ use App\Reposities\CompanyRepository;
 use App\Reposities\TankGroupRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
-
+use App\TankGroups;
 class TankGroupService
 {
     private $database;
@@ -43,7 +43,10 @@ class TankGroupService
     {
         return $this->tank_group_repository->get($options);
     }
-
+    public function delete($tank_id, array $options = [])
+    {
+        return  TankGroups::where('id',$tank_id)->delete();
+    }
     public function get_by_id($user_id, array $options = [])
     {
         return $this->get_requested_tank_group($user_id);

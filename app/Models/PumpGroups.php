@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Core\Models\Model;
+use Illuminate\Database\Eloquent\Model;
 
 class PumpGroups extends Model
 {
@@ -11,7 +11,7 @@ class PumpGroups extends Model
     ];
 
     public function pumps(){
-        return $this->hasMany(Pumps::class);
+        return $this->hasMany(Pumps::class , 'pump_group_id');
     }
 }
 

@@ -1,63 +1,123 @@
 <?php
-
 return [
 
         "admin" => [
 
-            "create_user" => [
-                "name" => "Create User",
-                "description" => "permission to Create User",
-            ],
+                "create_user" => [
+                    "name" => "Create/Modify Users",
+                    "description" => "permission to Create Users for company",
+                    "UI_slug" => "CMUs"
+                ],
 
-            "modify_user" => [
-                "name" => "Modify User",
-                "description" => "permission to Modify User",
-            ],
+                "create_company" => [
+                    "name" => "Create/Modify Company",
+                    "description" => "permission to Modify Company Profile",
+                    "UI_slug" => "CMCo"
+                ],
 
-            "create_price" => [
-                "name" => "Create Price",
-                "description" => "permission to Create Price",
-            ],
+                "setup_station" => [
+                    "name" => "Create/Modify Stations",
+                    "description" => "permission to setup stations",
+                    "UI_slug" => "CMSt"
+                ],
 
-            "approve_price_change" => [
-                "name" => "Approve Price Change",
-                "description" => "permission to Approve Price Change",
-            ],
-            "approve_adslots" => [
-                "name" => "Request Price Change",
-                "description" => "permission to Request Price Change",
-            ],
-            
-            "create_bank_payment" => [
-                "name" => "Create Bank Payment",
-                "description" => "permission to Create Bank Payment",
-            ],       
+                "create_price_change_request" => [
+                    "name" => "Create Price Change Request",
+                    "description" => "permission to Create Price Change Request",
+                    "UI_slug" => "CPCR"
+                ],  
 
-            "analytics_previous" => [
-                "name" => "Analytics - Previous Day Stats",
-                "description" => "Analytics - Previous Day Stats",
-            ],
+                "approve_price_change_request" => [
+                    "name" => "Approve Price Change Request",
+                    "description" => "permission to Create Price Change Request",
+                    "UI_slug" => "APCR"
+                ],
 
-            "analytics_expenses" => [
-                "name" => "Analytics - Expenses",
-                "description" => "Analytics - Expenses",
-            ],
+                "create_roles" => [
+                    "name" => "Create/Modify Roles",
+                    "description" => "permission to create and modify roles",
+                    "UI_slug" => "CMRo"
+                ],
+                            
+                "analytics_previous" => [
+                    "name" => "Analytics - Previous Day Stats",
+                    "description" => "Analytics - Previous Day Stats",
+                    "UI_slug" => "APDS"
+                ],
+
+                "analytics_expenses" => [
+                    "name" => "Analytics - Expenses",
+                    "description" => "Analytics - Expenses",
+                    "UI_slug" => "AExp"
+                ],
         ],
+
 
         "configuration" => [
-            "modify_stations" => [
-                "name" => "Modify Stations",
-                "description" => "permission to modify stations",
-            ],
-            
-        ],
-        "stock_management" => [
-            "capture_sales" => [
-                "name" => "Capture Sales / Stock",
-                "description" => "permission to Capture Sales / Stock",
-            ],
+                "setup_station_config" => [
+                    "name" => "Setup Station Configuration",
+                    "description" => "permission to Setup Station Configuration",
+                    "UI_slug" => "SSCo"
+                ],
+
+                 "modify_station_config" => [
+                    "name" => "Modify Station Configuration",
+                    "description" => "permission to Modify Station Configuration",
+                    "UI_slug" => "MSCo"
+                ],
             
         ],
 
-        
-];
+        "stock_management" => [
+                "capture_sales" => [
+                    "name" => "Capture Sales and Stock",
+                    "description" => "permission to Capture Sales and Stock",
+                    "UI_slug" => "CSSt"
+                ],
+                "modify_sales" => [
+                    "name" => "Modify Sales and Stock",
+                    "description" => "permission to Modify Sales and Stock",
+                    "UI_slug" => "MSSt"
+                ],             
+        ],
+
+        "cash_management" => [
+                "capture_sales" => [
+                    "name" => "Add and Manage Payments",
+                    "description" => "permission to Add and Manage Payments",
+                    "UI_slug" => "AMPa"
+                ],   
+        ],
+
+        "expenses_management" => [
+                "manage_expenses" => [
+                    "name" => "Add and Manage Expenses",
+                    "description" => "permission to Add and Manage Expenses",
+                    "UI_slug" => "AMEx"
+                ],             
+        ],
+
+        "fuel_supply" => [
+                "request_supply" => [
+                    "name" => "Request Fuel Supply",
+                    "description" => "permission to Request Fuel Supply",
+                    "UI_slug" => "RFSu"
+                ],
+                "approve_fuel_request" => [
+                    "name" => "Approve/Update Fuel Request",
+                    "description" => "permission to Approve/Update Fuel Request",
+                    "UI_slug" => "AFRe"
+                ],
+                "process_fuel_request" => [
+                    "name" => "Process Fuel Request",
+                    "description" => "permission to Process Fuel Request",
+                    "UI_slug" => "PFRe"
+                ],
+                "receive_stock" => [
+                    "name" => "Receive Stock",
+                    "description" => "permission to Receive Stock at Stations",
+                    "UI_slug" => "RStk"
+                ],
+        ]
+    ];
+    

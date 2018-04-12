@@ -38,5 +38,14 @@ class TankGroupsController extends BaseController
         $data = $this->tank_group_service->get_by_id($tank_id,$resource_options);
         return $this->response(1, 8000, "tank group details", $data);
     }
+     public function delete($id) {
+            try {
+                $resource_options = $this->parse_resource_options();
+                $data = $this->tank_group_service->delete($id, $resource_options);
+                return $this->response(1, 8000, "map deleted", $data);
+            }catch (Exception $exception){
+                return $this->response(0, 8000, $exception->getMessage(), null,500);
+            }
+        }
 
 }

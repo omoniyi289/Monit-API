@@ -21,7 +21,7 @@ class CreateActivationsTable extends Migration
             $table->string('expiry_date')->nullable();
             $table->integer('station_id');
             $table->boolean('is_activated')->default(0);
-            $table->timestamps();
+            $table->timestamps();$table->softDeletes();
         });
     }
 

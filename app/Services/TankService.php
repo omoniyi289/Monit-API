@@ -37,7 +37,8 @@ class TankService
             throw $exception;
         }
         $this->database->commit();
-        return $tanks;
+        //return $tanks;
+        return Tanks::where('station_id',$data['station_id'])->with('product')->get();
     }
 
 
@@ -52,7 +53,12 @@ class TankService
             throw $exception;
         }
         $this->database->commit();
-        return $tank;
+        //return $tank;
+        return Tanks::where('station_id',$data['station_id'])->with('product')->get();
+    }
+    public function delete($tank_id, array $options = [])
+    {
+        return  Tanks::where('id',$tank_id)->delete();
     }
 
     public function get_all(array $options = [])
@@ -68,7 +74,10 @@ class TankService
     {
         return Tanks::where('station_id',$station_id)->with('product')->get();
     }
-
+    public function get_tank_by_code($name)
+    {
+        return $this->tank_repository->get_where("code", $name);
+    }
     private function get_requested_tank($station_id, array $options = [])
     {
         return $this->tank_repository->get_by_id($station_id, $options);

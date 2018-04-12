@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-//use Core\Models\Model;
+use App\Station;
 use Illuminate\Database\Eloquent\Model;
 
 class StationUsers extends Model
@@ -14,5 +14,7 @@ class StationUsers extends Model
         'station_id' 
     ];
 
-   
+ 	public function station(){
+        return $this->belongsTo(Station::class,"station_id");
+    }  
 }

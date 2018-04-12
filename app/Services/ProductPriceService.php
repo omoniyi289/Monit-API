@@ -14,6 +14,8 @@ use App\Reposities\ProductPriceRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use App\ProductPrices;
+use App\ProductChangeLogs;
+
 
 class ProductPriceService
 {
@@ -32,13 +34,17 @@ class ProductPriceService
     public function create(array $data){
         $this->database->beginTransaction();
         try{
-            $exist = $this->get_by_product_id($data['product_id']);
+            if($data['mode']= 'create'){
+            $exist = $this->get_by_station_and_product_id($data['station_id'], $data['product_id']);
             if (count($exist) > 0) {
-                $company = $this->product_price_repository->update($data);
-            }else{
-                $data['current_price_tag'] = $data['requested_price_tag'];
-            $company = $this->product_price_repository->create($data);
+                return 'ERROR 400';
+            }else{   
+             $data['new_price_tag'] = $data['requested_price_tag'];      
+             $product_price = ProductPrices::create($data);
                 }
+            }else if($data['mode']= 'update'){
+              //  $product_price = $this->product_price_change_log_repository->create($data);
+            }
         }catch (Exception $exception){
             $this->database->rollBack();
             throw $exception;
@@ -61,6 +67,10 @@ class ProductPriceService
     public function get_by_station_id($station_id, array $options = [])
     {
         return ProductPrices::where("station_id", $station_id)->with('product')->get();
+    }
+    public static function log_price_change($data, array $options = [])
+    {
+        return ProductChangeLogs::create();
     }
     public function get_by_product_id($station_id, array $options = [])
     {

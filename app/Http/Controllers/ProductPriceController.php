@@ -22,12 +22,15 @@ class ProductPriceController extends BaseController
         $this->product_price_service = $product_price_service;
     }
 
-    public function create(ApiProductsPriceRequest $request){
+   /* public function create(ApiProductsPriceRequest $request){
         $product_change_log_request = $request->get('product_change_log',[]);
         $data = $this->product_price_service->create($product_change_log_request);
+        //if($data == 'ERROR 400'){
+        //   return $this->response(0, 8010, null, null, 400);
+        //}
         return $this->response(1, 8000, "product changed, but yet to be approved", $data);
     }
-
+*/
     public function get_all(){
         $resource_options = $this->parse_resource_options();
         $data = $this->product_price_service->get_all($resource_options);

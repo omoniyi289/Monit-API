@@ -18,6 +18,7 @@ class PermissionSeeder extends Seeder
                  Permission::create([
                   "name" => $permissions['name'],
                   "description" => $permissions['description'],
+                  "UI_slug" => $permissions['UI_slug'],
                     ]);
             }
         }

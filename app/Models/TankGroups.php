@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Core\Models\Model;
+use Illuminate\Database\Eloquent\Model;
 
 class TankGroups extends Model
 {
@@ -16,7 +16,7 @@ class TankGroups extends Model
     }
 
     public function tanks(){
-        return $this->hasMany(Tanks::class);
+        return $this->hasMany(Tanks::class, 'tank_group_id');
     }
 
 }

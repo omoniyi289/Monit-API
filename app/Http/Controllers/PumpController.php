@@ -25,6 +25,10 @@ class PumpController extends BaseController
 
     public function create(ApiPumpsRequest $request) {
         $pump_request = $request->get('pump',[]);
+        $exist_name = $this->pump_service->get_pump_by_code($pump_request['pump_nozzle_code']);
+        if (count($exist_name) == 1){
+               return $this->response(0, 8000, "error! pump with this same code already exist", $exist_name, 400);
+            }
         $data = $this->pump_service->create($pump_request);
         return $this->response(1, 8000, "pump successfully created", $data);
     }
@@ -51,5 +55,14 @@ class PumpController extends BaseController
         $data = $this->pump_service->get_by_station_id($station_id,$resource_options);
         return $this->response(1, 8000, "requested pumps", $data);
     }
+    public function delete($pump_id) {
+            try {
+                $resource_options = $this->parse_resource_options();
+                $data = $this->pump_service->delete($pump_id, $resource_options);
+                return $this->response(1, 8000, "pump deleted", $data);
+            }catch (Exception $exception){
+                return $this->response(0, 8000, $exception->getMessage(), null,500);
+            }
+        }
 
 }
