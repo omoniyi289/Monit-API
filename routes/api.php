@@ -25,6 +25,7 @@ Route::post('/v1/fromMail_pricing', 'FromMail_PriceChangeController@update');
 Route::get('/v1/paga/connect', 'PagaConnectController@connect');
 Route::get('/v1/paga/live/connect', 'PagaBusinessConnectController@connect');
 Route::get('/v1/stock-received/print-delivery-pdf', 'StockReceivedController@get_delivery_pdf');
+Route::get('/v1/dashboard', 'DashboardController@get_filtered');
 Route::get('/v1/fuel-supply/print-waybill-pdf', 'StockReceivedController@get_waybill_pdf');
 Route::get('/v1/roles/permissions/{role_id}', 'RoleController@get_role_permissions');
 
@@ -61,6 +62,12 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/permissions/{rol_id}', 'PermissionController@get_by_id');
     Route::get('/v1/permissions/by_company/{rol_id}', 'PermissionController@get_by_company_id');
     Route::put('/v1/permissions/{role_id}', 'PermissionController@update');
+
+      /*
+     * Notifications ENDPOINT
+     * */
+    Route::get('/v1/notifications', 'NotificationController@get_all');
+   
 
     /*
      * Permissions ENDPOINT
@@ -244,9 +251,6 @@ Route::group(['middleware' => ['jwt.auth']], function () {
      /*
        Dashboard ENDPOINT
         */
-    Route::get('/v1/dashboard', 'DashboardController@get_filtered');
-
-
     Route::get('/v1/test/token', 'CompanyController@get_token');
 
 });

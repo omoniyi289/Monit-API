@@ -26,7 +26,8 @@ class CreateExpensesTable extends Migration
             $table->string('expense_type')->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade');
             $table->foreign('station_id')->references('id')->on('stations')->onUpdate('cascade');
-            $table->timestamps();$table->softDeletes();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

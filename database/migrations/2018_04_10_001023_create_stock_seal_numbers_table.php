@@ -21,6 +21,7 @@ class CreateStockSealNumbersTable extends Migration
             $table->string('previous_seal_number')->nullable();
             $table->string('latest_seal_number')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

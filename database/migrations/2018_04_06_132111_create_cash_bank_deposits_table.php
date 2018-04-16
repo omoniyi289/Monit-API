@@ -30,6 +30,7 @@ class CreateCashBankDepositsTable extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade');
             $table->foreign('station_id')->references('id')->on('stations')->onUpdate('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

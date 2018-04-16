@@ -15,6 +15,7 @@ use App\Reposities\UserRepository;
 use App\Models\CompanyUserRole;
 use App\Models\StationUsers;
 use App\Models\CompanyUsers;
+use App\Models\UserNotifications;
 use Exception;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
@@ -54,6 +55,10 @@ class CompanyUserService
             foreach($data['selected_stations'] as $value) {
                     StationUsers::create(['company_user_id' => $company_user['id'], 'station_id' => $value['id']]);
                 }
+            ///add station_company_user
+            foreach($data['selected_notifications'] as $value) {
+                    UserNotifications::create(['company_user_id' => $company_user['id'],'notification_id' => $value['id'], 'name' => $value['name']]);
+                }                
             
 
         } catch (Exception $exception) {
@@ -62,19 +67,26 @@ class CompanyUserService
             throw $exception;
         }
         $this->database->commit();
-        return CompanyUsers::where('id',$company_user['id'])->with('station_users.station')->with('role')->get()->first();
+        return CompanyUsers::where('id',$company_user['id'])->with('station_users.station')->with('role')->with('user_notifications.module')->get()->first();
     }
 
     public function update($company_user_id, array $data)
     {
+        //return $data['selected_notifications'];
         $company_user = $this->get_requested_user($company_user_id);
         $this->database->beginTransaction();
         try {
             StationUsers::where('company_user_id',$company_user_id)->delete();
+            UserNotifications::where('company_user_id',$company_user_id)->delete();
             $this->company_user_repository->update($company_user, $data);
             if(isset($data['selected_stations'])){
             foreach($data['selected_stations'] as $value) {
                     StationUsers::create(['company_user_id' => $company_user_id, 'station_id' => $value['id']]);
+                }
+            }
+            if(isset($data['selected_notifications'])){
+            foreach($data['selected_notifications'] as $value) {
+                    UserNotifications::create(['company_user_id' => $company_user_id, 'notification_id' => $value['id'], 'name' => $value['name']]);
                 }
             }
         } catch (Exception $exception) {
@@ -82,7 +94,7 @@ class CompanyUserService
             throw $exception;
         }
         $this->database->commit();
-        return CompanyUsers::where('company_id',$data['company_id'])->with('station_users.station')->with('role')->get();
+        return CompanyUsers::where('company_id',$data['company_id'])->with('station_users.station')->with('role')->with('user_notifications.module')->get();
     }
       public function profile_update($company_user_id, array $data)
     {
@@ -117,17 +129,18 @@ class CompanyUserService
     public function get_by_id($user_id, array $options = [])
     {
         //return $this->get_requested_user($user_id);
-        return CompanyUsers::where('id',$user_id)->with('station_users.station')->with('role')->get()->first();
+        return CompanyUsers::where('id',$user_id)->with('station_users.station')->with('role')->with('user_notifications.module')->get()->first();
     }
     public function delete($user_id, array $options = [])
     {   
         StationUsers::where('company_user_id',$user_id)->delete();
+        UserNotifications::where('company_user_id',$user_id)->delete();
         CompanyUserRole::where('company_user_id',$user_id)->delete();
         return  CompanyUsers::where('id',$user_id)->delete();
     }
       public function get_by_company_id($company_id)
     {
-       return CompanyUsers::where('company_id',$company_id)->with('station_users.station')->with('role')->get();
+       return CompanyUsers::where('company_id',$company_id)->with('station_users.station')->with('role')->with('user_notifications.module')->get();
     }
 
     public function add_roles($user_id, array $role_ids)

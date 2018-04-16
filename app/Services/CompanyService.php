@@ -31,6 +31,7 @@ class CompanyService
         $this->database->beginTransaction();
         try{
             $company = $this->company_repository->create($data);
+            
         }catch (Exception $exception){
             $this->database->rollBack();
             throw $exception;

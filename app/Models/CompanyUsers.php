@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\CompanyUserRole;
+use App\Models\CompanyUser;
+use App\Models\UserNotifications;
 use App\Company;
 use App\Role;
 use App\Station;
@@ -25,6 +27,10 @@ class CompanyUsers extends Authenticatable
    }
     public function companies() {
         return $this->belongsTo(Company::class,'company_id');
+    }
+
+    public function user_notifications() {
+        return $this->hasMany(UserNotifications::class,'company_user_id');
     }
    
     public function station_users(){

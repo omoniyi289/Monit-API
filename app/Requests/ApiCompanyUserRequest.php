@@ -24,7 +24,8 @@ class ApiCompanyUserRequest extends APIRequest
             'user.phone_number' => 'required|string',
             'user.company_id' => 'required|integer',
             'user.role_id' => 'required|integer',
-            'user.selected_stations'=> 'array|required'
+            'user.selected_stations'=> 'array|required',
+            'user.selected_notifications'=> 'array|required'
            
         ];
     }
