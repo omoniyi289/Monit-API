@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\CompanyUsers;
+use App\User;
 use App\Models\NotificationModules;
 class UserNotifications extends Model
 {
@@ -15,7 +15,7 @@ class UserNotifications extends Model
  protected $table = 'user_notifications';
 
   public function company_user(){
-        return $this->belongsTo(CompanyUsers::class,"company_user_id");
+        return $this->belongsTo(User::class,"company_user_id");
     }  
     public function module(){
         return $this->belongsTo(NotificationModules::class,"notification_id");

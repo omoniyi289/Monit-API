@@ -7,7 +7,7 @@ use Mail;
 use App\Services\FuelSupplyService;
 use Core\Controllers\BaseController;
 use Illuminate\Http\Request;
-use App\Models\CompanyUsers;
+use App\User;
 use App\Station;
 use App\Products;
 use App\RolePermission;
@@ -41,7 +41,7 @@ class FromMail_FuelSupplyController extends BaseController
             $permission = Permission::where('UI_slug', 'PFRe')->get()->first();
             $roles= RolePermission::where('permission_id', $permission['id'])->get();
             if(count($roles) >0 ){
-            $user = CompanyUsers::with('role');
+            $user = User::with('role');
             foreach ($roles as $key => $value) {
                 if($key == 0){
                     $user= $user->where('role_id', $value['role_id']);

@@ -13,7 +13,7 @@ use App\Reposities\UserRepository;
 use Exception;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
-use App\Users;
+use App\User;
 
 class UserService
 {
@@ -41,6 +41,8 @@ class UserService
     {
         $this->database->beginTransaction();
         try {
+            $data['role_id']= 'super';
+            $data['company_id'] = 'super';
             $user = $this->user_repository->create($data);
         } catch (Exception $exception) {
             // this means don't insert

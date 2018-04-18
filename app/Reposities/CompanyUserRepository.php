@@ -8,7 +8,7 @@
 
 namespace App\Reposities;
 
-use App\Models\CompanyUsers;
+use App\User;
 use Core\Repository\BaseRepository;
 
 class CompanyUserRepository extends BaseRepository
@@ -16,7 +16,7 @@ class CompanyUserRepository extends BaseRepository
 
     public function get_model()
     {
-        return new CompanyUsers();
+        return new User();
     }
 
     public function create(array $data){
@@ -26,7 +26,7 @@ class CompanyUserRepository extends BaseRepository
         return $company_user;
     }
 
-    public function update(CompanyUsers $company_user, array $data){
+    public function update(User $company_user, array $data){
         $company_user->fill($data);
         $company_user->save();
         return $company_user;

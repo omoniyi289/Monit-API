@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\CompanyUsers;
+use App\User;
 
 class ProductChangeLogs extends Model
 {
@@ -21,6 +21,6 @@ class ProductChangeLogs extends Model
         return $this->belongsTo(Products::class ,'product_id');
     }
     public function approver(){
-        return $this->hasOne(CompanyUsers::class ,'id', 'approved_by');
+        return $this->hasOne(User::class ,'id', 'approved_by');
     }
 }

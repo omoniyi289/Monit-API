@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: funmiayinde
- * Date: 1/11/18
- * Time: 10:42 AM
- */
-
 namespace App\Services;
-
 
 use App\Notifications\RolesAssigned;
 use App\Reposities\RoleRepository;

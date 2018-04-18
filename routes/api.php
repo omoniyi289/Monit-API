@@ -25,7 +25,6 @@ Route::post('/v1/fromMail_pricing', 'FromMail_PriceChangeController@update');
 Route::get('/v1/paga/connect', 'PagaConnectController@connect');
 Route::get('/v1/paga/live/connect', 'PagaBusinessConnectController@connect');
 Route::get('/v1/stock-received/print-delivery-pdf', 'StockReceivedController@get_delivery_pdf');
-Route::get('/v1/dashboard', 'DashboardController@get_filtered');
 Route::get('/v1/fuel-supply/print-waybill-pdf', 'StockReceivedController@get_waybill_pdf');
 Route::get('/v1/roles/permissions/{role_id}', 'RoleController@get_role_permissions');
 
@@ -215,6 +214,16 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     //Route::get('/v1/pump-readings/by_station', 'DailyTotalizersReadingsController@get_by_station_id');
     Route::patch('/v1/pump-readings', 'DailyTotalizersReadingsController@update');
 
+
+    /*
+     * TOTALIZERS READINGS ENDPOINT
+     * */
+    Route::get('/v1/items', 'ItemController@get_all');
+    Route::post('/v1/items', 'ItemController@create');
+    Route::get('/v1/items/{params}', 'ItemController@get_by_params');
+    Route::get('/v1/items/by_company/{company_id}', 'ItemController@get_by_company_id');
+    Route::patch('/v1/items', 'ItemController@update');
+    Route::delete('/v1/items/{item_id}', 'ItemController@delete');
      /*
      * Fuel Supply ENDPOINT
      * */
@@ -251,6 +260,8 @@ Route::group(['middleware' => ['jwt.auth']], function () {
      /*
        Dashboard ENDPOINT
         */
+    Route::get('/v1/dashboard', 'DashboardController@get_filtered');
+
     Route::get('/v1/test/token', 'CompanyController@get_token');
 
 });

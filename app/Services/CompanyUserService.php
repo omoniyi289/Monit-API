@@ -14,7 +14,7 @@ use App\Reposities\CompanyUserRepository;
 use App\Reposities\UserRepository;
 use App\Models\CompanyUserRole;
 use App\Models\StationUsers;
-use App\Models\CompanyUsers;
+use App\User;
 use App\Models\UserNotifications;
 use Exception;
 use Illuminate\Database\DatabaseManager;
@@ -50,6 +50,7 @@ class CompanyUserService
     {
         $this->database->beginTransaction();
         try {
+            $data['is_verified'] = 1;
             $company_user = $this->company_user_repository->create($data);
             ///add station_company_user
             foreach($data['selected_stations'] as $value) {
@@ -67,7 +68,7 @@ class CompanyUserService
             throw $exception;
         }
         $this->database->commit();
-        return CompanyUsers::where('id',$company_user['id'])->with('station_users.station')->with('role')->with('user_notifications.module')->get()->first();
+        return User::where('id',$company_user['id'])->with('station_users.station')->with('role')->with('user_notifications.module')->get()->first();
     }
 
     public function update($company_user_id, array $data)
@@ -94,7 +95,7 @@ class CompanyUserService
             throw $exception;
         }
         $this->database->commit();
-        return CompanyUsers::where('company_id',$data['company_id'])->with('station_users.station')->with('role')->with('user_notifications.module')->get();
+        return User::where('company_id',$data['company_id'])->with('station_users.station')->with('role')->with('user_notifications.module')->get();
     }
       public function profile_update($company_user_id, array $data)
     {
@@ -129,18 +130,18 @@ class CompanyUserService
     public function get_by_id($user_id, array $options = [])
     {
         //return $this->get_requested_user($user_id);
-        return CompanyUsers::where('id',$user_id)->with('station_users.station')->with('role')->with('user_notifications.module')->get()->first();
+        return User::where('id',$user_id)->with('station_users.station')->with('role')->with('user_notifications.module')->get()->first();
     }
     public function delete($user_id, array $options = [])
     {   
         StationUsers::where('company_user_id',$user_id)->delete();
         UserNotifications::where('company_user_id',$user_id)->delete();
         CompanyUserRole::where('company_user_id',$user_id)->delete();
-        return  CompanyUsers::where('id',$user_id)->delete();
+        return  User::where('id',$user_id)->delete();
     }
       public function get_by_company_id($company_id)
     {
-       return CompanyUsers::where('company_id',$company_id)->with('station_users.station')->with('role')->with('user_notifications.module')->get();
+       return User::where('company_id',$company_id)->with('station_users.station')->with('role')->with('user_notifications.module')->get();
     }
 
     public function add_roles($user_id, array $role_ids)

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Station;
-use App\Models\CompanyUsers;
+use App\User;
 class Deposits extends Model
 {
     //
@@ -17,9 +17,9 @@ class Deposits extends Model
     }
 
      public function creator(){
-        return $this->belongsTo(CompanyUsers::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
      public function approver(){
-        return $this->belongsTo(CompanyUsers::class, 'verified_by');
+        return $this->belongsTo(User::class, 'verified_by');
     }
 }

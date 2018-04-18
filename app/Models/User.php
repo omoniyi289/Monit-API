@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\StationUsers;
+use App\Models\UserNotifications;
 
 class User extends Authenticatable
 {
@@ -17,7 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'fullname','username', 'email', 'password', 'phone_number', 'is_verified',
-        'auth_key', 'is_term_agreed', 'is_company_set_up',
+        'auth_key', 'is_term_agreed', 'is_company_set_up','role_id','company_id'
     ];
 
     /**
@@ -28,17 +30,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token','auth_key',
     ];
-
-    public function roles() {
-        return $this->belongsToMany(Role::class,"user_roles","user_id","role_id");
-    }
-    
-
-    public function companies(){
-        return $this->hasOne(User::class);
-    }
-   
-
     public function isAdminstrator(){
         return $this->roles();
     }
@@ -51,6 +42,19 @@ class User extends Authenticatable
         return [];
     }
 
+     public function role() {
+        return $this->hasOne(Role::class,'id', 'role_id');
+   }
+    public function companies() {
+        return $this->belongsTo(Company::class,'company_id');
+    }
 
+    public function user_notifications() {
+        return $this->hasMany(UserNotifications::class,'company_user_id');
+    }
+   
+    public function station_users(){
+        return $this->hasMany(StationUsers::class,"company_user_id");
+    }
 
 }

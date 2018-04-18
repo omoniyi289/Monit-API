@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Core\Controllers\BaseController;
 use Illuminate\Http\Request;
-use App\Models\CompanyUsers;
+use App\User;
 use App\Station;
 use App\Products;
 use App\ProductPrices;

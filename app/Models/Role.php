@@ -4,7 +4,7 @@ namespace App;
 
 use App\RolePermission;
 use App\Permission;
-use App\Models\CompanyUsers;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
@@ -14,7 +14,7 @@ class Role extends Model
         return $this->belongsToMany(User::class,"user_roles","user_id","role_id");
     }
     public function users_via_permission() {
-        return $this->hasMany(CompanyUsers::class, "role_id", "id");
+        return $this->hasMany(User::class, "role_id", "id");
     }
 
     public function role_permissions(){

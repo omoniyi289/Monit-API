@@ -63,53 +63,55 @@ class AuthController extends BaseController
                 return $this->response(0, 8000, "invalid email or password",
                     null, 400);
             }
-        }else {
-            // this is to authenticate station user if created to have access station manager portal
-            $station_user =  $this->station_user_service->get_user_by_email($request->get('email'))->first();
-            if (!empty($station_user) || $station_user != null){
-                $check_password = password_verify($request->get('password'),$station_user['password']);
-                if ($check_password){
-                    $credentials = [
-                        'email' => $station_user['email'],
-                    ];
-                    try{
-                        $token = JWTAuth::fromUser($station_user,$credentials);
-                        $data = $station_user;
-                        $data["is_exist"] = true;
-                        if ($token){
-                            $data['token'] = $token;
-                            return $this->response(1, 8000, "authentication successful", $data);
-                        }elseif (!$token){
-                            return $this->response(0, 8000, "oop!!! unable to create token with invalid credentials",
-                                null, 400);
-                        }
-                    }catch (JWTException $exception){
-                        return $this->response(0, 8000, "oop!!! an error occur while processing token",
-                            null,500);
-                    }
-                }else{
-                    return $this->response(0, 8000, "invalid email or password",
-                        null, 400);
-                }
-            }else{
-                return $this->response(0, 8000, "user does not exist",
-                    null, 400);
-            }
         }
+         //   else {
+        //     // this is to authenticate station user if created to have access station manager portal
+        //     $station_user =  $this->station_user_service->get_user_by_email($request->get('email'))->first();
+        //     if (!empty($station_user) || $station_user != null){
+        //         $check_password = password_verify($request->get('password'),$station_user['password']);
+        //         if ($check_password){
+        //             $credentials = [
+        //                 'email' => $station_user['email'],
+        //             ];
+        //             try{
+        //                 $token = JWTAuth::fromUser($station_user,$credentials);
+        //                 $data = $station_user;
+        //                 $data["is_exist"] = true;
+        //                 if ($token){
+        //                     $data['token'] = $token;
+        //                     return $this->response(1, 8000, "authentication successful", $data);
+        //                 }elseif (!$token){
+        //                     return $this->response(0, 8000, "oop!!! unable to create token with invalid credentials",
+        //                         null, 400);
+        //                 }
+        //             }catch (JWTException $exception){
+        //                 return $this->response(0, 8000, "oop!!! an error occur while processing token",
+        //                     null,500);
+        //             }
+        //         }else{
+        //             return $this->response(0, 8000, "invalid email or password",
+        //                 null, 400);
+        //         }
+        //     }else{
+        //         return $this->response(0, 8000, "user does not exist",
+        //             null, 400);
+        //     }
+        // }
     }
    public function passwordreset(Request $request){
         //= $request->get('email');
         $user =  $this->user_service->get_user_by_email($request->get('email'))->first();
-        $station_user =  $this->station_user_service->get_user_by_email($request->get('email'))->first();
+        //$station_user =  $this->station_user_service->get_user_by_email($request->get('email'))->first();
         $identifier ='';
         if (!empty($user) || $user != null) {
              $data = $user;
              $identifier= 'user';
             
-        }else if(!empty($station_user) || $station_user != null){
+        }/*else if(!empty($station_user) || $station_user != null){
             $data = $station_user;
             $identifier = 'company_user';
-        }else{
+        }*/
+        else{
             return $this->response(0, 8000, "emil not found",null,400);
         }   
             $user_request=[];
@@ -118,9 +120,10 @@ class AuthController extends BaseController
              //$identifier = '';
             if($identifier == 'user'){
                 $result = $this->user_service->update($user['id'],$user_request);
-            }else if($identifier == 'company_user'){
-                $result =  $this->station_user_service->profile_update($station_user['id'],$user_request);
             }
+            /*else if($identifier == 'company_user'){
+                $result =  $this->station_user_service->profile_update($station_user['id'],$user_request);
+            }*/
           $mail_data = [
             'fullname' => $data['fullname'],
             'email' => $data['email'],

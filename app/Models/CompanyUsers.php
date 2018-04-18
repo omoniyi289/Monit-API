@@ -1,5 +1,5 @@
 <?php
-
+/*
 namespace App\Models;
 
 use App\Models\CompanyUserRole;
@@ -45,3 +45,4 @@ class CompanyUsers extends Authenticatable
     }
    
 }
+*/

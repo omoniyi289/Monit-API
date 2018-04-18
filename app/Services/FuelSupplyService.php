@@ -20,7 +20,6 @@ use App\Mail\GoodsInTransitMailSealChange;
 use App\Station;
 use App\Products;
 use App\User;
-use App\Models\CompanyUsers;
 class FuelSupplyService
 {
     private $database;
@@ -38,7 +37,7 @@ class FuelSupplyService
                     $data['product_name'] = $sss['name'];
                     $station = Station::where('id', $data['station_id'])->get()->first();
                     
-                    $approver_details = CompanyUsers::where('id', $data['approved_by'])->get()->first();
+                    $approver_details = User::where('id', $data['approved_by'])->get()->first();
                     Mail::to($approver_details['email'])->send(new FuelSupplyMail($station,$approver_details,$data['creator_name'], $data , $request_code));
                      //Mail::to("abayomi.e@e360africa.com")->send(new FuelSupplyMail($station,$user, $data , $request_code));
                       //Mail::to("abayomi.e@e360africa.com")->send(new ReportMail($mail_data, $value ));

@@ -2,9 +2,11 @@
 
 namespace App;
 
+
 use Illuminate\Database\Eloquent\Model;
 use App\Permission;
 use App\Role;
+
 class RolePermission extends Model
 {
     protected $fillable = [
@@ -23,4 +25,5 @@ class RolePermission extends Model
     public function roles(){
         return $this->hasMany(Role::class, 'id', "role_id");
     }  
+     
 }

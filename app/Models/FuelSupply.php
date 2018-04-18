@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Products;
-use App\Models\CompanyUsers;
+use App\User;
 use App\Models\StockSealNumbers;
 
 class FuelSupply extends Model
@@ -17,7 +17,7 @@ class FuelSupply extends Model
         return $this->belongsTo(Station::class, 'station_id');
     }
     public function approver(){
-        return $this->belongsTo(CompanyUsers::class, 'approved_by');
+        return $this->belongsTo(User::class, 'approved_by');
     }
     public function product(){
         return $this->belongsTo(Products::class ,'product_id');
