@@ -51,6 +51,7 @@ class CompanyUserService
         $this->database->beginTransaction();
         try {
             $data['is_verified'] = 1;
+            $data['auth_key'] = str_random(6);
             $company_user = $this->company_user_repository->create($data);
             ///add station_company_user
             foreach($data['selected_stations'] as $value) {

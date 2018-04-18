@@ -64,7 +64,7 @@ class AuthController extends BaseController
                     null, 400);
             }
         }
-         //   else {
+          else {
         //     // this is to authenticate station user if created to have access station manager portal
         //     $station_user =  $this->station_user_service->get_user_by_email($request->get('email'))->first();
         //     if (!empty($station_user) || $station_user != null){
@@ -92,11 +92,11 @@ class AuthController extends BaseController
         //             return $this->response(0, 8000, "invalid email or password",
         //                 null, 400);
         //         }
-        //     }else{
-        //         return $this->response(0, 8000, "user does not exist",
-        //             null, 400);
-        //     }
-        // }
+      
+              return $this->response(0, 8000, "user does not exist",
+                     null, 400);
+          }
+    
     }
    public function passwordreset(Request $request){
         //= $request->get('email');

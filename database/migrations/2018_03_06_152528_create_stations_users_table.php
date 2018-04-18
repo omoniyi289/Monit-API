@@ -17,7 +17,7 @@ class CreateStationsUsersTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('company_user_id');
             $table->unsignedInteger('station_id');
-            $table->foreign('company_user_id')->references('id')->on('company_users')->onUpdate('cascade');
+            $table->foreign('company_user_id')->references('id')->on('users')->onUpdate('cascade');
             $table->foreign('station_id')->references('id')->on('stations')->onUpdate('cascade');
             $table->timestamps();$table->softDeletes();
         });
