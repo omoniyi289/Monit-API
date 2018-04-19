@@ -109,9 +109,7 @@ class DashboardController extends BaseController
         $pump_data= $pump_data->get();
         $tank_data= $tank_data->get();
         //return $tank_query;
-        $final_submission['total_pumps'] = count($pump_query);
-        $final_submission['total_tanks'] = count($tank_query);
-        $final_submission['total_stations'] = $station_count;
+        
         //$final_submission['total_companies'] = c;
 
         
@@ -145,11 +143,16 @@ class DashboardController extends BaseController
             }
         }
 
-       $final_submission['total_pump_sales'] = $total_pump_sales;    
-       $final_submission['total_tank_sales'] = $total_tank_sales;
-       $final_submission['total_vol_supplied'] = $total_vol_supplied;
-       $final_submission['merged_data_by_date'] = $merged_data_by_date;
-        return $this->response(1, 8000, "dashboard data", $final_submission);
+       $final_submission['total_pumps'] = $station_count > 0 ? count($pump_query) : 0;
+       $final_submission['total_tanks'] = $station_count > 0 ? count($tank_query) : 0;
+       $final_submission['total_stations'] = $station_count;
+       $final_submission['total_pump_sales'] = $station_count > 0 ? $total_pump_sales:0;    
+       $final_submission['total_tank_sales'] = $station_count > 0 ? $total_tank_sales:0;
+       $final_submission['total_vol_supplied'] = $station_count > 0 ? $total_vol_supplied
+       :0;
+       $final_submission['merged_data_by_date'] = $station_count > 0 ? $merged_data_by_date:0;
+
+       return $this->response(1, 8000, "dashboard data", $final_submission);
     }
 
     public function get_by_id($stock_id) {

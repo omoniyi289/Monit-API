@@ -3,17 +3,6 @@
 use Illuminate\Http\Request;
 
 /*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-/*
  * AUTH ENDPOINT
  * */
 Route::post('/v1/auth', 'AuthController@auth');
@@ -216,7 +205,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 
 
     /*
-     * TOTALIZERS READINGS ENDPOINT
+     * STORE ITEMS  ENDPOINT
      * */
     Route::get('/v1/items', 'ItemController@get_all');
     Route::post('/v1/items', 'ItemController@create');
@@ -224,6 +213,16 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/items/by_company/{company_id}', 'ItemController@get_by_company_id');
     Route::patch('/v1/items', 'ItemController@update');
     Route::delete('/v1/items/{item_id}', 'ItemController@delete');
+
+
+      /*
+     * ITEM VARIANTS  ENDPOINT
+     * */
+    Route::get('/v1/item-variants', 'ItemVariantController@get_all');
+    Route::post('/v1/item-variants', 'ItemVariantController@create');
+    Route::get('/v1/item-variants/by_item/{params}', 'ItemVariantController@get_by_item_id');
+    Route::patch('/v1/item-variants', 'ItemVariantController@update');
+    Route::delete('/v1/item-variants/{item_id}', 'ItemVariantController@delete');
      /*
      * Fuel Supply ENDPOINT
      * */
