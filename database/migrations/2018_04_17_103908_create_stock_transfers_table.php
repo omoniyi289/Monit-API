@@ -24,7 +24,7 @@ class CreateStockTransfersTable extends Migration
             $table->integer('quantity_requested')->nullable();           
             $table->integer('quantity_transferred')->nullable();
             $table->integer('quantity_received')->nullable();
-
+            $table->string('compositesku')->nullable();
             $table->string('requested_by')->nullable();
             $table->string('transfered_by')->nullable();
             $table->string('approved_by')->nullable();

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStockCountsTable extends Migration
+class CreateItemRestockHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,20 @@ class CreateStockCountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('stock_counts', function (Blueprint $table) {
+        Schema::create('item_restock_history', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('item_id')->nullable();    
-            $table->foreign('item_id')->references('id')->on('items')->onUpdate('cascade');
+            $table->unsignedInteger('item_id');    
+            //$table->foreign('item_id')->references('id')->on('items')->onUpdate('cascade');
             $table->integer('company_id')->nullable();    
             $table->integer('station_id')->nullable();
-
-            $table->integer('qty_counted');
-            $table->integer('qty_in_stock');
-   
+            $table->string('restock_id');
+            $table->string('compositesku');
+            $table->integer('restock_qty');
+            $table->string('qty_before_restock')->nullable();    
+            $table->string('qty_after_restock')->nullable();; 
             $table->string('created_by')->nullable();
-            $table->string('compositesku')->nullable();    
+            $table->string('modified_by')->nullable();             
             $table->integer('active')->default(1);
-            $table->integer('in_stock')->default(1);
             $table->timestamps();
         });
     }
@@ -38,6 +38,6 @@ class CreateStockCountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stock_counts');
+        Schema::dropIfExists('item_restock_history');
     }
 }

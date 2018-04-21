@@ -15,10 +15,9 @@ class CreateItemvariantsTable extends Migration
     {
         Schema::create('itemvariants', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('item_id')->nullable();    
-            $table->foreign('item_id')->references('id')->on('items')->onUpdate('cascade');
+            $table->unsignedInteger('item_id');    
+            //$table->foreign('item_id')->references('id')->on('items')->onUpdate('cascade');
             $table->integer('company_id')->nullable();    
-            $table->integer('station_id')->nullable();
             $table->string('variant_option');
             $table->string('variant_value');
             $table->integer('reorder_level');

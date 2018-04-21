@@ -17,7 +17,7 @@ class CreateStockSalesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('item_id')->nullable();    
             $table->foreign('item_id')->references('id')->on('items')->onUpdate('cascade');
-            $table->string('sku')->nullable();    
+            $table->string('compositesku')->nullable();    
             $table->integer('company_id')->nullable();    
             $table->integer('station_id')->nullable();
 

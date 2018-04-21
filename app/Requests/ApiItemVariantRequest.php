@@ -20,15 +20,15 @@ class ApiItemVariantRequest extends APIRequest
     public function rules(){
         return [
             'item_variant' => 'array|required',
-            'item_variant.name' => 'required|string',
-            'item_variant.qty_in_stock' => 'required|string',
+           
+            'item_variant.qty_in_stock' => 'required|integer',
             //'company.country' => 'required|string',
             'item_variant.retail_price' => 'required|string',
             'item_variant.supply_price' => 'required|string',
-            'item_variant.reorder_level' => 'required|string',
+            'item_variant.reorder_level' => 'required|integer',
             'item_variant.variant_option' => 'required|string',
-            'item_variant.item_id' => 'required|string',
-            'item_variant.variant_option' => 'required|string',
+            'item_variant.item_id' => 'required|integer',
+            'item_variant.last_restock_date' => 'required|string',
             'item_variant.compositesku' => 'required|string',
         ];
     }
