@@ -3,6 +3,23 @@
 use Illuminate\Http\Request;
 
 /*
+ * V1-V2 MIGRATION ENDPOINT ENDPOINT
+ * */
+Route::get('/v1/company_mg', 'MigrationController@company_migrate');
+Route::get('/v1/user_mg', 'MigrationController@user_migrate');
+Route::get('/v1/station_mg', 'MigrationController@station_migrate');
+Route::get('/v1/role_mg', 'MigrationController@role_migrate');
+Route::get('/v1/user_role_mg', 'MigrationController@user_role_migrate');
+Route::get('/v1/pump_mg', 'MigrationController@pump_migrate');
+Route::get('/v1/tank_mg', 'MigrationController@tank_migrate');
+Route::get('/v1/tankgroup_mg', 'MigrationController@tankgroup_migrate');
+Route::get('/v1/pumpgroup_mg', 'MigrationController@pumpgroup_migrate');
+Route::get('/v1/p_t_map_mg', 'MigrationController@p_t_map_migrate');
+Route::get('/v1/preadings_mg', 'MigrationController@preadings_migrate');
+
+
+
+/*
  * AUTH ENDPOINT
  * */
 Route::post('/v1/auth', 'AuthController@auth');

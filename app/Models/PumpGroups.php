@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PumpGroups extends Model
 {
     protected $fillable = [
-        'name','code','station_id','company_id',
+        'name','code','station_id','company_id','v1_id'
     ];
 
     public function pumps(){

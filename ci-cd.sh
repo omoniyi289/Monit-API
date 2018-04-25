@@ -22,6 +22,7 @@ ssh root@185.130.207.215 <<-EOF
     php artisan key:generate
     #php artisan route:cache resolve closure based routes before caching
     php artisan migrate --force
+    php artisan db:seed
     chmod -R 755 .
     chown -R www-data:www-data .
 EOF

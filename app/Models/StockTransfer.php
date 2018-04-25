@@ -8,7 +8,7 @@ use App\Station;
 class StockTransfer extends Model
 {
     //
-    protected $fillable = [	'item_id', 	'company_id', 	'tx_station_id', 	'rx_station_id', 	'quantity_requested', 'quantity_transferred', 'quantity_received','requested_by', 	'transfered_by' ,'approved_by', 'received_by', 	'date_requested','date_transfered', 'date_received', 'date_approved', 	'status', 	'active', 	'in_stock', 'compositesku'
+    protected $fillable = [	'item_id', 	'company_id', 	'tx_station_id', 	'rx_station_id', 	'quantity_requested', 'quantity_transferred', 'quantity_received','requested_by', 	'transfered_by' ,'approved_by', 'received_by', 	'date_requested','date_transfered', 'date_received', 'date_approved', 	'status', 	'active', 	'in_stock', 'compositesku','v1_id'
     ];
     protected $table='stock_transfers';
     public function station(){

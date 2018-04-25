@@ -4,27 +4,27 @@ return [
         "notifications" => [
 
                 "sales_stock" => [
-                    "name" => "Sales & Stock",
-                    "UI_slug" => "SS"
+                    "name" => "Close of Station Report",
+                    "UI_slug" => "CSRt"
                 ],
 
                 "cash_control" => [
-                    "name" => "Cash Control",
-                    "UI_slug" => "CC"
+                    "name" => "Cash Control Report",
+                    "UI_slug" => "CCRe"
                 ],
 
                 "station_league_table" => [
-                    "name" => "Station League Table",
-                    "UI_slug" => "SLT"
+                    "name" => "Station League Table Report",
+                    "UI_slug" => "SLTR"
                 ],
                  "bank_payment" => [
-                    "name" => "Bank Payments",
-                    "UI_slug" => "BPT"
+                    "name" => "Bank Payments Report",
+                    "UI_slug" => "BPRt"
                 ],
 
                 "daily_stock" => [
-                    "name" => "Daily Stock",
-                    "UI_slug" => "DS"
+                    "name" => "Daily Operations Report",
+                    "UI_slug" => "DORt"
                 ],
 
     ],

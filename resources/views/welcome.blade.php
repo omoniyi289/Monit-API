@@ -1,3 +1,6 @@
+<?php
+phpinfo();
+?>
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
     <head>

@@ -17,8 +17,8 @@ class CreateTanksTable extends Migration
             $table->increments('id');
             $table->string('code');
             $table->string('name')->nullable();;
-            $table->string('width')->nullable();
-            $table->string('height')->nullable();
+            //$table->string('width')->nullable();
+            //$table->string('height')->nullable();
             $table->string('shape')->nullable();
             $table->string('capacity')->nullable();
             $table->integer('product_id');

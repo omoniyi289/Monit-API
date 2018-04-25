@@ -14,12 +14,16 @@ class PermissionSeeder extends Seeder
     {
 
         foreach (config('permissions') as $key => $permissions_category) {        
-            foreach ($permissions_category as $inner_key => $permissions) {           
+            foreach ($permissions_category as $inner_key => $permissions) {     
+                $perm = Permission::where('UI_slug', $permissions['UI_slug'])->get()->first();      
+                 if(count($perm) == 0){
                  Permission::create([
                   "name" => $permissions['name'],
                   "description" => $permissions['description'],
                   "UI_slug" => $permissions['UI_slug'],
                     ]);
+             }
+
             }
         }
     }

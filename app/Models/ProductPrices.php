@@ -8,7 +8,7 @@ class ProductPrices extends Model
 {
     //
     protected $fillable = [
-        'new_price_tag', 'product_id' , 'company_id', 'station_id'
+        'new_price_tag', 'product_id' , 'company_id', 'station_id','v1_id'
     ];
 
     public function company() {

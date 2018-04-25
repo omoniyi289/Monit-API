@@ -8,7 +8,7 @@ class TankGroups extends Model
 {
     //
     protected $fillable = [
-      'code','name','company_id','station_id',
+      'code','name','company_id','station_id','v1_id'
     ];
 
     public function companies(){

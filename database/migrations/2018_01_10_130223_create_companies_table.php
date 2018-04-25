@@ -25,8 +25,7 @@ class CreateCompaniesTable extends Migration
                 $table->string('state');
                 $table->string('city');
                 $table->string('address');
-                $table->unsignedInteger('user_id');
-                $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
+                $table->integer('user_id')->nullable();
                 $table->string('logo')->nullable();
                 $table->timestamps();$table->softDeletes();
             });

@@ -18,10 +18,10 @@ class CreateItemvariantsTable extends Migration
             $table->unsignedInteger('item_id');    
             //$table->foreign('item_id')->references('id')->on('items')->onUpdate('cascade');
             $table->integer('company_id')->nullable();    
-            $table->string('variant_option');
-            $table->string('variant_value');
-            $table->integer('reorder_level');
-            $table->integer('qty_in_stock');
+            $table->string('variant_option')->nullable();;
+            $table->string('variant_value')->nullable();;
+            $table->integer('reorder_level')->nullable();;
+            $table->integer('qty_in_stock')->nullable();;
             $table->string('last_restock_date')->nullable();    
             $table->string('supply_price')->nullable();;
             $table->string('retail_price')->nullable();          

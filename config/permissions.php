@@ -118,6 +118,34 @@ return [
                     "description" => "permission to Receive Stock at Stations",
                     "UI_slug" => "RStk"
                 ],
+        ],
+
+        "store_management" => [
+                "manage_items" => [
+                    "name" => "Store- Add/Modify Items",
+                    "description" => "Add Items/Modify Items",
+                    "UI_slug" => "AMIs20"
+                ],
+                "fill_items" => [
+                    "name" => "Store- Fill/Refill Stock",
+                    "description" => "permission to Fill/Refill Stock",
+                    "UI_slug" => "FRSk20"
+                ],
+                 "count_items" => [
+                    "name" => "Store- Count Stock",
+                    "description" => "permission to count Stock",
+                    "UI_slug" => "CStk20"
+                ],
+                "transfer_items" => [
+                    "name" => "Store- Transfer Stock",
+                    "description" => "permission to Transfer Stock",
+                    "UI_slug" => "TStk20"
+                ],
+                "recieve_items" => [
+                    "name" => "Store- Receive Stock",
+                    "description" => "permission to Receive Stock at Stations",
+                    "UI_slug" => "RStk20"
+                ],
         ]
     ];
     

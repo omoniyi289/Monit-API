@@ -18,10 +18,10 @@ class CreateItemsTable extends Migration
             $table->integer('company_id')->nullable();    
             $table->integer('station_id')->nullable();
             $table->string('name');
-            $table->string('category');
-            $table->string('brand');
-            $table->string('uom');
-            $table->string('description')->nullable();;
+            $table->string('category')->nullable();;
+            $table->string('brand')->nullable();;
+            $table->string('uom')->nullable();;
+            $table->string('description')->nullable();
             $table->string('supplier')->nullable();          
             $table->string('created_by')->nullable();
             $table->string('modified_by')->nullable();            

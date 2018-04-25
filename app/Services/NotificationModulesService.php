@@ -40,7 +40,7 @@ class NotificationModulesService
     }
 
     public function get_all(array $options = []){
-        return NotificationModules::all();
+        return NotificationModules::where('active', 1)->get();
     }
     public function get_by_id($module_id, array $options = [])
     {

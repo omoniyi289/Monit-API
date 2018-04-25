@@ -10,7 +10,7 @@ use App\Role;
 class RolePermission extends Model
 {
     protected $fillable = [
-        'permission_id','role_id', 'permission_name', 'company_id'
+        'permission_id','role_id', 'permission_name', 'company_id', 'v1_id'
     ];
 
    
