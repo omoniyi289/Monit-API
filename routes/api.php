@@ -16,6 +16,7 @@ Route::get('/v1/tankgroup_mg', 'MigrationController@tankgroup_migrate');
 Route::get('/v1/pumpgroup_mg', 'MigrationController@pumpgroup_migrate');
 Route::get('/v1/p_t_map_mg', 'MigrationController@p_t_map_migrate');
 Route::get('/v1/preadings_mg', 'MigrationController@preadings_migrate');
+Route::get('/v1/treadings_mg', 'MigrationController@treadings_migrate');
 
 
 

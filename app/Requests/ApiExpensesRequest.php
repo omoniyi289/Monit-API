@@ -22,7 +22,7 @@ class ApiExpensesRequest extends APIRequest
             'expenses.description' => 'required|string',
             'expenses.company_id' => 'required|integer',
             'expenses.station_id' => 'required|integer',
-            'expenses.amount'=> 'required|integer',
+            'expenses.amount'=> 'required|string',
             'expenses.date' =>'required|string'
            
         ];

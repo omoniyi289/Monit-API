@@ -23,7 +23,7 @@ class ApiStockReceivedRequest extends APIRequest
             'stock_received.product_id' => 'required|integer',
             'stock_received.company_id' => 'required|integer',
             'stock_received.station_id' => 'required|integer',
-            'stock_received.quantity_supplied'=> 'required|integer'
+            'stock_received.quantity_supplied'=> 'required|string'
            
         ];
     }

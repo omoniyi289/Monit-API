@@ -29,12 +29,16 @@ class CompanyController extends BaseController
 
     public function create(ApiCompanyRequest $request){
         try {
+           // return ;
             $company_request = $request->get('company', []);
             $company_exist = $this->company_service->get_company_by_name($company_request['name']);
             $company_reg_no_exist = $this->company_service->get_company_by_reg_no($company_request['registration_number']);
             $company_request['user_id'] = Util::get_user_details_from_token('id');
+            $company_request['role_id'] = Util::get_user_details_from_token('role_id');
             $user_id_exist = $this->company_service->get_company_by_user_id($company_request['user_id'])->first();
-           if (count($user_id_exist) == 1){
+          // $user = $this->user_service->get_by_id($company_request['user_id']);
+            //return $company_request['role_id'];
+           if (count($user_id_exist) == 1 and $company_request['role_id'] != 'master'){
                return $this->response(0, 8000, "a company already registered with this account", $user_id_exist, 400);
             }
             if (count($company_exist) == 1) {
