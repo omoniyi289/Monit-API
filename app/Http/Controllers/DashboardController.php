@@ -47,7 +47,7 @@ class DashboardController extends BaseController
         //pumps
         $pump_query = Pumps::with('product');
         $tank_query = Tanks::with('product');
-        $back_day ='-60 days';
+        $back_day ='-21 days';
         //return date('Y-m-d', strtotime('-14 days'));
         $pump_data = DailyTotalizerReadings::select('close_shift_totalizer_reading', 'open_shift_totalizer_reading', 'ppv', 'created_at', 'pump_id', 'station_id', 'product')->where('created_at','>', date('Y-m-d', strtotime($back_day)))->orderBy('created_at', 'ASC')->with(array('pump'=>function($query){
             $query->select('id','pump_nozzle_code');}))->with(array('station'=>function($query){
