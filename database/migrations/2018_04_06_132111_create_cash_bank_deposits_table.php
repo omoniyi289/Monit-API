@@ -15,7 +15,8 @@ class CreateCashBankDepositsTable extends Migration
     {
         Schema::create('cash_bank_deposits', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('amount');
+            //$table->integer('amount');
+            $table->decimal('amount', 11, 2);
             $table->string('teller_number')->nullable();
             $table->string('pos_receipt_number')->nullable();
             $table->string('pos_receipt_range')->nullable();

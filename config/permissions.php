@@ -50,6 +50,40 @@ return [
                     "description" => "Analytics - Expenses",
                     "UI_slug" => "AExp"
                 ],
+                "analytics_current" => [
+                    "name" => "Analytics - Current Day Sales",
+                    "description" => "Analytics - Current Day Sales",
+                    "UI_slug" => "ACDS20"
+                ],
+
+                "analytics_historical" => [
+                    "name" => "Analytics - Historical Data",
+                    "description" => "Analytics - Historical Data",
+                    "UI_slug" => "AHDa20"
+                ],
+                "analytics_stock_data" => [
+                    "name" => "Analytics - Stock Data",
+                    "description" => "Analytics - Stock Data",
+                    "UI_slug" => "ASDa20"
+                ],
+
+                "analytics_recon" => [
+                    "name" => "Analytics - Reconciliation",
+                    "description" => "Analytics - Reconciliation",
+                    "UI_slug" => "ARco20"
+                ],
+                "analytics_reports" => [
+                    "name" => "Analytics - Reports",
+                    "description" => "Analytics - Reports",
+                    "UI_slug" => "ARep20"
+                ],
+
+                "analytics_cds" => [
+                    "name" => "Analytics - Current Day Stock",
+                    "description" => "Analytics - Current Day Stock",
+                    "UI_slug" => "ACur20"
+                ],
+
         ],
 
 

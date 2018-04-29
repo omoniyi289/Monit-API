@@ -36,6 +36,20 @@ class MigrationController extends BaseController
         $data = $this->migration_service->user_role_migrate();
         return $this->response(1, 8000, "transfers", $data);
     }
+      public function role_perm_migrate(Request $request) {
+        $data = $this->migration_service->role_perm_migrate();
+        return $this->response(1, 8000, "transfers", $data);
+    }
+
+    public function user_station_migrate(Request $request) {
+        $data = $this->migration_service->user_station_migrate();
+        return $this->response(1, 8000, "transfers", $data);
+    }
+    public function user_notf_migrate(Request $request) {
+        $data = $this->migration_service->user_notf_migrate();
+        return $this->response(1, 8000, "transfers", $data);
+    }
+
     public function pump_migrate(Request $request) {
         $data = $this->migration_service->pump_migrate();
         return $this->response(1, 8000, "transfers", $data);

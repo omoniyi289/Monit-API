@@ -17,6 +17,11 @@ use App\Pumps;
 use App\Tanks;
 use App\Role;
 use App\User;
+use App\Permission;
+use App\Models\StationUsers;
+use App\Models\NotificationModules;
+use App\Models\UserNotifications;
+use App\RolePermission;
 use App\TankGroups;
 use App\PumpGroups;
 use App\PumpGroupToTankGroup;
@@ -243,6 +248,219 @@ class MigrationService
         $this->database->commit();
          return $counter;
     }
+/////////run just once
+     public function role_perm_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+            
+                $role = Role::where('v1_id', '!=',NULL)->get();
+           //return $company['v1_id'];
+            foreach ($role as $key => $value) {
+            $id= $value['name'];
+            
+            $sql = "SELECT DISTINCT privilegeName, id FROM role_privileges where roleName = '".$id."'";
+             
+            $result = mysqli_query($this->conn,$sql);
+            // $privs = array();
+            // while($row =mysqli_fetch_assoc($result) ){
+            //       array_push($privs, $row);
+            //   }
+            //   return $privs;
+
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){
+                  $permission = $row['privilegeName'];
+                  if($permission== 'Create User' or $permission== 'Modify User'){
+                      $inhouse= 'Create/Modify Users';
+                  }else if ($permission== 'Create Price' or $permission== 'Request Price Change'){
+                    $inhouse = 'Create Price Change Request';
+                  }
+                  else if ($permission== 'Modify Price' or $permission== 'Approve Price Change'){
+                    $inhouse = 'Approve Price Change Request';
+                  }
+                  else if ($permission== 'Modify Station'){
+                    $inhouse = 'Create/Modify Stations';
+                  }
+                  else if ($permission== 'Capture Sales / Stock'){
+                    $inhouse = 'Capture Sales and Stock';
+                  }
+                  else if ($permission== 'Modify Sales / Stock'){
+                    $inhouse = 'Modify Sales and Stock';
+                  }
+                  else if ($permission== 'Create Bank Payment' or $permission== 'Modify Bank Payment'){
+                    $inhouse = 'Add and Manage Payments';
+                  }
+                  else if ($permission== 'Create Expense' or $permission== 'Modify Expenses'){
+                    $inhouse = 'Add and Manage Expenses';
+                  }
+                  else if ($permission== 'Analytics - Current Day Sales'){
+                    $inhouse = 'Analytics - Current Day Sales';
+                  }
+                  else if ($permission== 'Analytics - Current Day Stock'){
+                    $inhouse = 'Analytics - Current Day Stock';
+                  }
+                  else if ($permission== 'Analytics - Previous Day Stats'){
+                    $inhouse = 'Analytics - Previous Day Stats';
+                  }
+                   else if ($permission== 'Analytics - Historical Data'){
+                    $inhouse = 'Analytics - Historical Data';
+                  }
+                  else if ($permission== 'Analytics - Expenses'){
+                    $inhouse = 'Analytics - Expenses';
+                  }
+                  else if ($permission== 'Analytics - Reconciliation'){
+                    $inhouse = 'Analytics - Reconciliation';
+                  }
+                  else if ($permission== 'Analytics - Reports'){
+                    $inhouse = 'Analytics - Reports';
+                  }
+                  else if ($permission== 'Analytics - Stock Data'){
+                    $inhouse = 'Analytics - Stock Data';
+                  }
+                  else if ($permission== 'Store - Add Items' or $permission== 'Store - Modify Items'){
+                    $inhouse = 'Store- Add/Modify Items';
+                  }
+                  else if ($permission== 'Store - Stock Manager'){
+                    $inhouse = 'Store- Fill/Refill Stock';
+                  }
+                  
+
+               
+                   $perm =Permission::where('name', $inhouse)->get()->first();
+                        $counter++;
+                    RolePermission::create(['role_id'=> $value['id'], 'permission_id'=> $perm['id'], 'permission_name'=> $perm['name'], 'company_id'=> $value['company_id'], 'v1_id'=> $row['id'] ]);   
+
+                  
+                           
+                }
+                    $others = array();
+
+                if($value['name'] == 'Administrator'){
+                array_push($others, "Create/Modify Company");
+                array_push($others, "Create/Modify Roles");
+                array_push($others, "Setup Station Configuration");
+                array_push($others, "Modify Station Configuration");
+                array_push($others, "Request Fuel Supply");
+                array_push($others, "Approve/Update Fuel Request");
+
+                array_push($others, "Process Fuel Request");
+                array_push($others, "Receive Stock");
+                array_push($others, "Store- Transfer Stock");
+                array_push($others, "Store- Receive Stock");
+                array_push($others, "Store- Count Stock");
+                }          
+                foreach ($others as $key => $value2) {
+                     $perm =Permission::where('name', $value2)->get()->first();
+                        $counter++;
+                    RolePermission::create(['role_id'=> $value['id'], 'permission_id'=> $perm['id'], 'permission_name'=> $perm['name'], 'company_id'=> $value['company_id'], 'v1_id'=> $row['id']]);   
+                   } 
+            }
+                 # code...
+            }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+         return $counter;
+    }
+
+   public function user_station_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+
+
+                 $sql = "SELECT * FROM usersInstations";
+                $result = mysqli_query($this->conn,$sql);
+            //return mysqli_num_rows($result);
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){
+                    //array_push($arr, $row);
+                    $date_array = explode(".", $row['datecreated']);
+                    $row['datecreated'] = $date_array[0];
+                    
+                     $station = Station::where('v1_id',$row['stationid'])->get()->first();
+                 
+                    $user= User::where('v1_id', $row['userid'])->get()->first();                     
+                      //  return $row['tankgroupid'];
+                     if(count($station) > 0 and count($user) > 0){
+                      $counter++;
+                    $new_pt = StationUsers::create([ 'v1_id'=> $row['id'], 'created_at' => $row ['datecreated'],'company_id'=>$station['company_id'], 'station_id'=>  $station['id'], 'has_access'=> $row['HasAccess'],
+                    'company_user_id' => $user['id'] ]);
+
+                }
+            
+             // return 1;   # code...
+            }
+            }
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            return $row['pumpgroupid'];
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+
+    ////run just once
+    public function user_notf_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+
+
+                 $sql = "SELECT * FROM notification_config";
+                $result = mysqli_query($this->conn,$sql);
+            //return mysqli_num_rows($result);
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){
+                    //array_push($arr, $row);
+                    $date_array = explode(".", $row['datecreated']);
+                    $row['datecreated'] = $date_array[0];
+                    $module = $row['module'];
+                  if($module== 'Sales & Stock'){
+                      $inhouse= 'Daily Operations Report';
+                  }
+                  else if ($module== 'Station League Table'){
+                    $inhouse = 'Station League Table Report';
+                  }
+                  else if ($module== 'Bank Payments'){
+                    $inhouse = 'Bank Payments Report';
+                  }
+
+
+                     $notf = NotificationModules::where('name',$inhouse)->get()->first();
+                 
+                    $user= User::where('v1_id', $row['userid'])->get()->first();                     
+                      //  return $row['tankgroupid'];
+                     if(count($notf) > 0 and count($user) > 0){
+                      $counter++;
+                    $new_pt = UserNotifications::create([ 'v1_id'=> $row['ID'], 'created_at' => $row ['datecreated'],'notification_id'=>$notf['id'], 'name'=>  $notf['name'], 'active'=> $row['Active'],
+                    'company_user_id' => $user['id'] ]);
+
+                }
+            
+             // return 1;   # code...
+            }
+            }
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            return $row['pumpgroupid'];
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+
     
       public function pump_migrate(){
         $this->database->beginTransaction();
@@ -381,10 +599,10 @@ class MigrationService
                     $new_tg = TankGroups::create(['code'=> $row['tankgroupname'], 'v1_id'=> $row['tankgroupid'], 'created_at' => $row ['datecreated'],'company_id'=>$station['company_id'], 'station_id'=>  $station['id'], 
                     'name' => $row ['tankgroupname'] ]); 
 
-                     Tanks::where('code', $row['tankcode'])->update(['tank_group_id'=> $new_tg['id']]);
+                     Tanks::where('code', $row['tankcode'])->where('station_id', $station['id'])->update(['tank_group_id'=> $new_tg['id']]);
 
                     }else{
-                        Tanks::where('code', $row['tankcode'])->update(['tank_group_id'=> $exist2['id']]);
+                        Tanks::where('code', $row['tankcode'])->where('station_id', $station['id'])->update(['tank_group_id'=> $exist2['id']]);
                     }
 
                 }
@@ -429,10 +647,12 @@ class MigrationService
                     $new_tg = PumpGroups::create(['code'=> $row['pumpgroupname'], 'v1_id'=> $row['pumpgroupid'], 'created_at' => $row ['datecreated'],'company_id'=>$station['company_id'], 'station_id'=>  $station['id'], 
                     'name' => $row ['pumpgroupname'] ]); 
 
-                     Pumps::where('pump_nozzle_code', $row['pumpcode'])->update(['pump_group_id'=> $new_tg['id']]);
+
+
+                     Pumps::where('pump_nozzle_code', $row['pumpcode'])->where('station_id', $station['id'])->update(['pump_group_id'=> $new_tg['id']]);
 
                     }else{
-                        Pumps::where('pump_nozzle_code', $row['pumpcode'])->update(['pump_group_id'=> $exist2['id']]);
+                        Pumps::where('pump_nozzle_code', $row['pumpcode'])->where('station_id', $station['id'])->update(['pump_group_id'=> $exist2['id']]);
                     }
 
                 }
@@ -500,18 +720,8 @@ class MigrationService
         $arr=array();
         $counter = 0;
         try{
-
-
-           $pump = Pumps::where('v1_id', '!=',NULL)->get();
-           $sql = "SELECT * FROM daily_totalizer_reading";
-           $result = mysqli_query($this->conn,$sql);
-           return $row =mysqli_num_rows($result);
-           //return $company['v1_id'];
-            foreach ($pump as $key => $value) {
-              $id= $value['v1_id'];
-              ///track last update
             
-                 $sql = "SELECT * FROM daily_totalizer_reading where pumpid = '".$id."'";
+                 $sql = "SELECT * FROM daily_totalizer_reading";
             
             $result = mysqli_query($this->conn,$sql);
             //return mysqli_num_rows($result);
@@ -521,17 +731,21 @@ class MigrationService
                     //array_push($arr, $row);
                     $date_array = explode(".", $row['datecreated']);
                     $row['datecreated'] = $date_array[0];
+                     $station = Pumps::where('v1_id',$row['pumpid'])->get()->first();
+                   
+                      if(count($station) > 0){
                     $user = User::where('v1_id' , $row['createdby'])->get()->first();
                    
                      $counter++;
 
-                    $new_tg = DailyTotalizerReadings::create(['company_id'=> $value['company_id'], 'v1_id'=> $row['iDailyTotalizerReadingId'], 'station_id' => $value ['station_id'],'pump_id'=>$value['id'], 'status'=>  $row['status'], 
-                    'nozzle_code' => $value ['pump_nozzle_code'],'open_shift_totalizer_reading'=> $value['opening_shift_totalizer_reading'], 'shift_1_totalizer_reading'=> $row['shift_1_totalizer_reading'], 'shift_2_totalizer_reading' => $row ['shift_2_totalizer_reading'],'close_shift_totalizer_reading'=>$row['closing_shift_totalizer_reading'], 'shift_1_cash_collected'=>  $row['shift_1_cash_collected'],'created_by' => $user['id'], 
+                    $new_tg = DailyTotalizerReadings::create(['company_id'=> $station['company_id'], 'v1_id'=> $row['iDailyTotalizerReadingId'], 'station_id' => $station ['station_id'],'pump_id'=>$station['id'], 'status'=>  $row['status'], 
+                    'nozzle_code' => $station ['pump_nozzle_code'],'open_shift_totalizer_reading'=> $row['opening_shift_totalizer_reading'], 'shift_1_totalizer_reading'=> $row['shift_1_totalizer_reading'], 'shift_2_totalizer_reading' => $row ['shift_2_totalizer_reading'],'close_shift_totalizer_reading'=>$row['closing_shift_totalizer_reading'], 'shift_1_cash_collected'=>  $row['shift_1_cash_collected'],'created_by' => $user['id'], 
                     'shift_2_cash_collected' => $row ['shift_2_cash_collected'],'cash_collected'=>$row['cash_collected'], 'ppv'=>  $row['PPV'], 'created_at'=>  $row['datecreated'], 
                     'shift_2_cash_collected' => $row ['shift_2_cash_collected'] ]); 
+                  }
 
-
-                }
+                
+              
             }
               //return 1;   # code...
             }
@@ -550,18 +764,7 @@ class MigrationService
         $counter = 0;
         try{
 
-
-           $pump = Tanks::where('v1_id', '!=',NULL)->get();
-           //$pump = Pumps::where('v1_id', '!=',NULL)->get();
-           $sql = "SELECT * FROM daily_stock_readings";
-           $result = mysqli_query($this->conn,$sql);
-           return $row =mysqli_num_rows($result);
-           //return $company['v1_id'];
-            foreach ($pump as $key => $value) {
-              $id= $value['v1_id'];
-              ///track last update
-            
-                 $sql = "SELECT * FROM daily_stock_readings where tankid = '".$id."'";
+      $sql = "SELECT * FROM daily_stock_readings";
             
             $result = mysqli_query($this->conn,$sql);
             //return mysqli_num_rows($result);
@@ -571,11 +774,14 @@ class MigrationService
                     //array_push($arr, $row);
                     $date_array = explode(".", $row['datecreated']);
                     $row['datecreated'] = $date_array[0];
+                     $station = Tanks::where('v1_id',$row['tankid'])->get()->first();
+                   
+                      if(count($station) > 0){
                    $user = User::where('v1_id' , $row['createdby'])->get()->first();
                      $counter++;
 
-                    $new_tg = DailyStockReadings::create(['company_id'=> $value['company_id'], 'v1_id'=> $row['iDailyStockReadingsId'], 'station_id' => $value ['station_id'],'tank_id'=>$value['id'], 'status'=>  $row['status'], 
-                    'tank_code' => $value ['tank_code'], 'created_by'=> $user['id'], 'created_at'=>  $row['datecreated'], 'phy_shift_end_volume_reading' => $row['phy_shift_end_volume_reading'],'phy_shift_start_volume_reading' => $row['phy_shift_start_volume_reading'],'return_to_tank'=>$row['return_to_tank'],
+                    $new_tg = DailyStockReadings::create(['company_id'=> $station['company_id'], 'v1_id'=> $row['iDailyStockReadingsId'], 'station_id' => $station ['station_id'],'tank_id'=>$station['id'], 'status'=>  $row['status'], 
+                    'tank_code' => $station ['code'], 'created_by'=> $user['id'], 'created_at'=>  $row['datecreated'], 'phy_shift_end_volume_reading' => $row['phy_shift_end_volume_reading'],'phy_shift_start_volume_reading' => $row['phy_shift_start_volume_reading'],'return_to_tank'=>$row['return_to_tank'],
                         'end_delivery'=>$row['end_delivery'], ]); 
                 }
             }

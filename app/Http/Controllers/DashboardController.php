@@ -46,8 +46,9 @@ class DashboardController extends BaseController
         //pumps
         $pump_query = Pumps::with('product');
         $tank_query = Tanks::with('product');
-        $pump_data = DailyTotalizerReadings::with('pump.product')->with('station');
-        $tank_data = DailyStockReadings::with('tank.product')->with('station');
+        //return date('Y-m-d', strtotime('-14 days'));
+        $pump_data = DailyTotalizerReadings::where('created_at','>', date('Y-m-d', strtotime('-60 days')))->with('pump.product')->with('station')->orderBy('created_at', 'ASC');
+        $tank_data = DailyStockReadings::where('created_at','>',date('Y-m-d', strtotime('-60 days')))->with('tank.product')->with('station')->orderBy('created_at', 'ASC');
 
         if($user == 'first_company_user'){
             $company = Company::where('user_id', $user_id)->get()->first();
@@ -117,29 +118,38 @@ class DashboardController extends BaseController
         $total_pump_sales = 0;
         $total_vol_supplied = 0;
         foreach ($pump_data as $key => $value) {
-            $total_pump_sales = $total_pump_sales + ($value['close_shift_totalizer_reading'] - $value['open_shift_totalizer_reading']);
+            if($value['close_shift_totalizer_reading'] != 0 and $value['open_shift_totalizer_reading'] != 0){
+            $total_pump_sales = $total_pump_sales + $value['close_shift_totalizer_reading'] - $value['open_shift_totalizer_reading'];
+        }
              $time_stamp = date("M d Y",strtotime($value['created_at']));
              $product_stamp = $value['pump']['product']['code'];
-             if(!isset($merged_data_by_date[$time_stamp][$product_stamp]['pump_data'])){
-                $merged_data_by_date[$time_stamp][$product_stamp]['pump_data'] = array();
-                 array_push($merged_data_by_date[$time_stamp][$product_stamp]['pump_data'], $value);
+             $station = $value['station']['name'];
+             //return $station;
+             if(!isset($merged_data_by_date[$time_stamp][$station][$product_stamp]['pump_data'])){
+                $merged_data_by_date[$time_stamp][$station][$product_stamp]['pump_data'] = array();
+                 array_push($merged_data_by_date[$time_stamp][$station][$product_stamp]['pump_data'], $value);
                 }
             else{
-              array_push($merged_data_by_date[$time_stamp][$product_stamp]['pump_data'], $value);  
+              array_push($merged_data_by_date[$time_stamp][$station][$product_stamp]['pump_data'], $value);  
             }
         }
+        //return $total_pump_sales;
 
         foreach ($tank_data as $key => $value) {
-            $total_tank_sales = $total_tank_sales + ($value['phy_shift_start_volume_reading'] - $value['phy_shift_end_volume_reading']);
+            if($value['phy_shift_start_volume_reading'] != 0 and $value['phy_shift_end_volume_reading'] != 0){
+            $total_tank_sales = $total_tank_sales + ($value['phy_shift_start_volume_reading'] - $value['phy_shift_end_volume_reading']) + ($value['start_delivery'] + $value['end_delivery']);
+            }
+            
             $total_vol_supplied = $total_vol_supplied + ($value['start_delivery'] + $value['end_delivery']);
              $time_stamp = date("M d Y",strtotime($value['created_at']));
              $product_stamp = $value['tank']['product']['code'];
-             if(!isset($merged_data_by_date[$time_stamp][$product_stamp]['tank_data'])){
-                $merged_data_by_date[$time_stamp][$product_stamp]['tank_data'] = array();
-                 array_push($merged_data_by_date[$time_stamp][$product_stamp]['tank_data'], $value);
+             $station = $value['station']['name'];
+             if(!isset($merged_data_by_date[$time_stamp][$station][$product_stamp]['tank_data'])){
+                $merged_data_by_date[$time_stamp][$station][$product_stamp]['tank_data'] = array();
+                 array_push($merged_data_by_date[$time_stamp][$station][$product_stamp]['tank_data'], $value);
                 }
             else{
-              array_push($merged_data_by_date[$time_stamp][$product_stamp]['tank_data'], $value);  
+              array_push($merged_data_by_date[$time_stamp][$station][$product_stamp]['tank_data'], $value);  
             }
         }
 

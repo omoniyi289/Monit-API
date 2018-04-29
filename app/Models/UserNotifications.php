@@ -8,7 +8,7 @@ use App\Models\NotificationModules;
 class UserNotifications extends Model
 {
     protected $fillable = [
-        'company_user_id', 'notification_id', 'active', 'name'
+        'company_user_id', 'notification_id', 'active', 'name' ,'v1_id', 'created_at', 'module'
     ];
 
    
