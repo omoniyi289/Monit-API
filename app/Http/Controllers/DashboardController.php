@@ -24,6 +24,7 @@ class DashboardController extends BaseController
     {
         $this->daily_totalizers_readings_service = $daily_totalizers_readings_service;
         $this->daily_stock_readings_service = $daily_stock_readings_service;
+        ini_set('memory_limit', '2048M');
     }
 
 
@@ -41,14 +42,14 @@ class DashboardController extends BaseController
         $station_count = 0;
         $tank_count = 0;
         $pump_count = 0;
-        $pump_data = array();
-        $tank_data = array();
+        $pump_data = '';
+        $tank_data = '';
         //pumps
         $pump_query = Pumps::with('product');
         $tank_query = Tanks::with('product');
         //return date('Y-m-d', strtotime('-14 days'));
-        $pump_data = DailyTotalizerReadings::where('created_at','>', date('Y-m-d', strtotime('-60 days')))->with('pump.product')->with('station')->orderBy('created_at', 'ASC');
-        $tank_data = DailyStockReadings::where('created_at','>',date('Y-m-d', strtotime('-60 days')))->with('tank.product')->with('station')->orderBy('created_at', 'ASC');
+        $pump_data = DailyTotalizerReadings::with('pump.product')->with('station')->orderBy('created_at', 'ASC');
+        $tank_data = DailyStockReadings::with('tank.product')->with('station')->orderBy('created_at', 'ASC');
 
         if($user == 'first_company_user'){
             $company = Company::where('user_id', $user_id)->get()->first();
@@ -107,8 +108,8 @@ class DashboardController extends BaseController
         $pump_query= $pump_query->get();
         $tank_query= $tank_query->get();
 
-        $pump_data= $pump_data->get();
-        $tank_data= $tank_data->get();
+        $pump_data= $pump_data->where('created_at','>', date('Y-m-d', strtotime('-60 days')))->get();
+        $tank_data= $tank_data->where('created_at','>', date('Y-m-d', strtotime('-60 days')))->get();
         //return $tank_query;
         
         //$final_submission['total_companies'] = c;
