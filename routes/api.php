@@ -9,10 +9,13 @@ Route::get('/v1/company_mg', 'MigrationController@company_migrate');
 Route::get('/v1/user_mg', 'MigrationController@user_migrate');
 Route::get('/v1/station_mg', 'MigrationController@station_migrate');
 Route::get('/v1/role_mg', 'MigrationController@role_migrate');
+
 Route::get('/v1/user_role_mg', 'MigrationController@user_role_migrate');
 Route::get('/v1/role_perm_mg', 'MigrationController@role_perm_migrate');
 Route::get('/v1/user_station_mg', 'MigrationController@user_station_migrate');
 Route::get('/v1/user_notf_mg', 'MigrationController@user_notf_migrate');
+
+
 Route::get('/v1/pump_mg', 'MigrationController@pump_migrate');
 Route::get('/v1/tank_mg', 'MigrationController@tank_migrate');
 Route::get('/v1/tankgroup_mg', 'MigrationController@tankgroup_migrate');
@@ -20,6 +23,7 @@ Route::get('/v1/pumpgroup_mg', 'MigrationController@pumpgroup_migrate');
 Route::get('/v1/p_t_map_mg', 'MigrationController@p_t_map_migrate');
 Route::get('/v1/preadings_mg', 'MigrationController@preadings_migrate');
 Route::get('/v1/treadings_mg', 'MigrationController@treadings_migrate');
+Route::get('/v1/pt_product_mg', 'MigrationController@pt_product_migrate');
 
 
 

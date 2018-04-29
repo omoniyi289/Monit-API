@@ -25,7 +25,7 @@ class DailyStockReadingsService
         $this->database->beginTransaction();
         try{
             foreach ($data['readings'] as $value) {
-                    $stock = DailyStockReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'tank_id' => $value['tank_id'],'tank_code' => $value['tank_code'], 'phy_shift_start_volume_reading' => $value['opening_reading'],'created_by' => $data['created_by'],'created_at' => $data['created_at'], 'status' =>'Opened']);
+                    $stock = DailyStockReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'tank_id' => $value['tank_id'],'tank_code' => $value['tank_code'], 'phy_shift_start_volume_reading' => $value['opening_reading'],'created_by' => $data['created_by'],'created_at' => $data['created_at'], 'status' =>'Opened', 'product'=> $value['product']]);
                 }
             
         }catch (Exception $exception){

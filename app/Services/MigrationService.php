@@ -795,5 +795,31 @@ class MigrationService
         $this->database->commit();
         return $counter;
     }
+     public function pt_product_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+
+      $sql = DailyTotalizerReadings::with('pump.product')->get(['id', 'pump_id']);   
+          foreach ($sql as $key => $value) {
+                 $product_code = $value['pump']['product']['code'];
+              $new_tg = DailyTotalizerReadings::where('id', $value['id'])->update(['product'=>$product_code]);
+            }
+
+
+      $sql2 = DailyStockReadings::with('tank.product')->get(['id', 'tank_id']);   
+          foreach ($sql2 as $key => $value) {
+                 $product_code = $value['tank']['product']['code'];
+              $new_tg = DailyStockReadings::where('id', $value['id'])->update(['product'=>$product_code]);
+            }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
        
 }

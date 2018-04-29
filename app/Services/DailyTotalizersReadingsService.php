@@ -27,7 +27,7 @@ class DailyTotalizersReadingsService
           //return $data['created_at'];
             foreach ($data['readings'] as $value) {
 
-                    $pump = DailyTotalizerReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['pump_nozzle_code'], 'open_shift_totalizer_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened', 'created_at'=> $data['created_at']]);
+                    $pump = DailyTotalizerReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['pump_nozzle_code'], 'open_shift_totalizer_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened', 'created_at'=> $data['created_at'], 'product'=> $value['product']]);
                 }
             
         }catch (Exception $exception){
