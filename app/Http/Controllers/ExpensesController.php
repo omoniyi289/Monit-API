@@ -21,16 +21,6 @@ class ExpensesController extends BaseController
         $data = $this->expenses_service->create($expense_update_request);
         return $this->response(1, 8000, "expenses successfully created", $data);
     }
-      public function update(Request $request)
-    {
-        $expense_update_request = $request->get('expenses', []);
-        $data = $this->expenses_service->update($expense_update_request);
-        if($data == 'invalid code'){        
-            return $this->response(0, 8000, "invalid code supplied", null, 400);
-            }else{
-            return $this->response(1, 8000, "request successfully updated", $data);     
-            }
-    }
 
     public function get_all(){
         $resource_options = $this->parse_resource_options();

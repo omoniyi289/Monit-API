@@ -11,6 +11,7 @@ namespace App\Services;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use App\Models\ExpenseHeader;
+use App\Models\ExpenseItems;
 class ExpensesService
 {
     private $database;
@@ -23,14 +24,21 @@ class ExpensesService
     public function create(array $data) {
         $this->database->beginTransaction();
         try{
-            $data['expense_code'] = date("Ymdmis");
-            $expenses = ExpenseHeader::create($data);
+            //$data['expense_code'] = date("Ymdmis");
+            $data['expense_date'] = date_format(date_create($data['expense_date']),"Y-m-d")." 00:00:00";
+            $items = $data['items'];
+            //return $data;
+            $expense = ExpenseHeader::create($data);
+            foreach ($items as $key => $value) {
+                $value['expense_id'] = $expense['id'];
+                $item = ExpenseItems::create($value);
+            }
         }catch (Exception $exception){
             $this->database->rollBack();
             throw $exception;
         }
         $this->database->commit();
-        return $expenses;
+        return ExpenseHeader::with('station')->with('items')->where('id', $expense['id'])->get()->first();
     }
      public function update($expense_id, array $data)
     {
@@ -55,7 +63,7 @@ class ExpensesService
     }
       public function get_by_station_id($station_id)
     {
-       return ExpenseHeader::with('station')->where('station_id',$station_id)->get();
+       return ExpenseHeader::with('station')->with('items')->where('station_id',$station_id)->get();
     }
     private function get_requested_expense($id, array $options = [])
     {

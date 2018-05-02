@@ -14,5 +14,8 @@ class ExpenseHeader extends Model
     public function station(){
         return $this->belongsTo(Station::class, 'station_id');
     }
+    public function items(){
+        return $this->hasMany(ExpenseItems::class, 'expense_id', 'id');
+    }
 
 }

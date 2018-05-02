@@ -30,7 +30,6 @@ class CreateExpenseHeaderAndExpenseItemsTable extends Migration
         });
         Schema::create('expense_items', function (Blueprint $table) {
             $table->increments('id');
-            $table->decimal('amount', 11, 2);
             $table->integer('expense_id')->nullable();
             $table->integer('created_by')->nullable();
             $table->decimal('unit_amount', 11, 2)->nullable();
