@@ -40,6 +40,7 @@ class ExpensesService
         $this->database->commit();
         return ExpenseHeader::with('station')->with('items')->where('id', $expense['id'])->get()->first();
     }
+    
      public function update($expense_id, array $data)
     {
         $expense = ExpenseHeader::where('id',$expense_id);
