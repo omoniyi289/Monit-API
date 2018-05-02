@@ -11,6 +11,8 @@ namespace App\Services;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use App\Models\Deposits;
+use App\Models\DailyStockReadings;
+use App\Models\DailyTotalizerReadings;
 class DepositsService
 {
     private $database;
@@ -23,7 +25,10 @@ class DepositsService
     public function create(array $data) {
         $this->database->beginTransaction();
         try{
-            //$data['deposit_code'] = strtoupper(uniqid('EC'));
+           // return $data;
+            $data['teller_date']= date_format(date_create($data['payment_date']),"Y-m-d");
+            $data['reading_date']= date_format(date_create($data['reading_date']),"Y-m-d");
+            //date_format(date_create($params['selected_date']),"Y-m-d")
             $deposits = Deposits::create($data);
         }catch (Exception $exception){
             $this->database->rollBack();
@@ -60,5 +65,19 @@ class DepositsService
     private function get_requested_deposit($id, array $options = [])
     {
      return Deposits::where('id', $id)->with('creator')->with('approver')->get()->first();
+    }
+     public function validate_amount($params)
+    {   
+
+      $result = DailyTotalizerReadings::where('station_id',$params['station_id']);
+       //return date_format(date_create($params['date']),"Y-m-d");
+       $result->where('created_at', 'LIKE', date_format(date_create($params['selected_date']),"Y-m-d").'%');
+      $pump_data = $result->get();
+      $total_amount=0;
+      foreach ($pump_data as $key => $value) {
+          $total_amount = $total_amount + $value['shift_1_cash_collected'] 
+          + $value['shift_2_cash_collected'] + $value['cash_collected'];
+      }
+       return $total_amount;
     }
 }

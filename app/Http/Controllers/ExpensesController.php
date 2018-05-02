@@ -17,7 +17,7 @@ class ExpensesController extends BaseController
 
     public function create(ApiExpensesRequest $request) {
 
-        $expense_update_request = $request->get('expenses',[]);
+        $expense_update_request = $request->get('expense_header',[]);
         $data = $this->expenses_service->create($expense_update_request);
         return $this->response(1, 8000, "expenses successfully created", $data);
     }

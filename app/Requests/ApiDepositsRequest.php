@@ -24,7 +24,8 @@ class ApiDepositsRequest extends APIRequest
             'deposits.station_id' => 'required|integer',
             'deposits.amount'=> 'required|string',
             'deposits.bank'=> 'required|string',
-            'deposits.date' =>'required|string',
+            'deposits.payment_date' =>'required|string',
+            'deposits.reading_date' =>'required|string',
             'deposits.payment_type' =>'required|string'
            
         ];

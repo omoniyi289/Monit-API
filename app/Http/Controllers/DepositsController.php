@@ -16,11 +16,11 @@ class DepositsController extends BaseController
     }
 
     public function create(ApiDepositsRequest $request) {
-
+         //return $request;
         $deposit_update_request = $request->get('deposits',[]);
         if($deposit_update_request['payment_type'] == 'POS' and (!isset($deposit_update_request['pos_receipt_number']) or !isset($deposit_update_request['pos_receipt_range']))){
             return $this->response(0, 8000, "error, missing parameter(s)", null, 400);
-        }else if($deposit_update_request['payment_type'] == 'Cash Deposit' and (!isset($deposit_update_request['bank_name']) or !isset($deposit_update_request['account_number']) or !isset($deposit_update_request['teller_number']))){
+        }else if($deposit_update_request['payment_type'] == 'Cash Deposit' and (!isset($deposit_update_request['bank']) or !isset($deposit_update_request['account_number']) or !isset($deposit_update_request['teller_number']))){
             return $this->response(0, 8000, "error, missing parameter(s)", null, 400);
         }
         $data = $this->deposits_service->create($deposit_update_request);
@@ -53,6 +53,12 @@ class DepositsController extends BaseController
         $resource_options = $this->parse_resource_options();
         $data = $this->deposits_service->get_by_station_id($station_id,$resource_options);
         return $this->response(1, 8000, "requested deposits", $data);
+    }
+    public function validate_amount(Request $request) {
+        $deposit_request = $request->all();
+        //return $deposit_request;
+        $data = $this->deposits_service->validate_amount($deposit_request);
+        return $this->response(1, 8000, "requested amount", $data);
     }
 
 

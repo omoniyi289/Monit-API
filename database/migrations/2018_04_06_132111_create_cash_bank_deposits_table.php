@@ -20,7 +20,7 @@ class CreateCashBankDepositsTable extends Migration
             $table->string('teller_number')->nullable();
             $table->string('pos_receipt_number')->nullable();
             $table->string('pos_receipt_range')->nullable();
-            $table->integer('created_by');
+            $table->integer('created_by')->nullable();
             $table->unsignedInteger('company_id');
             $table->unsignedInteger('station_id');          
             $table->string('date')->nullable();

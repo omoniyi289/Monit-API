@@ -27,6 +27,9 @@ use App\PumpGroups;
 use App\PumpGroupToTankGroup;
 use App\Models\DailyStockReadings;
 use App\Models\DailyTotalizerReadings;
+use App\Models\Deposits;
+use App\Models\ExpenseHeader;
+use App\Models\ExpenseItems;
 
 ini_set('max_execution_time', 80000); 
 class MigrationService
@@ -469,36 +472,22 @@ class MigrationService
         try{
 
 
-           /*$station = Station::where('v1_id', '!=',NULL)->get();
-           //return $company['v1_id'];
-            foreach ($station as $key => $value) {
-              $id= $value['v1_id'];
-              ///track last update
-            $exist= Pumps::where('station_id', $value['id'])->orderBy('created_at', 'DESC')->get()->first();
-
-            if(count($exist) > 0){
-                ///compute max milli second
-             $date_time = explode(".", ((array)$exist['created_at'])['date'])[0].'.999';
-             $sql = "SELECT * FROM pumps where stationid = '".$id."' AND datecreated > '".$date_time."'";
-                }else {*/
                  $sql = "SELECT * FROM pumps";
-            //    }
-
-            $result = mysqli_query($this->conn,$sql);
-            //return mysqli_num_rows($result);
-            if (mysqli_num_rows($result) > 0 and $result !=false ) {
-                // output data of each row
-                while($row =mysqli_fetch_assoc($result) ){
-                    //array_push($arr, $row);
-                    $date_array = explode(".", $row['datecreated']);
-                    $row['datecreated'] = $date_array[0];
-                    if($row['pump_product'] == 'PMS'){
-                    $product = 1;
-                     }else if($row['pump_product'] == 'DPK'){
-                    $product = 2;
-                     }else if($row['pump_product'] == 'AGO'){
-                    $product = 3;
-                     }
+                  $result = mysqli_query($this->conn,$sql);
+                  //return mysqli_num_rows($result);
+                  if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                      // output data of each row
+                      while($row =mysqli_fetch_assoc($result) ){
+                          //array_push($arr, $row);
+                          $date_array = explode(".", $row['datecreated']);
+                          $row['datecreated'] = $date_array[0];
+                          if($row['pump_product'] == 'PMS'){
+                          $product = 1;
+                           }else if($row['pump_product'] == 'DPK'){
+                          $product = 2;
+                           }else if($row['pump_product'] == 'AGO'){
+                          $product = 3;
+                           }
 
             $exist= Pumps::where('v1_id', $row['iPumpsId'])->get()->first();
 
@@ -813,6 +802,144 @@ class MigrationService
                  $product_code = $value['tank']['product']['code'];
               $new_tg = DailyStockReadings::where('id', $value['id'])->update(['product'=>$product_code]);
             }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+
+    public function deposits_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+
+
+                 $sql = "SELECT * FROM cash_bank_deposits";
+                  $result = mysqli_query($this->conn,$sql);
+                  //return mysqli_num_rows($result);
+                  if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                      // output data of each row
+                      while($row =mysqli_fetch_assoc($result) ){
+                          //array_push($arr, $row);
+                          $date_array = explode(".", $row['datecreated']);
+                          $row['datecreated'] = $date_array[0];
+                         
+
+            $exist= Deposits::where('v1_id', $row['ID'])->get()->first();
+
+            if(count($exist) == 0){
+              
+                     $station = Station::where('v1_id', $row['stationid'])->get()->first();
+                     $user = User::where('v1_id' , $row['createdby'])->get()->first();
+                    //$product 
+                     if(count($station) > 0){
+                     $counter++;
+                    Deposits::create(['reading_date'=> $row['reading_date'], 'v1_id'=> strtoupper($row['ID']), 'teller_date'=> $row['teller_date'], 'created_at' => $row ['datecreated'], 'company_id'=>$station['company_id'], 'station_id'=>  $station['id'], 'teller_number'=> $row['bank_teller_no'], 'account_number'=> $row['bank_account_no'],'bank'=> $row['bank_name'], 'amount'=> $row['amount_deposited'], 'payment_type'=> $row['bank_deposit_type'] , 'pos_receipt_number'=> $row['pos_receipt_no'] , 'pos_receipt_range'=> $row['pos_receipt_range'], 'created_by'=> $user['id'] ]); 
+                  }
+
+                }
+            }
+                 # code...
+           }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+
+       public function expense_header_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+
+
+                 $sql = "SELECT * FROM expense_header";
+                  $result = mysqli_query($this->conn,$sql);
+                  //return mysqli_num_rows($result);
+                  if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                      // output data of each row
+                      while($row =mysqli_fetch_assoc($result) ){
+                          //array_push($arr, $row);
+                          $date_array = explode(".", $row['datecreated']);
+                          $row['datecreated'] = $date_array[0];
+                         //return $row['datecreated'];
+
+            $exist= ExpenseHeader::where('v1_id', $row['expenseId'])->get()->first();
+
+            if(count($exist) == 0){
+              
+                     $station = Station::where('v1_id', $row['stationid'])->get()->first();
+                     $user = User::where('v1_id' , $row['createdby'])->get()->first();
+                    //$product 
+                     if(count($station) > 0){
+                     $counter++;
+                    ExpenseHeader::create([
+           'expense_code' => $row['expensecode'],
+            'created_by' => $user['id'],
+            'company_id'=> $station['company_id'],
+            'station_id' => $station['id'],          
+            'expense_date' => $row['expensedate'],
+            'total_amount' => $row['totalexpenseamount'],
+             'v1_id' => $row['expenseId'],
+             'created_at'=> $row['datecreated'],
+              ]); 
+                  }
+
+                }
+            }
+                 # code...
+           }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+        public function expense_items_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+
+
+                 $sql = "SELECT * FROM expense_items";
+                  $result = mysqli_query($this->conn,$sql);
+                  //return mysqli_num_rows($result);
+                  if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                      // output data of each row
+                      while($row =mysqli_fetch_assoc($result) ){
+                          //array_push($arr, $row);
+                          $date_array = explode(".", $row['datecreated']);
+                          $row['datecreated'] = $date_array[0];
+                         
+
+            $exist= ExpenseItems::where('v1_id', $row['itemid'])->get()->first();
+
+            if(count($exist) == 0){
+                    $header= ExpenseHeader::where('v1_id', $row['expenseid'])->get()->first();
+                    $user = User::where('v1_id' , $row['createdby'])->get()->first();
+                    //$product 
+                     if(count($header) == 1){
+                     $counter++;
+                    ExpenseItems::create([
+          'expense_id'=> $header['id'],'created_by'=> $user['id'],'unit_amount'=> $row['unitamount'],'total_amount'=> $row['totalamount'],'quantity'=> $row['quantity'],'expense_type'=> $row['expensetype'],'proof_of_payment'=> $row['proofofpayment'],'approved'=> $row['approved'],'item_code'=> $row['itemcode'],'item_description'=> $row['itemdescription'],'v1_id'=> $row['itemid'], 'created_at'=> $row['datecreated']
+              ]); 
+                  }
+
+                }
+            }
+                 # code...
+           }
             
         }catch (Exception $exception){
             $this->database->rollBack();

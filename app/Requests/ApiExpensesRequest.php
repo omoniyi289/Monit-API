@@ -17,13 +17,12 @@ class ApiExpensesRequest extends APIRequest
     }
     public function rules(){
         return [
-            'expenses' => 'array|required',
+            'expense_header' => 'array|required',
             
-            'expenses.description' => 'required|string',
-            'expenses.company_id' => 'required|integer',
-            'expenses.station_id' => 'required|integer',
-            'expenses.amount'=> 'required|string',
-            'expenses.date' =>'required|string'
+            'expense_header.company_id' => 'required|integer',
+            'expense_header.station_id' => 'required|integer',
+            'expense_header.total_amount'=> 'required|string',
+            'expense_header.expense_date' =>'required|string'
            
         ];
     }

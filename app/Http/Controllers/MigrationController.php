@@ -91,4 +91,16 @@ class MigrationController extends BaseController
         $data = $this->migration_service->pt_product_migrate();
         return $this->response(1, 8000, "transfers", $data);
     }
+     public function deposits_migrate(Request $request) {
+        $data = $this->migration_service->deposits_migrate();
+        return $this->response(1, 8000, "transfers", $data);
+    }
+    public function expense_header_migrate(Request $request) {
+        $data = $this->migration_service->expense_header_migrate();
+        return $this->response(1, 8000, "transfers", $data);
+    }
+     public function expense_items_migrate(Request $request) {
+        $data = $this->migration_service->expense_items_migrate();
+        return $this->response(1, 8000, "transfers", $data);
+    }
 }

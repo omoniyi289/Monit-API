@@ -24,6 +24,9 @@ Route::get('/v1/p_t_map_mg', 'MigrationController@p_t_map_migrate');
 Route::get('/v1/preadings_mg', 'MigrationController@preadings_migrate');
 Route::get('/v1/treadings_mg', 'MigrationController@treadings_migrate');
 Route::get('/v1/pt_product_mg', 'MigrationController@pt_product_migrate');
+Route::get('/v1/deposits_mg', 'MigrationController@deposits_migrate');
+Route::get('/v1/expense_header_mg', 'MigrationController@expense_header_migrate');
+Route::get('/v1/expense_items_mg', 'MigrationController@expense_items_migrate');
 
 
 
@@ -288,6 +291,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/deposits', 'DepositsController@get_all');
     Route::post('/v1/deposits', 'DepositsController@create');
     Route::get('/v1/deposits/by_station/{param}', 'DepositsController@get_by_station_id');
+    Route::get('/v1/deposits/validate_amount/{param}', 'DepositsController@validate_amount');
     Route::patch('/v1/deposits', 'DepositsController@update');
 
      /*

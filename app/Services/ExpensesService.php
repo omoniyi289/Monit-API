@@ -10,7 +10,7 @@ namespace App\Services;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
-use App\Models\Expenses;
+use App\Models\ExpenseHeader;
 class ExpensesService
 {
     private $database;
@@ -23,8 +23,8 @@ class ExpensesService
     public function create(array $data) {
         $this->database->beginTransaction();
         try{
-            $data['expense_code'] = strtoupper(uniqid('EC'));
-            $expenses = Expenses::create($data);
+            $data['expense_code'] = date("Ymdmis");
+            $expenses = ExpenseHeader::create($data);
         }catch (Exception $exception){
             $this->database->rollBack();
             throw $exception;
@@ -34,10 +34,10 @@ class ExpensesService
     }
      public function update($expense_id, array $data)
     {
-        $expense = Expenses::where('id',$expense_id);
+        $expense = ExpenseHeader::where('id',$expense_id);
         $this->database->beginTransaction();
         try {
-            Expenses::where('id', $expense['id'])->update($data);
+            ExpenseHeader::where('id', $expense['id'])->update($data);
         } catch (Exception $exception) {
             $this->database->rollBack();
             throw $exception;
@@ -47,7 +47,7 @@ class ExpensesService
     }
 
     public function get_all(array $options = []){
-        return Expenses::all();
+        return ExpenseHeader::all();
     }
     public function get_by_id($id, array $options = [])
     {
@@ -55,10 +55,10 @@ class ExpensesService
     }
       public function get_by_station_id($station_id)
     {
-       return Expenses::where('station_id',$station_id)->get();
+       return ExpenseHeader::with('station')->where('station_id',$station_id)->get();
     }
     private function get_requested_expense($id, array $options = [])
     {
-        return Expenses::where('id', $id)->get()->first();
+        return ExpenseHeader::where('id', $id)->get()->first();
     }
 }
