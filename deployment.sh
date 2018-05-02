@@ -7,9 +7,10 @@ php artisan key:generate --env=testing
 #./vendor/bin/phpunit #No tests yet
 
 #### CD ####
-rsync -vzrh --exclude-from="deploy_exclude.txt" . ubuntu@34.246.63.12:/var/www/Station-manager-api/temp
+rsync -vzrhe "ssh -i /var/lib/jenkins/.ssh/e360_prod_kp2.pem -o StrictHostKeyChecking=no" --exclude-from="deploy_exclude.txt"  . ubuntu@34.246.63.12:/var/www/Station-manager-api/temp
 
-ssh ubuntu@34.246.63.12 <<-EOF
+ssh -i /var/lib/jenkins/.ssh/e360_prod_kp2.pem -o StrictHostKeyChecking=no ubuntu@34.246.63.12 <<-EOF
+
     cd /var/www/Station-manager-api
     sudo rm -rf ./backup # Delete previous backup
     sudo mv ./live ./backup # Create new backup
@@ -19,10 +20,10 @@ ssh ubuntu@34.246.63.12 <<-EOF
     cd ./live
     sudo composer install --no-dev --optimize-autoloader --no-plugins --no-scripts
     sudo composer update
-    php artisan key:generate
-    #php artisan route:cache resolve closure based routes before caching
-    php artisan migrate --force
-    php artisan db:seed
+    sudo php artisan key:generate
+    sudo php artisan route:cache #resolve closure based routes before caching
+    sudo php artisan migrate --force
+    sudo php artisan db:seed
     sudo chmod -R 755 .
     sudo chown -R www-data:www-data .
 EOF
