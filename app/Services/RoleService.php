@@ -48,8 +48,9 @@ class RoleService
         }
     }
 
-    public function get_role_by_name($name){
-        return $this->role_repository->get_where("name",$name);
+    public function get_role_by_name($name, $company_id){
+      //  return $this->role_repository->get_where("name",$name);
+        return Role::where("name",$name)->where("company_id",$company_id)->get();
     }
     public function get_id($role_id, array $options = []){
         return $this->get_requested_role($role_id);

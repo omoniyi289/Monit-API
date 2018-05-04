@@ -41,6 +41,12 @@ class MigrationService
     private $password = "Tr-3re@Aza4r";
     private $dbname = "station_manager_1";
     private $conn ='';
+
+    private $ms_servername = "185.173.25.163";
+    private $ms_username = "samuel.j";
+    private $ms_password = "P@ssw0rd%%";
+    private $ms_dbname = "station_manager_1";
+    private $ms_conn ='';
     
     //$sql = "SELECT id, firstname, lastname FROM MyGuests";
     //$result = $conn->query($sql);
@@ -52,10 +58,16 @@ class MigrationService
        // $this->company_repository = $company_repository;
         // Create connection
         $this->conn =   mysqli_connect($this->servername, $this->username, $this->password, $this->dbname);
+        //$this->ms_conn =   mssql_connect($this->ms_servername, $this->ms_username, $this->ms_password);
+       // $selected = mssql_select_db($this->ms_dbname, $this->ms_conn)
+  //or die("Couldn't open ms database "); 
         // Check connection
        if (!$this->conn) {
                  return ("Connection failed: " . mysqli_connect_error());
-}
+          }
+     //      if (!$this->ms_conn) {
+     //            return ("Microsoft Connection failed: ");
+     //     }
     }
 
     public function company_migrate(){
@@ -948,5 +960,57 @@ class MigrationService
         $this->database->commit();
         return $counter;
     }
+
+      public function items_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+
+
+                 $sql = "SELECT * FROM items";
+                  $result = mssql_query($this->conn,$sql);
+                  //return mysqli_num_rows($result);
+                  if (mssql_num_rows($result) > 0 and $result !=false ) {
+                      // output data of each row
+                      while($row =mssql_fetch_assoc($result) ){
+                          //array_push($arr, $row);
+                          $date_array = explode(".", $row['datecreated']);
+                          $row['datecreated'] = $date_array[0];
+                         //return $row['datecreated'];
+
+            $exist= Items::where('v1_id', $row['expenseId'])->get()->first();
+
+            if(count($exist) == 0){
+              
+                     $station = Station::where('v1_id', $row['stationid'])->get()->first();
+                     $user = User::where('v1_id' , $row['createdby'])->get()->first();
+                    //$product 
+                     if(count($station) > 0){
+                     $counter++;
+                    ExpenseHeader::create([
+            'created_by' => $user['id'],
+            'company_id'=> $station['company_id'],
+            'station_id' => $station['id'],          
+            
+             'v1_id' => $row['expenseId'],
+             'created_at'=> $row['datecreated'],
+             'description'=> $row['description'],'created_by'=> $row['datecreated'],'parentsku'=> $row['parentsku'],'hasvariants'=> $row['hasvariants'], 'name'=> $row['itemname'], 'category'=> $row['category'], 'status'=> $row['status'], 'brand'=> $row['brand'], 'uom'=> $row['uom'], 'modified_by'=> $row['modifiedby'], 'active'=> $row['active'], 'v1_id'=> $row['itemid']
+              ]); 
+                  }
+
+                }
+            }
+                 # code...
+           }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+ 
        
 }

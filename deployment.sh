@@ -21,7 +21,7 @@ ssh -i /var/lib/jenkins/.ssh/e360_prod_kp2.pem -o StrictHostKeyChecking=no ubunt
     sudo composer install --no-dev --optimize-autoloader --no-plugins --no-scripts
     sudo composer update
     sudo php artisan key:generate
-    sudo php artisan route:cache #resolve closure based routes before caching
+    #sudo php artisan route:cache #resolve closure based routes before caching
     sudo php artisan migrate --force
     sudo php artisan db:seed
     sudo chmod -R 755 .

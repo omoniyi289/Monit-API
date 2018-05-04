@@ -29,6 +29,11 @@ Route::get('/v1/deposits_mg', 'MigrationController@deposits_migrate');
 Route::get('/v1/expense_header_mg', 'MigrationController@expense_header_migrate');
 Route::get('/v1/expense_items_mg', 'MigrationController@expense_items_migrate');
 
+Route::get('/v1/items_mg', 'MigrationController@items_migrate');
+Route::get('/v1/item_variants_mg', 'MigrationController@item_variants_migrate');
+Route::get('/v1/stock_count_mg', 'MigrationController@stock_count_migrate');
+Route::get('/v1/stock_transfer_mg', 'MigrationController@stock_transfer_migrate');
+
 
 
 /*

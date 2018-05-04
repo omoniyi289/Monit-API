@@ -33,7 +33,9 @@ class DashboardController extends BaseController
         $user_id = $request->get('user_id',[]);
        
         $company_id=$request->get('company_id');
-            
+        $start_date=$request->get('start_date');
+        $end_date=$request->get('end_date');
+        
 
         //return (array)$pump_data[0];
         $merged_data_by_date= array();
@@ -47,13 +49,25 @@ class DashboardController extends BaseController
         //pumps
         $pump_query = Pumps::with('product');
         $tank_query = Tanks::with('product');
-        $back_day ='-21 days';
-        //return date('Y-m-d', strtotime('-14 days'));
-        $pump_data = DailyTotalizerReadings::select('close_shift_totalizer_reading', 'open_shift_totalizer_reading', 'ppv', 'created_at', 'pump_id', 'station_id', 'product')->where('created_at','>', date('Y-m-d', strtotime($back_day)))->orderBy('created_at', 'ASC')->with(array('pump'=>function($query){
+        $back_day ='-3 days';
+        //return $start_date.' '.$end_date;
+        if($start_date == 'init'){
+            $start_date = date('Y-m-d', strtotime($back_day));
+        }else{
+          $start_date = date_format(date_create($start_date),"Y-m-d h:i:s");  
+        }
+        if($end_date == 'init'){
+            $end_date = date('Y-m-d h:i:s');
+        }else{
+            $end_date = date_format(date_create($end_date),"Y-m-d h:i:s");  
+        }
+
+        
+        $pump_data = DailyTotalizerReadings::select('close_shift_totalizer_reading', 'open_shift_totalizer_reading', 'ppv', 'created_at', 'pump_id', 'station_id', 'product')->where('created_at','>=', $start_date)->where('created_at','<=', $end_date)->orderBy('created_at', 'ASC')->with(array('pump'=>function($query){
             $query->select('id','pump_nozzle_code');}))->with(array('station'=>function($query){
             $query->select('id','name');}));
 
-        $tank_data = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'created_at', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('created_at','>', date('Y-m-d', strtotime($back_day)))->orderBy('created_at', 'ASC')->with(array('tank'=>function($query){
+        $tank_data = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'created_at', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('created_at','>=', $start_date)->where('created_at','<=', $end_date)->orderBy('created_at', 'ASC')->with(array('tank'=>function($query){
             $query->select('id','code');}))->with(array('station'=>function($query){
             $query->select('id','name');}));
 
@@ -103,11 +117,11 @@ class DashboardController extends BaseController
                     $pump_query = $pump_query->orWhere('station_id', $value['station_id']);
                     $tank_query = $tank_query->orWhere('station_id', $value['station_id']);
 
-                    $pump_data = $pump_data->orWhere(function($query)use($value, $back_day){
-                        $query->where('station_id', $value['station_id'])->where('created_at','>', date('Y-m-d', strtotime($back_day)));
+                    $pump_data = $pump_data->orWhere(function($query)use($value, $start_date, $end_date){
+                        $query->where('station_id', $value['station_id'])->where('created_at','>=', $start_date)->where('created_at','<=', $end_date);
                     });
-                    $tank_data = $tank_data->orWhere(function($query)use($value, $back_day){
-                        $query->where('station_id', $value['station_id'])->where('created_at','>', date('Y-m-d', strtotime($back_day)));
+                    $tank_data = $tank_data->orWhere(function($query)use($value, $start_date, $end_date){
+                        $query->where('station_id', $value['station_id'])->where('created_at','>=', $start_date)->where('created_at','<=', $end_date);
                     });
                     
                 }

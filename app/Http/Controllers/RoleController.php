@@ -24,7 +24,7 @@ class RoleController extends BaseController
 
     public function create(ApiRoleRequest $request){
         $role_request = $request->get('role',[]);
-        $role_name_exit = $this->role_service->get_role_by_name($role_request['name']);
+        $role_name_exit = $this->role_service->get_role_by_name($role_request['name'], $role_request['company_id']);
         if (count($role_name_exit) == 1){
             return $this->response(0, 8012, null, null, 400);
         }
