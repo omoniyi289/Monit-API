@@ -39,6 +39,7 @@ class CreateStockTransfersTable extends Migration
             $table->integer('active')->default(1);
             $table->integer('in_stock')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

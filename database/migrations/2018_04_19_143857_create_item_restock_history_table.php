@@ -28,6 +28,7 @@ class CreateItemRestockHistoryTable extends Migration
             $table->string('modified_by')->nullable();             
             $table->integer('active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

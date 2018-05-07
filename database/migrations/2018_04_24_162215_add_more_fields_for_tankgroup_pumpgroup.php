@@ -22,11 +22,6 @@ class AddMoreFieldsForTankgroupPumpgroup extends Migration
            
         }); 
 
-          Schema::table('expenses', function (Blueprint $table) {
-            $table->string('v1_id')->nullable();
-           
-        });
-
           Schema::table('stock_transfers', function (Blueprint $table) {
             $table->string('v1_id')->nullable();
            

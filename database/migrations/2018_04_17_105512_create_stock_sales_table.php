@@ -27,6 +27,7 @@ class CreateStockSalesTable extends Migration
             $table->integer('grand_total');
             $table->string('sold_by')->nullable();               
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

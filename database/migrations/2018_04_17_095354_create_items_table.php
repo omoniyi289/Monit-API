@@ -29,6 +29,7 @@ class CreateItemsTable extends Migration
             $table->integer('hasvariants')->default(1);
             $table->integer('active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

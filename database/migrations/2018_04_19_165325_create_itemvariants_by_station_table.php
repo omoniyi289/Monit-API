@@ -31,6 +31,7 @@ class CreateItemvariantsByStationTable extends Migration
             $table->string('compositesku')->nullable();    
             $table->integer('active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

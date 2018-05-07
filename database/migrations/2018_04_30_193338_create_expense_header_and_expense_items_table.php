@@ -54,7 +54,7 @@ class CreateExpenseHeaderAndExpenseItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expense_header');\
+        Schema::dropIfExists('expense_header');
         Schema::dropIfExists('expense_items');
     }
 }
