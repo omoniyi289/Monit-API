@@ -50,7 +50,7 @@ class AddMoreFieldsForTankgroupPumpgroup extends Migration
             $table->string('v1_id')->nullable();
            
         });  
-            Schema::table('price_change_logs', function (Blueprint $table) {
+            Schema::table('product_change_logs', function (Blueprint $table) {
             $table->string('v1_id')->nullable();
            
         });  
