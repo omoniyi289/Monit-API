@@ -11,7 +11,7 @@ class ProductChangeLogs extends Model
     protected $table = 'product_change_logs';
     protected $fillable = [
         'current_price_tag','requested_price_tag', 'company_id', 'product_id' , 'updated_by',
-        'approved_by','station_id', 'is_approved','v1_id'
+        'approved_by','station_id', 'is_approved','v1_id', 'executed_by', 'is_executed', 'valid_from'
     ];
 
     public function station(){
@@ -22,5 +22,8 @@ class ProductChangeLogs extends Model
     }
     public function approver(){
         return $this->hasOne(User::class ,'id', 'approved_by');
+    }
+    public function executor(){
+        return $this->hasOne(User::class ,'id', 'executed_by');
     }
 }

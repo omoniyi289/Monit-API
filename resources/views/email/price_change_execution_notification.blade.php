@@ -92,7 +92,7 @@
                     <td align="center" valign="top" style="padding: 40px 10px 40px 10px;">
                         <a href="#" target="_blank" style="text-decoration: none;">
                             <span style="display: block; font-family: 'Poppins', sans-serif; color: #ffffff; font-size: 36px;"
-                                  border="0"><b>Station</b>Manager</span>
+                                  border="0"><b>Station </b> Manager</span>
                         </a>
                     </td>
                 </tr>
@@ -140,16 +140,18 @@
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 10px 10px 10px 10px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;">A fuel request with the details below has been made.</p>
+                        <p style="margin: 0;">A price change request with the details below has been approved. Please  <a href="http://sm2.staging.energy360africa.com/#/login">
+                                                    LOGIN </a> to the Station Manager app to Execute the price change request. Thanks</p>
                     </td>
                 </tr>
                  <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 10px 10px 10px 10px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
                         <p style="margin: 0;">
-                            Request made by : {{$creator_name}}<br>
+                            Approved by : {{$creator_name}}<br>
                             Product: {{$data['product_name']}}<br>
-                            Requested Quantity: {{$data['quantity_requested']}} Litres<br>
+                            Current Price: {{$data['current_price_tag']}}<br>
+                            Requested Price: {{$data['requested_price_tag']}}<br>
                             Date: {{date('D d-m-Y')}}<br>
                             Requested At : {{$station}}<br>
                         </p>
@@ -164,18 +166,12 @@
                                     <table border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td align="center" style="border-radius: 3px;" bgcolor="blue">
-                                                <a href="http://sm2.staging.energy360africa.com/#/fuel-supply/validate-request?external_query=true&request_code={{$request_code}}&user_id={{$user['id']}}&status=Approved"
+                                                <a href="http://sm2.staging.energy360africa.com/#/login"
                                                    style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
-                                                    Approve</a>
+                                                    LOGIN HERE</a>
                                             </td>
-                                            <td style="margin-right: 10px">
-                                               
-                                            </td>
-                                            <td align="center" style="border-radius: 3px;" bgcolor="red">
-                                                <a href="http://sm2.staging.energy360africa.com/#/fuel-supply/validate-request?external_query=true&request_code={{$request_code}}&user_id={{$user['id']}}&status=Disapproved"
-                                                   style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
-                                                    Disapprove</a>
-                                            </td>
+                                          
+                                            
                                         </tr>
                                     </table>
                                 </td>
@@ -241,7 +237,7 @@
             <![endif]-->
         </td>
     </tr>
-  
+    
 </table>
 
 </body>

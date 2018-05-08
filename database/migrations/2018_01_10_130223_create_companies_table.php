@@ -19,12 +19,12 @@ class CreateCompaniesTable extends Migration
             Schema::create('companies', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
-                $table->string('email');
+                $table->string('email')->nullable();
                 $table->string('registration_number')->nullable();
                 $table->string('country')->nullable();
-                $table->string('state');
-                $table->string('city');
-                $table->string('address');
+                $table->string('state')->nullable();
+                $table->string('city')->nullable();
+                $table->string('address')->nullable();
                 $table->integer('user_id')->nullable();
                 $table->string('logo')->nullable();
                 $table->timestamps();$table->softDeletes();

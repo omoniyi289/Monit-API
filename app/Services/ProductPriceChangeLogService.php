@@ -36,7 +36,7 @@ class ProductPriceChangeLogService
         $this->product_price_change_log_repository = $product_price_change_log_repository;
     }
 
-    public function create(array $data){
+    public function create_default(array $data){
         $this->database->beginTransaction();
         try{
 
@@ -68,16 +68,35 @@ class ProductPriceChangeLogService
     {
         return $this->get_requested_product_price_change($user_id);
     }
-    public function create_new_log($new_data)
+    public function create_new_request($new_data)
     {
-                $data = ProductChangeLogs::create($new_data);
-              // return $product_price;
-                    $sss= Products::where('id', $data['product_id'])->first();
-                    $data['product_name'] = $sss['name'];
-                    $station = Station::where('id', $data['station_id'])->get()->first();
+                   
+                    $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $new_data['station_id'])->get()->first();
                     
-                    $approver_details = User::where('id', $data['approved_by'])->get()->first();
-                    Mail::to($approver_details['email'])->send(new PriceChangeMail($station,$approver_details,$new_data['creator_name'], $data ));
+                    //$approver_details = User::where('id', $new_data['approved_by'])->get()->first();
+                    /*get users with privilege to this station with permission to approve price change(APCR)*/
+                 
+                   $data = ProductChangeLogs::create($new_data);
+                   $sss= Products::where('id', $new_data['product_id'])->first();
+                    $data['product_name'] = $sss['name'];
+
+                    $station_users =  $station->station_users;
+                    foreach ($station_users as $key => $value) {
+                        $user =  $value->user;
+                        $role_permissions = $user->role->role_permissions;
+                        foreach ($role_permissions as $key => $value) {
+                                    $permission = $value->permission;
+                                if($permission['UI_slug'] == "APCR"){
+                                        Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
+                                    }
+                                
+                            }    
+                            }
+                    
+                    //return $emails;
+
+                   
+                  //  Mail::to($email)->send(new PriceChangeMail($station,$approver_details,$new_data['creator_name'], $data ));
                   return $data;
     }
     public function get_by_station_id($station_id, array $options = [])

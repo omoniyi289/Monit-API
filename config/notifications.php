@@ -22,10 +22,14 @@ return [
                     "UI_slug" => "BPRt"
                 ],
 
-                "daily_stock" => [
-                    "name" => "Daily Operations Report",
-                    "UI_slug" => "DORt"
+                "atg_fcc_downtime" => [
+                    "name" => "ATG and FCC Downtime Alert",
+                    "UI_slug" => "AFDN"
                 ],
+                 "daily_upload" => [
+                    "name" => "S.M Daily Upload Downtime Alert",
+                    "UI_slug" => "DUDN"
+                ]
 
     ],
 ];

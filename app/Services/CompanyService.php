@@ -1,14 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: funmiayinde
- * Date: 1/14/18
- * Time: 2:17 AM
- */
 
 namespace App\Services;
-
-
 use App\Reposities\CompanyRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;

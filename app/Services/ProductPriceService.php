@@ -31,7 +31,7 @@ class ProductPriceService
         $this->product_price_repository = $product_price_repository;
     }
 
-    public function create(array $data){
+    /*public function create(array $data){
         $this->database->beginTransaction();
         try{
             if($data['mode']= 'create'){
@@ -42,8 +42,6 @@ class ProductPriceService
              $data['new_price_tag'] = $data['requested_price_tag'];      
              $product_price = ProductPrices::create($data);
                 }
-            }else if($data['mode']= 'update'){
-              //  $product_price = $this->product_price_change_log_repository->create($data);
             }
         }catch (Exception $exception){
             $this->database->rollBack();
@@ -51,7 +49,7 @@ class ProductPriceService
         }
         $this->database->commit();
         return $company;
-    }
+    }*/
 
     public function get_company_by_name($name){
         return $this->product_price_repository->get_where('name',$name);

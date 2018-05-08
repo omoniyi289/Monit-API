@@ -21,19 +21,20 @@ Route::get('/v1/tank_mg', 'MigrationController@tank_migrate');
 Route::get('/v1/tankgroup_mg', 'MigrationController@tankgroup_migrate');
 Route::get('/v1/pumpgroup_mg', 'MigrationController@pumpgroup_migrate');
 Route::get('/v1/p_t_map_mg', 'MigrationController@p_t_map_migrate');
+
 Route::get('/v1/preadings_mg', 'MigrationController@preadings_migrate');
 Route::get('/v1/treadings_mg', 'MigrationController@treadings_migrate');
-
 Route::get('/v1/pt_product_mg', 'MigrationController@pt_product_migrate');
+
 Route::get('/v1/deposits_mg', 'MigrationController@deposits_migrate');
 Route::get('/v1/expense_header_mg', 'MigrationController@expense_header_migrate');
 Route::get('/v1/expense_items_mg', 'MigrationController@expense_items_migrate');
 
-Route::get('/v1/items_mg', 'MigrationController@items_migrate');
+/*Route::get('/v1/items_mg', 'MigrationController@items_migrate');
 Route::get('/v1/item_variants_mg', 'MigrationController@item_variants_migrate');
 Route::get('/v1/stock_count_mg', 'MigrationController@stock_count_migrate');
 Route::get('/v1/stock_transfer_mg', 'MigrationController@stock_transfer_migrate');
-
+*/
 
 
 /*
@@ -184,8 +185,9 @@ Route::group(['middleware' => ['jwt.auth']], function () {
      * PRODUCT PRICE CHANGE LOGS ENDPOINT
      * */
     Route::get('/v1/product_price_change', 'ProductPriceChangeLogsController@get_all');
-    Route::post('/v1/product_price_change', 'ProductPriceChangeLogsController@create');
-    Route::post('/v1/product_price_change/new/', 'ProductPriceChangeLogsController@create_new_log');
+    Route::post('/v1/product_price_change', 'ProductPriceChangeLogsController@create_default');
+    Route::post('/v1/product_price_change/request/', 'ProductPriceChangeLogsController@create_new_request');
+    Route::post('/v1/product_price_change/execute/', 'ProductPriceChangeLogsController@execute_approval');
     Route::get('/v1/product_price_change/{product_price_change_id}', 'ProductPriceChangeLogsController@get_by_id');
      Route::get('/v1/product_price_change/by_station/{product_price_change_id}', 'ProductPriceChangeLogsController@get_by_station_id');
     Route::put('/v1/product_price_change/{product_price_change_id}', 'ProductPriceChangeLogsController@update');

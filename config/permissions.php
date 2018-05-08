@@ -33,6 +33,12 @@ return [
                     "UI_slug" => "APCR"
                 ],
 
+                 "execute_price_change_request" => [
+                    "name" => "Execute Price Change Request",
+                    "description" => "permission to Execute Price Change Request",
+                    "UI_slug" => "EPCR"
+                ],
+
                 "create_roles" => [
                     "name" => "Create/Modify Roles",
                     "description" => "permission to create and modify roles",

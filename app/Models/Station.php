@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\StationUsers;
 class Station extends Model
 {
     protected $fillable = [
@@ -23,6 +24,9 @@ class Station extends Model
 
     public function tanks_groups(){
         return $this->hasMany(TankGroups::class);
+    }
+    public function station_users(){
+        return $this->hasMany(StationUsers::class);
     }
 
     public function tanks(){

@@ -31,7 +31,7 @@ class CreateDailyTotalizerReadingsTable extends Migration
             $table->integer("attendant")->nullable();
             $table->integer("ppv")->nullable();
             //$table->integer("reading_date")->nullable();
-            $table->unsignedInteger("created_by");
+            $table->unsignedInteger("created_by")->nullable();
             $table->integer("last_modified_by")->nullable();
             $table->string("status")->nullable();
             $table->foreign('pump_id')->references('id')->on('pumps')->onUpdate('cascade');

@@ -27,7 +27,7 @@ class CreateDailyStockReadingsTable extends Migration
             $table->integer("end_delivery")->nullable();
             $table->integer("return_to_tank")->nullable();
             //$table->integer("reading_date")->nullable();
-            $table->unsignedInteger("created_by");
+            $table->unsignedInteger("created_by")->nullable();
             $table->integer("last_modified_by")->nullable();
             $table->string("status")->nullable();
             $table->foreign('tank_id')->references('id')->on('tanks')->onUpdate('cascade');
