@@ -45,7 +45,9 @@ class ProductPriceChangeLogService
             if (count($exist) > 0) {
                 return 'ERROR 400';
             }else{   
-             $data['new_price_tag'] = $data['requested_price_tag'];      
+             $data['new_price_tag'] = $data['requested_price_tag'];  
+             $product= Products::where('id', $data['product_id'])->first();
+             $data['product'] = $product['code'];    
              $product_price = ProductPrices::create($data);
                 }
             }
@@ -75,10 +77,11 @@ class ProductPriceChangeLogService
                     
                     //$approver_details = User::where('id', $new_data['approved_by'])->get()->first();
                     /*get users with privilege to this station with permission to approve price change(APCR)*/
-                 
+                   $product= Products::where('id', $new_data['product_id'])->first();
+                   $new_data['product'] = $product['code'];   
+
                    $data = ProductChangeLogs::create($new_data);
-                   $sss= Products::where('id', $new_data['product_id'])->first();
-                    $data['product_name'] = $sss['name'];
+                    $data['product_name'] = $product['name'];
 
                     $station_users =  $station->station_users;
                     foreach ($station_users as $key => $value) {

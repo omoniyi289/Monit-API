@@ -22,7 +22,7 @@ class FromMail_PriceChangeController extends BaseController
        //$data = $request->all();
       //  return $data;
         //$data['set_time'] = "2017-06-12 06:06:06";
-        $output = ProductChangeLogs::where('id', $data['log_id'])->update(['updated_by' => $data['updated_by'],'approved_by' => $data['approved_by'], 'is_approved' =>$data['is_approved']]);
+        $output = ProductChangeLogs::where('id', $data['log_id'])->update(['approved_by' => $data['approved_by'], 'is_approved' =>$data['is_approved']]);
         $approver = User::where('id', $data['approved_by'])->get()->first();
         
         if($data['is_approved'] == 1){

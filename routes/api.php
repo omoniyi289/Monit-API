@@ -24,7 +24,11 @@ Route::get('/v1/p_t_map_mg', 'MigrationController@p_t_map_migrate');
 
 Route::get('/v1/preadings_mg', 'MigrationController@preadings_migrate');
 Route::get('/v1/treadings_mg', 'MigrationController@treadings_migrate');
-Route::get('/v1/pt_product_mg', 'MigrationController@pt_product_migrate');
+Route::get('/v1/pt1_product_mg', 'MigrationController@pt1_product_migrate');
+Route::get('/v1/pt1_product_mg', 'MigrationController@pt1_product_migrate');
+Route::get('/v1/pt2_product_mg', 'MigrationController@pt2_product_migrate');
+Route::get('/v1/pp_mg', 'MigrationController@pp_migrate');
+Route::get('/v1/pplog_mg', 'MigrationController@pplog_migrate');
 
 Route::get('/v1/deposits_mg', 'MigrationController@deposits_migrate');
 Route::get('/v1/expense_header_mg', 'MigrationController@expense_header_migrate');

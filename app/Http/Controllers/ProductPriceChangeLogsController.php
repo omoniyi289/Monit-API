@@ -52,7 +52,7 @@ class ProductPriceChangeLogsController extends BaseController
         
         if($data['is_executed'] == 1){
             $prd = ProductChangeLogs::where('id', $data['log_id'])->get()->first();
-           $reset = ProductPrices::where('product_id', $prd['product_id'])->update(['new_price_tag' => $prd['requested_price_tag']]);
+              
            $output = [ "code" => 1, "description"=>"price changed successfully"];//SBE Station Process ends here
            //change for automated station
            $station = Station::where('id', $prd['station_id'])->get()->first();

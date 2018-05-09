@@ -28,6 +28,8 @@ use App\PumpGroupToTankGroup;
 use App\Models\DailyStockReadings;
 use App\Models\DailyTotalizerReadings;
 use App\Models\Deposits;
+use App\ProductPrices;
+use App\ProductChangeLogs;
 use App\Models\ExpenseHeader;
 use App\Models\ExpenseItems;
 
@@ -796,7 +798,26 @@ class MigrationService
         $this->database->commit();
         return $counter;
     }
-     public function pt_product_migrate(){
+     public function pt1_product_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+
+      $sql2 = DailyStockReadings::with('tank.product')->get(['id', 'tank_id']);   
+          foreach ($sql2 as $key => $value) {
+                 $product_code = $value['tank']['product']['code'];
+              $new_tg = DailyStockReadings::where('id', $value['id'])->update(['product'=>$product_code]);
+            }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+    public function pt2_product_migrate(){
         $this->database->beginTransaction();
         $arr=array();
         $counter = 0;
@@ -808,12 +829,103 @@ class MigrationService
               $new_tg = DailyTotalizerReadings::where('id', $value['id'])->update(['product'=>$product_code]);
             }
 
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
 
-      $sql2 = DailyStockReadings::with('tank.product')->get(['id', 'tank_id']);   
-          foreach ($sql2 as $key => $value) {
-                 $product_code = $value['tank']['product']['code'];
-              $new_tg = DailyStockReadings::where('id', $value['id'])->update(['product'=>$product_code]);
+    public function pp_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+        $sql = "SELECT * FROM product_prices";
+            //    }
+
+            $result = mysqli_query($this->conn,$sql);
+            //return mysqli_num_rows($result);
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){
+                    //array_push($arr, $row);
+                    $date_array = explode(".", $row['datecreated']);
+                    $row['datecreated'] = $date_array[0];
+                    if($row['product'] == 'PMS'){
+                    $product = 1;
+                     }else if($row['product'] == 'DPK'){
+                    $product = 2;
+                     }else if($row['product'] == 'AGO'){
+                    $product = 3;
+                     }
+
+            $exist= ProductPrices::where('v1_id', $row['id'])->get()->first();
+
+            if(count($exist) == 0){
+              
+                     $station = Station::where('v1_id',$row['stationid'])->get()->first();
+                    //$product 
+                     $counter++;   
+                      if(count($station) > 0){       
+                    ProductPrices::create(['new_price_tag'=> $row['new_ppv'], 'v1_id'=> strtoupper($row['id']), 'created_at' => $row ['datecreated'], 'product_id' => $product, 'company_id'=>$station['company_id'], 'station_id'=>  $station['id'], 'product' => $row ['product'] ]); 
+                  }
             }
+              //return 1;   # code...
+           }
+         }
+
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+
+       public function pplog_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+        $sql = "SELECT * FROM price_change_log";
+            //    }
+
+            $result = mysqli_query($this->conn,$sql);
+            //return mysqli_num_rows($result);
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){
+                    //array_push($arr, $row);
+                    $date_array = explode(".", $row['datecreated']);
+                    $row['datecreated'] = $date_array[0];
+                    if($row['product'] == 'PMS'){
+                    $product = 1;
+                     }else if($row['product'] == 'DPK'){
+                    $product = 2;
+                     }else if($row['product'] == 'AGO'){
+                    $product = 3;
+                     }
+
+            $exist= ProductChangeLogs::where('v1_id', $row['id'])->get()->first();
+
+            if(count($exist) == 0){
+              
+                     $station = Station::where('v1_id',$row['stationid'])->get()->first();
+                     $user = User::where('v1_id' , $row['createdby'])->get()->first();
+                    //$product 
+                     $counter++;   
+                      if(count($station) > 0){       
+                    ProductChangeLogs::create(['requested_price_tag'=> $row['new_ppv'], 'current_price_tag'=> $row['old_ppv'], 'v1_id'=> strtoupper($row['id']), 'created_at' => $row ['datecreated'], 'product_id' => $product, 'company_id'=>$station['company_id'], 'station_id'=>  $station['id'], 'product' => $row ['product'], 'updated_by'=> $user['id'] ]); 
+                  }
+            }
+              //return 1;   # code...
+           }
+         }
+
             
         }catch (Exception $exception){
             $this->database->rollBack();
