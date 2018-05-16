@@ -27,7 +27,7 @@ class DailyTotalizersReadingsService
           //return $data['created_at'];
             foreach ($data['readings'] as $value) {
 
-                    $pump = DailyTotalizerReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['pump_nozzle_code'], 'open_shift_totalizer_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened', 'created_at'=> $data['created_at'], 'product'=> $value['product']]);
+                    $pump = DailyTotalizerReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['pump_nozzle_code'], 'open_shift_totalizer_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened', 'reading_date'=> $data['reading_date'], 'product'=> $value['product']]);
                 }
             
         }catch (Exception $exception){
@@ -48,9 +48,9 @@ class DailyTotalizersReadingsService
 
          $price = ProductPrices::where('product_id', $pump['product']['id'])->where('station_id', $data['station_id'])->get()->first(); 
             if($data['shift_batch']== 'First Shift'){
-               $single_pump = DailyTotalizerReadings::where('created_at', $data['created_at'])->where('pump_id', $value['pump_id'])->update(['shift_1_cash_collected' => $value['cash_collected'],'ppv'=>$price['new_price_tag'], 'shift_1_totalizer_reading' => $value['closing_reading'],'status' =>$value['status']]);
+               $single_pump = DailyTotalizerReadings::where('reading_date', $data['reading_date'])->where('pump_id', $value['pump_id'])->update(['shift_1_cash_collected' => $value['cash_collected'],'ppv'=>$price['new_price_tag'], 'shift_1_totalizer_reading' => $value['closing_reading'],'status' =>$value['status']]);
             }else if($data['shift_batch']== 'Second Shift'){
-              $single_pump = DailyTotalizerReadings::where('created_at', $data['created_at'])->where('pump_id', $value['pump_id'])->update(['shift_2_cash_collected' => $value['cash_collected'],'ppv'=>$price['new_price_tag'], 'shift_2_totalizer_reading' => $value['closing_reading'],'status' =>$value['status']]);
+              $single_pump = DailyTotalizerReadings::where('reading_date', $data['reading_date'])->where('pump_id', $value['pump_id'])->update(['shift_2_cash_collected' => $value['cash_collected'],'ppv'=>$price['new_price_tag'], 'shift_2_totalizer_reading' => $value['closing_reading'],'status' =>$value['status']]);
             }
               }
               else if($value['status']== 'Closed'){
@@ -59,10 +59,10 @@ class DailyTotalizersReadingsService
 
                 $price = ProductPrices::where('product_id', $pump['product']['id'])->where('station_id', $data['station_id'])->get()->first();
 
-               $single_pump = DailyTotalizerReadings::where('created_at', $data['created_at'])->where('pump_id', $value['pump_id'])->update(['cash_collected' => $value['cash_collected'],'ppv'=>$price['new_price_tag'],'close_shift_totalizer_reading' => $value['closing_reading'], 'status' =>$value['status']]);
+               $single_pump = DailyTotalizerReadings::where('reading_date', $data['reading_date'])->where('pump_id', $value['pump_id'])->update(['cash_collected' => $value['cash_collected'],'ppv'=>$price['new_price_tag'],'close_shift_totalizer_reading' => $value['closing_reading'], 'status' =>$value['status']]);
               }
               else if($value['status'] == 'Modified'){
-                $single_pump = DailyTotalizerReadings::where('created_at', $value['created_at'])->where('pump_id', $value['pump_id'])->update(['cash_collected' => $value['cash_collected'],'shift_1_cash_collected' => $value['first_shift_cash_collected'],'shift_2_cash_collected' => $value['second_shift_cash_collected'],'ppv' => $value['ppv'], 'open_shift_totalizer_reading' => $value['opening_reading'],'shift_1_totalizer_reading' => $value['first_shift_reading'],'shift_2_totalizer_reading' => $value['second_shift_reading'],'close_shift_totalizer_reading' => $value['closing_reading'],'last_modified_by'=>$data['last_modified_by']]);
+                $single_pump = DailyTotalizerReadings::where('reading_date', $value['reading_date'])->where('pump_id', $value['pump_id'])->update(['cash_collected' => $value['cash_collected'],'shift_1_cash_collected' => $value['first_shift_cash_collected'],'shift_2_cash_collected' => $value['second_shift_cash_collected'],'ppv' => $value['ppv'], 'open_shift_totalizer_reading' => $value['opening_reading'],'shift_1_totalizer_reading' => $value['first_shift_reading'],'shift_2_totalizer_reading' => $value['second_shift_reading'],'close_shift_totalizer_reading' => $value['closing_reading'],'last_modified_by'=>$data['last_modified_by']]);
               }
               }  
 
@@ -102,11 +102,11 @@ class DailyTotalizersReadingsService
 
        $result = DailyTotalizerReadings::where('station_id',$params['station_id']);
        if(isset($params['date'])){
-            $result->where('created_at', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
+            $result->where('reading_date', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
        }
        else{
         $timecheck = DailyTotalizerReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
-        $result->where('created_at', 'LIKE',"%".date_format(date_create($timecheck['created_at']),"Y-m-d")."%");
+        $result->where('reading_date', 'LIKE',"%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
         $result->orderBy('id', 'desc');
        }
        return $result->get();

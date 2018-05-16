@@ -79,6 +79,10 @@ class StationController extends BaseController implements GenericInterface
         $company_stations = $this->station_service->get_station_by_company_id($company_id);
         return $this->response(1, 8000, "registered stations", $company_stations);
     }
+    public function get_station_by_state($state){
+        $company_stations = $this->station_service->get_station_by_state($state);
+        return $this->response(1, 8000, "registered stations", $company_stations);
+    }
 
      public function get_stations_by_user_id($company_id){
         $company_stations = $this->station_service->get_stations_by_user_id($company_id);

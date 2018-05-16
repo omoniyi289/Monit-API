@@ -195,7 +195,7 @@ class MigrationService
             foreach ($company as $key => $value) {
             $id= $value['v1_id'];
             
-            $sql = "SELECT Email, Firstname, Lastname, UserId, LastActivityDate FROM aspnetusers where company_manager = '".$id."'";
+            $sql = "SELECT Email,status, Firstname, Lastname, UserId, LastActivityDate, status FROM aspnetusers where company_manager = '".$id."'";
              
             $result = mysqli_query($this->conn,$sql);
             
@@ -211,7 +211,7 @@ class MigrationService
                     if(count($user) == 0){
                     //doesn't exist
                     $counter++;
-                    User::create(['fullname' => $row['Firstname'].' '.$row['Lastname'], 'v1_id'=> $row['UserId'], 'email'=> $row['Email'] , 'username' => $row['Email'], 'created_at' => $row ['LastActivityDate'], 'company_id'=>$value['id'], 'phone_number'=> ' ', 'is_company_set_up'=> 1 ,'is_verified'=> 1, 'auth_key'=> $auth_key, 'password'=> $password ]);  
+                    User::create(['fullname' => $row['Firstname'].' '.$row['Lastname'], 'v1_id'=> $row['UserId'], 'email'=> $row['Email'] , 'username' => $row['Email'], 'created_at' => $row ['LastActivityDate'], 'company_id'=>$value['id'], 'phone_number'=> ' ', 'is_company_set_up'=> 1 ,'is_verified'=> 1, 'auth_key'=> $auth_key, 'status'=> $row['status'], 'password'=> $password ]);  
                         }      
                 }
             }
@@ -743,7 +743,7 @@ class MigrationService
 
                     $new_tg = DailyTotalizerReadings::create(['company_id'=> $station['company_id'], 'v1_id'=> $row['iDailyTotalizerReadingId'], 'station_id' => $station ['station_id'],'pump_id'=>$station['id'], 'status'=>  $row['status'], 
                     'nozzle_code' => $station ['pump_nozzle_code'],'open_shift_totalizer_reading'=> $row['opening_shift_totalizer_reading'], 'shift_1_totalizer_reading'=> $row['shift_1_totalizer_reading'], 'shift_2_totalizer_reading' => $row ['shift_2_totalizer_reading'],'close_shift_totalizer_reading'=>$row['closing_shift_totalizer_reading'], 'shift_1_cash_collected'=>  $row['shift_1_cash_collected'],'created_by' => $user['id'], 
-                    'shift_2_cash_collected' => $row ['shift_2_cash_collected'],'cash_collected'=>$row['cash_collected'], 'ppv'=>  $row['PPV'], 'created_at'=>  $row['datecreated'], 
+                    'shift_2_cash_collected' => $row ['shift_2_cash_collected'],'cash_collected'=>$row['cash_collected'], 'ppv'=>  $row['PPV'], 'created_at'=>  $row['datecreated'], 'reading_date'=>  $row['reading_date'], 
                     'shift_2_cash_collected' => $row ['shift_2_cash_collected'] ]); 
                   }
 
@@ -784,7 +784,7 @@ class MigrationService
                      $counter++;
 
                     $new_tg = DailyStockReadings::create(['company_id'=> $station['company_id'], 'v1_id'=> $row['iDailyStockReadingsId'], 'station_id' => $station ['station_id'],'tank_id'=>$station['id'], 'status'=>  $row['status'], 
-                    'tank_code' => $station ['code'], 'created_by'=> $user['id'], 'created_at'=>  $row['datecreated'], 'phy_shift_end_volume_reading' => $row['phy_shift_end_volume_reading'],'phy_shift_start_volume_reading' => $row['phy_shift_start_volume_reading'],'return_to_tank'=>$row['return_to_tank'],
+                    'tank_code' => $station ['code'], 'created_by'=> $user['id'], 'created_at'=>  $row['datecreated'], 'reading_date'=>  $row['reading_date'],  'phy_shift_end_volume_reading' => $row['phy_shift_end_volume_reading'],'phy_shift_start_volume_reading' => $row['phy_shift_start_volume_reading'],'return_to_tank'=>$row['return_to_tank'],
                         'end_delivery'=>$row['end_delivery'], ]); 
                 }
             }

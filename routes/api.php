@@ -55,6 +55,7 @@ Route::get('/v1/paga/live/connect', 'PagaBusinessConnectController@connect');
 Route::get('/v1/stock-received/print-delivery-pdf', 'StockReceivedController@get_delivery_pdf');
 Route::get('/v1/fuel-supply/print-waybill-pdf', 'StockReceivedController@get_waybill_pdf');
 Route::get('/v1/roles/permissions/{role_id}', 'RoleController@get_role_permissions');
+Route::post('/v1/demo_dashboard', 'FGDemoDashboardController@get_filtered');
 
   Route::get('/v1/test', function () {
    return view('delivery-note');
@@ -139,6 +140,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::delete('/v1/stations/{station_id}', 'StationController@delete');
     //Route::get('/v1/stations', 'StationController@get_company_by_station');
     Route::get('/v1/stations/by_company/{company_id}', 'StationController@get_stations_by_company_id');
+    Route::get('/v1/stations/by_state/{state}', 'StationController@get_station_by_state');
     Route::get('/v1/stations/by_user/{user_id}', 'StationController@get_stations_by_user_id');
 
     /*

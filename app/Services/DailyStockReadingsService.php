@@ -25,7 +25,7 @@ class DailyStockReadingsService
         $this->database->beginTransaction();
         try{
             foreach ($data['readings'] as $value) {
-                    $stock = DailyStockReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'tank_id' => $value['tank_id'],'tank_code' => $value['tank_code'], 'phy_shift_start_volume_reading' => $value['opening_reading'],'created_by' => $data['created_by'],'created_at' => $data['created_at'], 'status' =>'Opened', 'product'=> $value['product']]);
+                    $stock = DailyStockReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'tank_id' => $value['tank_id'],'tank_code' => $value['tank_code'], 'phy_shift_start_volume_reading' => $value['opening_reading'],'created_by' => $data['created_by'],'reading_date' => $data['reading_date'], 'status' =>'Opened', 'product'=> $value['product']]);
                 }
             
         }catch (Exception $exception){
@@ -42,9 +42,9 @@ class DailyStockReadingsService
             //DailyStockReadings::update($stock, $data);
             foreach ($data['readings'] as $value) {
                     if($value['status'] == 'Closed'){
-                    $stock = DailyStockReadings::where('created_at', $data['created_at'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'return_to_tank'=>$value['rtt'],'end_delivery'=>$value['qty_received'] ,'status' =>'Closed']);
+                    $stock = DailyStockReadings::where('reading_date', $data['reading_date'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'return_to_tank'=>$value['rtt'],'end_delivery'=>$value['qty_received'] ,'status' =>'Closed']);
                     }else if($value['status'] == 'Modified'){
-                    $stock = DailyStockReadings::where('created_at', $value['created_at'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'phy_shift_start_volume_reading' => $value['opening_reading'],'return_to_tank'=>$value['rtt'],
+                    $stock = DailyStockReadings::where('reading_date', $value['reading_date'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'phy_shift_start_volume_reading' => $value['opening_reading'],'return_to_tank'=>$value['rtt'],
                         'end_delivery'=>$value['qty_received'],'last_modified_by'=>$data['last_modified_by']]);
               }
               }  
@@ -79,13 +79,13 @@ class DailyStockReadingsService
        $result = DailyStockReadings::where('station_id',$params['station_id']);
        //return date_format(date_create($params['date']),"Y-m-d");
        if(isset($params['date'])){
-            $result->where('created_at', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
+            $result->where('reading_date', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
        }
        else{
         //$timecheck = DailyStockReadings::where('station_id',$params['station_id'])->get();
-        //$result->where('created_at', 'LIKE', date('Y-m-d').'%');
+        //$result->where('reading_date', 'LIKE', date('Y-m-d').'%');
         $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
-        $result->where('created_at', 'LIKE',"%".date_format(date_create($timecheck['created_at']),"Y-m-d")."%");
+        $result->where('reading_date', 'LIKE',"%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
         $result->orderBy('id', 'desc');
        }
        return $result->get();
@@ -97,7 +97,7 @@ class DailyStockReadingsService
        //return date_format(date_create($params['date']),"Y-m-d");
       
         $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
-        $result->where('created_at', 'LIKE', "%".date_format(date_create($timecheck['created_at']),"Y-m-d")."%");
+        $result->where('reading_date', 'LIKE', "%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
         $result->orderBy('id', 'desc');
        
        return $result->get();
