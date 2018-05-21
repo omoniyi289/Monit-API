@@ -196,13 +196,19 @@ class MigrationService
             $id= $value['v1_id'];
             
             $sql = "SELECT Email,status, Firstname, Lastname, UserId, LastActivityDate, status FROM aspnetusers where company_manager = '".$id."'";
-             
+           
             $result = mysqli_query($this->conn,$sql);
             
             if (mysqli_num_rows($result) > 0 and $result !=false ) {
                 // output data of each row
                 while($row =mysqli_fetch_assoc($result) ){
                     //array_push($arr, $row);
+                    if($row['UserId'] == null ){
+                      $sql3= "SELECT UserId from aspnet_Membership where email = '".$row['Email']."'";
+                      $result3 = mysqli_query($this->conn,$sql3);
+                      $row3 =mysqli_fetch_assoc($result3);
+                      $row['UserId'] = $row3['UserId'];
+                    }
                     $date_array = explode(".", $row['LastActivityDate']);
                     $row['LastActivityDate'] = $date_array[0];
                     $auth_key = str_random(6);
@@ -216,6 +222,7 @@ class MigrationService
                 }
             }
                //return mysqli_num_rows($result);
+            
             }
             
         }catch (Exception $exception){
