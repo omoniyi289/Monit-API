@@ -6,7 +6,7 @@ use App\Tanks;
 use Illuminate\Database\Eloquent\Model;
 use App\Station;
 use App\Company;
-class DailyStockReadings extends Model
+class DailyOperationsReportLog extends Model
 {
 	 protected $table = 'daily_operations_report';
 	 protected $fillable = ['station_name', 'upload_date'];

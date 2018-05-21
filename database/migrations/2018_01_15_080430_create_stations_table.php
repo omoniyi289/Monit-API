@@ -19,15 +19,15 @@ class CreateStationsTable extends Migration
             Schema::create('stations', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string("name");
-                $table->string("address");
-                $table->string("opening_time")->nullable();;
-                $table->string("manager_name")->nullable();;
-                $table->string("manager_phone")->nullable();;
-                $table->string("manager_email")->nullable();;
-                $table->string("city");
-                $table->string("state");
+                $table->string("address")->nullable();
+                $table->string("opening_time")->nullable();
+                $table->string("manager_name")->nullable();
+                $table->string("manager_phone")->nullable();
+                $table->string("manager_email")->nullable();
+                $table->string("city")->nullable();
+                $table->string("state")->nullable();
                 $table->string("daily_budget")->nullable();;
-                $table->string("monthly_budget")->nullable();;
+                $table->string("monthly_budget")->nullable();
                 $table->string("license_type")->nullable();;
                 $table->string("expenses_type")->nullable();
                 $table->string("company_id");

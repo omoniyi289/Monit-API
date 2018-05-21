@@ -21,12 +21,12 @@ class CreateTanksTable extends Migration
             //$table->string('height')->nullable();
             $table->string('shape')->nullable();
             $table->string('capacity')->nullable();
-            $table->integer('product_id');
-            $table->string('low_volume');
+            $table->integer('product_id')->nullable();
+            $table->string('low_volume')->nullable();
             $table->string('reorder_volume');
             $table->string('deadstock')->nullable();
-            $table->string('max_temperate');
-            $table->string('max_water_level');
+            $table->string('max_temperate')->nullable();
+            $table->string('max_water_level')->nullable();
             $table->integer('daily_budget');
             $table->integer('tank_group_id')->nullable();
             $table->integer('company_id');
