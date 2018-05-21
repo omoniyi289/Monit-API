@@ -16,7 +16,7 @@ use App\Models\StationUsers;
 use App\Models\DailyStockReadings;
 use App\Models\DailyTotalizerReadings;
 
-class FGDemoDashboardController extends BaseController
+class Backup extends BaseController
 {
     private $daily_totalizers_readings_service;
 

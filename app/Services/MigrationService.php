@@ -225,6 +225,7 @@ class MigrationService
             
             }
             
+            
         }catch (Exception $exception){
             $this->database->rollBack();
             throw $exception;
