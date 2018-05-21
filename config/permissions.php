@@ -14,7 +14,11 @@ return [
                     "description" => "permission to Modify Company Profile",
                     "UI_slug" => "CMCo"
                 ],
-
+                "setup_regions" => [
+                    "name" => "Create/Modify Regions",
+                    "description" => "permission to setup regions",
+                    "UI_slug" => "CMRe"
+                ],
                 "setup_station" => [
                     "name" => "Create/Modify Stations",
                     "description" => "permission to setup stations",

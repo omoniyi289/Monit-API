@@ -25,7 +25,6 @@ Route::get('/v1/p_t_map_mg', 'MigrationController@p_t_map_migrate');
 Route::get('/v1/preadings_mg', 'MigrationController@preadings_migrate');
 Route::get('/v1/treadings_mg', 'MigrationController@treadings_migrate');
 Route::get('/v1/pt1_product_mg', 'MigrationController@pt1_product_migrate');
-Route::get('/v1/pt1_product_mg', 'MigrationController@pt1_product_migrate');
 Route::get('/v1/pt2_product_mg', 'MigrationController@pt2_product_migrate');
 Route::get('/v1/pp_mg', 'MigrationController@pp_migrate');
 Route::get('/v1/pplog_mg', 'MigrationController@pplog_migrate');
@@ -33,6 +32,17 @@ Route::get('/v1/pplog_mg', 'MigrationController@pplog_migrate');
 Route::get('/v1/deposits_mg', 'MigrationController@deposits_migrate');
 Route::get('/v1/expense_header_mg', 'MigrationController@expense_header_migrate');
 Route::get('/v1/expense_items_mg', 'MigrationController@expense_items_migrate');
+
+/*
+ * V1-V2 FG DEMO MIGRATION ENDPOINT ENDPOINT
+ * */
+Route::get('/v1/demo_company_mg', 'FGDemoMigrationController@company_migrate');
+Route::get('/v1/demo_station_mg', 'FGDemoMigrationController@station_migrate');
+
+Route::get('/v1/demo_preadings_mg', 'FGDemoMigrationController@preadings_migrate');
+Route::get('/v1/demo_treadings_mg', 'FGDemoMigrationController@treadings_migrate');
+Route::get('/v1/demo_pt1_product_mg', 'FGDemoMigrationController@pt1_product_migrate');
+Route::get('/v1/demo_pt2_product_mg', 'FGDemoMigrationController@pt2_product_migrate');
 
 /*Route::get('/v1/items_mg', 'MigrationController@items_migrate');
 Route::get('/v1/item_variants_mg', 'MigrationController@item_variants_migrate');
@@ -130,6 +140,18 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::delete('/v1/company_users/{user_id}', 'CompanyUserController@delete');
 
 
+
+     /*
+     * REGION ENDPOINT
+     * */
+    Route::get('/v1/regions', 'RegionController@get_all');
+    Route::post('/v1/regions', 'RegionController@create');
+    Route::get('/v1/regions/{rol_id}', 'RegionController@get_by_id');
+    Route::get('/v1/regions/by_company/{rol_id}', 'RegionController@get_by_company_id');
+    Route::patch('/v1/regions/{role_id}', 'RegionController@update');
+    Route::delete('/v1/regions/{role_id}', 'RegionController@delete');
+
+
     /*
      * STATIONs ENDPOINT
      * */
@@ -142,6 +164,14 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/stations/by_company/{company_id}', 'StationController@get_stations_by_company_id');
     Route::get('/v1/stations/by_state/{state}', 'StationController@get_station_by_state');
     Route::get('/v1/stations/by_user/{user_id}', 'StationController@get_stations_by_user_id');
+
+ /*
+     * STATIONs ENDPOINT
+     * */
+    Route::get('/v1/demo_stations', 'DemoStationController@get_all');
+    //Route::get('/v1/stations', 'StationController@get_company_by_station');
+    Route::get('/v1/demo_stations/by_company/{company_id}', 'DemoStationController@get_stations_by_company_id');
+    Route::get('/v1/demo_stations/by_state/{state}', 'DemoStationController@get_station_by_state');
 
     /*
      * TANK GROUPS ENDPOINT

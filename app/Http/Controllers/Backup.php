@@ -10,11 +10,11 @@ use Core\Controllers\BaseController;
 use Illuminate\Http\Request;
 use App\Pumps;
 use App\Tanks;
-use App\Models\FGDemoCompany;
-use App\Models\FGDemoStation;
+use App\Company;
+use App\Station;
 use App\Models\StationUsers;
-use App\Models\FGDemoDailyStockReadings;
-use App\Models\FGDemoDailyTotalizerReadings;
+use App\Models\DailyStockReadings;
+use App\Models\DailyTotalizerReadings;
 
 class FGDemoDashboardController extends BaseController
 {
@@ -68,12 +68,12 @@ class FGDemoDashboardController extends BaseController
         }
         //return $start_date." ".$end_date;
         
-        $pump_data = FGDemoDailyTotalizerReadings::select('close_shift_totalizer_reading', 'open_shift_totalizer_reading', 'ppv', 'reading_date', 'pump_id', 'station_id', 'product')->where('reading_date','>=', $start_date)->where('reading_date','<=', $end_date)->orderBy('reading_date', 'ASC')->with(array('pump'=>function($query){
+        $pump_data = DailyTotalizerReadings::select('close_shift_totalizer_reading', 'open_shift_totalizer_reading', 'ppv', 'reading_date', 'pump_id', 'station_id', 'product')->where('reading_date','>=', $start_date)->where('reading_date','<=', $end_date)->orderBy('reading_date', 'ASC')->with(array('pump'=>function($query){
             $query->select('id','pump_nozzle_code');}))->with(array('station'=>function($query){
             $query->select('id','name', 'state', 'city');}))->with(array('company'=>function($query){
             $query->select('id','name');}));
 
-        $tank_data = FGDemoDailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', $start_date)->where('reading_date','<=', $end_date)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
+        $tank_data = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', $start_date)->where('reading_date','<=', $end_date)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
             $query->select('id','code', 'reorder_volume', 'deadstock');}))->with(array('station'=>function($query){
             $query->select('id','name', 'state', 'city');}))->with(array('company'=>function($query){
             $query->select('id','name');}));
@@ -86,9 +86,9 @@ class FGDemoDashboardController extends BaseController
 
             foreach ($stations as $value) {
              ///calculate run rate for 30 days per station per product
-                $station= FGDemoStation::where('id', $value)->get()->first();
+                $station= Station::where('id', $value)->get()->first();
             
-                 $tank_data_for_30_days = FGDemoDailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $value)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
+                 $tank_data_for_30_days = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $value)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
             $query->select('id','code');}))->with(array('station'=>function($query){
             $query->select('id','name', 'city', 'state');}))->get();
 
@@ -128,12 +128,12 @@ class FGDemoDashboardController extends BaseController
             $loop_counter = 1;
 
             foreach ($companies as $value) {
-                $stations=FGDemoStation::where('company_id', $value)->get();
+                $stations=Station::where('company_id', $value)->get();
                 $station_count = $station_count + count($stations);
                 foreach ($station as  $inner_value) {
                        ///calculate run rate for 30 days per station per product
               
-            $tank_data_for_30_days = FGDemoDailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $inner_value->id)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
+            $tank_data_for_30_days = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $inner_value->id)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
             $query->select('id','code');}))->with(array('station'=>function($query){
             $query->select('id','name', 'city', 'state');}))->get();
 
@@ -174,12 +174,12 @@ class FGDemoDashboardController extends BaseController
             $loop_counter = 1;
 
             foreach ($cities as $value) {
-                $stations=FGDemoStation::where('city', $value)->get();
+                $stations=Station::where('city', $value)->get();
                 //return $stations;
                 $station_count = $station_count + count($stations);
             foreach ($stations as $inner_value) {
                    ///calculate run rate for 30 days per station per product
-              $tank_data_for_30_days = FGDemoDailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $inner_value->id)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
+              $tank_data_for_30_days = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $inner_value->id)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
             $query->select('id','code');}))->with(array('station'=>function($query){
             $query->select('id','name', 'city', 'state');}))->get();
 
@@ -222,11 +222,11 @@ class FGDemoDashboardController extends BaseController
 
             foreach ($states as $state) {
 
-                $stations=FGDemoStation::where('state', $state)->get();
+                $stations=Station::where('state', $state)->get();
                 $station_count = $station_count + count($stations);
             foreach ($stations as $inner_value) {
             ///calculate run rate for 30 days per station per product
-          $tank_data_for_30_days = FGDemoDailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $inner_value->id)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
+          $tank_data_for_30_days = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $inner_value->id)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
             $query->select('id','code');}))->with(array('station'=>function($query){
             $query->select('id','name', 'city', 'state');}))->get();
 
@@ -265,11 +265,11 @@ class FGDemoDashboardController extends BaseController
             }
         }
         }else{
-            $query = FGDemoStation::with('companies')->get();
+            $query = Station::with('companies')->get();
             $station_count = count($query);
             foreach ($query as $inner_value) {
                 ///calculate run rate for 30 days per station per product
-                $tank_data_for_30_days = FGDemoDailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $inner_value->id)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
+                $tank_data_for_30_days = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery')->where('reading_date','>=', date('Y-m-d', strtotime('-30 days')))->where('reading_date','<=', date('Y-m-d h:i:s'))->where('station_id', $inner_value->id)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
             $query->select('id','code');}))->with(array('station'=>function($query){
             $query->select('id','name', 'city', 'state');}))->get();
 
@@ -364,7 +364,7 @@ class FGDemoDashboardController extends BaseController
                  $con_deliveries[$value['station']['state']][$value['station']['city']][$value['station']['name']][$product_stamp]=$con_deliveries[$value['station']['state']][$value['station']['city']][$value['station']['name']][$product_stamp]   + ($value['start_delivery'] + $value['end_delivery']);
 
 
-         //   if($value['phy_shift_start_volume_reading'] != 0 and $value['phy_shift_end_volume_reading'] != 0){
+            if($value['phy_shift_start_volume_reading'] != 0 and $value['phy_shift_end_volume_reading'] != 0){
             
             $total_tank_sales = $total_tank_sales + ($value['phy_shift_start_volume_reading'] - $value['phy_shift_end_volume_reading']) + ($value['start_delivery'] + $value['end_delivery']);
             $stocks_at_hand[$value['product']]  = $stocks_at_hand[$value['product']]  + $value['phy_shift_end_volume_reading'];
@@ -373,7 +373,7 @@ class FGDemoDashboardController extends BaseController
                 $con_stocks_at_hand[$value['station']['state']][$value['station']['city']][$value['station']['name']][$product_stamp]=0;
                  }
                  $con_stocks_at_hand[$value['station']['state']][$value['station']['city']][$value['station']['name']][$product_stamp]=$con_stocks_at_hand[$value['station']['state']][$value['station']['city']][$value['station']['name']][$product_stamp] + $value['phy_shift_end_volume_reading'];
-         //  }
+           }
             
         ///replenishement plan stage 2
          if(!isset($total_current_tank_vol[$value['station']['state']][$value['station']['city']][$value['station']['name']][$product_stamp])){

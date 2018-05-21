@@ -33,8 +33,8 @@ class CreateStationsTable extends Migration
                 $table->string("company_id");
                 $table->integer("station_user_id")->nullable();;
                 $table->integer("is_station_enabled")->default(1);
-                $table->timestamps()
-                ;$table->softDeletes();
+                $table->timestamps();
+                $table->softDeletes();
             });
         }catch (Exception $exception){
             DB::rollBack();
