@@ -19,6 +19,7 @@ use App\Models\DailyTotalizerReadings;
 class Backup extends BaseController
 {
     private $daily_totalizers_readings_service;
+
     public function __construct(DailyTotalizersReadingsService $daily_totalizers_readings_service, DailyStockReadingsService $daily_stock_readings_service)
     {
         $this->daily_totalizers_readings_service = $daily_totalizers_readings_service;
