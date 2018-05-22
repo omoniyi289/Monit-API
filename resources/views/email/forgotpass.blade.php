@@ -142,7 +142,7 @@
                         style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
                         <p style="margin: 0;">A request was sent through your email to reset your e360 station manager account password.</p>
                         <p style="margin: 0;">Your temporary password is <b>{{$new_pass}}</b>. </p>
-                        <p><a href="http://sm2.staging.energy360africa.com/#/login">LOGIN</a> to change it to your desired password in your profile settings</p>
+                        <p><a href="https://api.e360stationmanager.com/#/login">LOGIN</a> to change it to your desired password in your profile settings</p>
                     </td>
                 </tr>
                 <!-- COPY -->

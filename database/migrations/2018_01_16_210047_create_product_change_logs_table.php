@@ -19,7 +19,7 @@ class CreateProductChangeLogsTable extends Migration
             $table->string('current_price_tag');
             $table->unsignedInteger('company_id');
             $table->unsignedInteger('product_id');
-            $table->unsignedInteger('updated_by');
+            $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('approved_by')->nullable();
             $table->boolean('is_approved')->default(0);
             $table->unsignedInteger('station_id');

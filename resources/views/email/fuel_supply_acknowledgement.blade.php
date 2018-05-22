@@ -174,7 +174,7 @@
                                     <table border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td align="center" style="border-radius: 3px;" bgcolor="green">
-                                                <a href="http://sm2.staging.energy360africa.com/#/fuel-supply/validate-request?external_query=true&request_code={{$request_code}}&user_id={{$user['id']}}&status=Order in Process"
+                                                <a href="https://api.e360stationmanager.com/#/fuel-supply/validate-request?external_query=true&request_code={{$request_code}}&user_id={{$user['id']}}&status=Order in Process"
                                                    style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
                                                     Acknowledge</a>
                                             </td>
