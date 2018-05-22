@@ -65,33 +65,72 @@ class AuthController extends BaseController
             }
         }
           else {
-        //     // this is to authenticate station user if created to have access station manager portal
-        //     $station_user =  $this->station_user_service->get_user_by_email($request->get('email'))->first();
-        //     if (!empty($station_user) || $station_user != null){
-        //         $check_password = password_verify($request->get('password'),$station_user['password']);
-        //         if ($check_password){
-        //             $credentials = [
-        //                 'email' => $station_user['email'],
-        //             ];
-        //             try{
-        //                 $token = JWTAuth::fromUser($station_user,$credentials);
-        //                 $data = $station_user;
-        //                 $data["is_exist"] = true;
-        //                 if ($token){
-        //                     $data['token'] = $token;
-        //                     return $this->response(1, 8000, "authentication successful", $data);
-        //                 }elseif (!$token){
-        //                     return $this->response(0, 8000, "oop!!! unable to create token with invalid credentials",
-        //                         null, 400);
-        //                 }
-        //             }catch (JWTException $exception){
-        //                 return $this->response(0, 8000, "oop!!! an error occur while processing token",
-        //                     null,500);
-        //             }
-        //         }else{
-        //             return $this->response(0, 8000, "invalid email or password",
-        //                 null, 400);
-        //         }
+      
+              return $this->response(0, 8000, "user does not exist",
+                     null, 400);
+          }
+    
+    }
+
+        public function analytics_login(Request $request){
+        $user =  $this->user_service->get_user_for_analytics($request->get('email'));
+        //return $user;
+        if (!empty($user) || $user != null){
+            if ($user['is_verified'] == 0){
+                return $this->response(0, 0, "account yet to be verified",null,400);
+            }
+            $check_password = password_verify($request->get('password'),$user['password']);
+            if ($check_password){
+                $credentials = [
+                    'email' => $user['email'],
+                    'is_verified' => $user['is_verified'],
+                    'auth_key' => $user['auth_key']
+                ];
+                try{
+                    $token = JWTAuth::fromUser($user,$credentials);
+                   // $data = $user;
+                    if ($token){
+                        $user['token'] = $token;
+
+                        $station_array = array();
+                        foreach ($user->station_users as $key => $value) {
+                          array_push($station_array, $value->station);
+                        }
+                        //return $station_array;
+                        if($user->role == null){
+                            $user->role = (object)['name' => 'Nil'];
+                        }
+
+                        if($user->companies == null){
+                            $user->companies = (object)['name' => 'Nil','id' => 'Nil'];
+                        }
+
+                        $data =  array(["companies"=> [
+                           $user->companies->id=> [
+                               "name"=> $user->companies->name,
+                               "stations"=> $station_array
+                           ]
+                       ],
+                       
+                       "username"=> $user['fullname'],
+                       "userRole"=> $user->role->name,
+                   "userId"=> $user['id']]);
+
+                        return $this->response(1, 8000, "authentication successful", $data);
+                    }elseif (!$token){
+                        return $this->response(0, 8000, "oop!!! unable to create token with invalid credentials",
+                            null, 400);
+                    }
+                }catch (JWTException $exception){
+                    return $this->response(0, 8000, "oop!!! an error occur while processing token",
+                        null,500);
+                }
+            }else{
+                return $this->response(0, 8000, "invalid email or password",
+                    null, 400);
+            }
+        }
+          else {
       
               return $this->response(0, 8000, "user does not exist",
                      null, 400);

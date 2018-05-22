@@ -71,6 +71,12 @@ class UserService
     {
         return $this->user_repository->get_where("email", $email);
     }
+    public function get_user_for_analytics($email)
+    {
+        $user = User::where("email", $email)->with('role:id,name')->with('companies:id,name')->with('station_users.station:id,name')->get()->first();
+        return $user;
+        
+    }
 
     public function get_user_by_username($username)
     {

@@ -165,7 +165,7 @@
                                     <table border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td align="center" style="border-radius: 3px;" bgcolor="blue">
-                                                <a href="https://api.e360stationmanager.com/#/pricing/validate-request?external_query=true&log_id={{$data['id']}}&user_id={{$user['id']}}&is_approved=1"
+                                                <a href="https://www.e360stationmanager.com/#/pricing/validate-request?external_query=true&log_id={{$data['id']}}&user_id={{$user['id']}}&is_approved=1"
                                                    style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
                                                     Approve</a>
                                             </td>
@@ -173,7 +173,7 @@
                                                
                                             </td>
                                             <td align="center" style="border-radius: 3px;" bgcolor="red">
-                                                <a href="https://api.e360stationmanager.com/#/pricing/validate-request?external_query=true&log_id={{$data['id']}}&user_id={{$user['id']}}&is_approved=0"
+                                                <a href="https://www.e360stationmanager.com/#/pricing/validate-request?external_query=true&log_id={{$data['id']}}&user_id={{$user['id']}}&is_approved=0"
                                                    style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
                                                     Disapprove</a>
                                             </td>

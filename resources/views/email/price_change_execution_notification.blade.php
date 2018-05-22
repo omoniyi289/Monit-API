@@ -140,7 +140,7 @@
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 10px 10px 10px 10px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;">A price change request with the details below has been approved. Please  <a href="https://api.e360stationmanager.com/#/login">
+                        <p style="margin: 0;">A price change request with the details below has been approved. Please  <a href="https://www.e360stationmanager.com/#/login">
                                                     LOGIN </a> to the Station Manager app to Execute the price change request. Thanks</p>
                     </td>
                 </tr>
@@ -166,7 +166,7 @@
                                     <table border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td align="center" style="border-radius: 3px;" bgcolor="blue">
-                                                <a href="https://api.e360stationmanager.com/#/login"
+                                                <a href="https://www.e360stationmanager.com/#/login"
                                                    style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
                                                     LOGIN HERE</a>
                                             </td>
