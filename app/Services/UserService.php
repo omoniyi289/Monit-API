@@ -73,7 +73,7 @@ class UserService
     }
     public function get_user_for_analytics($email)
     {
-        $user = User::where("email", $email)->with('role:id,name')->with('companies:id,name')->with('station_users.station:id,name')->get()->first();
+        $user = User::where("email", $email)->with('role.role_permissions.permission')->with('companies:id,name')->with('station_users.station:id,name')->get()->first();
         return $user;
         
     }

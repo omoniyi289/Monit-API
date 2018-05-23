@@ -93,10 +93,14 @@ class AuthController extends BaseController
                         $user['token'] = $token;
 
                         $station_array = array();
+                        $perm_array = array();
                         foreach ($user->station_users as $key => $value) {
                           array_push($station_array, $value->station);
                         }
-                        //return $station_array;
+                        foreach ($user->role->role_permissions as $key => $value) {
+                          array_push($perm_array, $value->permission['name']);
+                        }
+                        //return $perm_array;
                         if($user->role == null){
                             $user->role = (object)['name' => 'Nil'];
                         }
@@ -105,7 +109,7 @@ class AuthController extends BaseController
                             $user->companies = (object)['name' => 'Nil','id' => 'Nil'];
                         }
 
-                        $data =  array(["companies"=> [
+                        $data =  (object)array(["companies"=> [
                            $user->companies->id=> [
                                "name"=> $user->companies->name,
                                "stations"=> $station_array
@@ -114,6 +118,7 @@ class AuthController extends BaseController
                        
                        "username"=> $user['fullname'],
                        "userRole"=> $user->role->name,
+                       "userPermissions"=> $perm_array,
                    "userId"=> $user['id']]);
 
                         return $this->response(1, 8000, "authentication successful", $data);

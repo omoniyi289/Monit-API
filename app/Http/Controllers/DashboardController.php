@@ -49,17 +49,17 @@ class DashboardController extends BaseController
         //pumps
         $pump_query = Pumps::with('product');
         $tank_query = Tanks::with('product');
-        $back_day ='-3 days';
+        $back_day ='-2 days';
         //return $start_date.' '.$end_date;
         if($start_date == 'init'){
             $start_date = date('Y-m-d', strtotime($back_day));
         }else{
-          $start_date = date_format(date_create($start_date),"Y-m-d h:i:s");  
+          $start_date = date_format(date_create($start_date),"Y-m-d")."00:00:00";  
         }
         if($end_date == 'init'){
             $end_date = date('Y-m-d h:i:s');
         }else{
-            $end_date = date_format(date_create($end_date),"Y-m-d h:i:s");  
+            $end_date = date_format(date_create($end_date),"Y-m-d")."23:23:23";  
         }
 
         
