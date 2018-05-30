@@ -52,16 +52,16 @@ class DashboardController extends BaseController
         $back_day ='-3 days';
         //return $start_date.' '.$end_date;
         if($start_date == 'init'){
-            $start_date = date('Y-m-d', strtotime($back_day))."00:00:00";
+            $start_date = date('Y-m-d', strtotime($back_day))." 00:00:00";
         }else{
-          $start_date = date_format(date_create($start_date),"Y-m-d")."00:00:00";  
+          $start_date = date_format(date_create($start_date),"Y-m-d")." 00:00:00";  
         }
         if($end_date == 'init'){
             //$end_date = date('Y-m-d h:i:s');
            // $end_date ='-1 day';
-            $end_date = date('Y-m-d', strtotime('-1 day'))."23:23:23"; 
+            $end_date = date('Y-m-d', strtotime('-1 day'))." 23:23:23"; 
         }else{
-            $end_date = date_format(date_create($end_date),"Y-m-d")."23:23:23";  
+            $end_date = date_format(date_create($end_date),"Y-m-d")." 23:23:23";  
         }
 
         
