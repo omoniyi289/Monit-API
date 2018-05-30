@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('auth_key')->nullable();
-            $table->integer('is_company_set_up');
+            $table->integer('is_company_set_up')->nullable();
             $table->string('phone_number');
             $table->boolean('is_verified');
             $table->rememberToken();
