@@ -963,8 +963,7 @@ class MigrationService
 
             $exist= Deposits::where('v1_id', $row['ID'])->get()->first();
 
-            if(count($exist) == 0){
-              
+            if(count($exist) == 0){           
                      $station = Station::where('v1_id', $row['stationid'])->get()->first();
                      $user = User::where('v1_id' , $row['createdby'])->get()->first();
                     //$product 
