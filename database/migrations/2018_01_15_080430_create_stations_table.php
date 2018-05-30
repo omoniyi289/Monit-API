@@ -30,6 +30,7 @@ class CreateStationsTable extends Migration
                 $table->string("monthly_budget")->nullable();
                 $table->string("license_type")->nullable();;
                 $table->string("expenses_type")->nullable();
+                $table->string("start_date")->nullable();
                 $table->string("company_id");
                 $table->integer("station_user_id")->nullable();;
                 $table->integer("is_station_enabled")->default(1);

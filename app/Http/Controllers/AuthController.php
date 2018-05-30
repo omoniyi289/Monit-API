@@ -16,6 +16,8 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Mail\ForgotPassMail;
 use Mail;
+use App\Models\UserLoginActivityLog;
+
 class AuthController extends BaseController
 {
 
@@ -50,6 +52,7 @@ class AuthController extends BaseController
                     $data = $user;
                     if ($token){
                         $data['token'] = $token;
+                        UserLoginActivityLog::create(['email'=> $data['email'], 'user_id'=> $data['id'], 'login_time'=> date('d-m-Y h:i:s') ]);
                         return $this->response(1, 8000, "authentication successful", $data);
                     }elseif (!$token){
                         return $this->response(0, 8000, "oop!!! unable to create token with invalid credentials",

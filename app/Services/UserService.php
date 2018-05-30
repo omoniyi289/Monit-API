@@ -69,7 +69,8 @@ class UserService
 
     public function get_user_by_email($email)
     {
-        return $this->user_repository->get_where("email", $email);
+        //return $this->user_repository->get_where("email", $email);
+        return User::where("email", $email)->where('status', 'Active')->get();
     }
     public function get_user_for_analytics($email)
     {
