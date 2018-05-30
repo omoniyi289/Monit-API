@@ -18,7 +18,8 @@ class AddReadingDateToStockAndPump extends Migration
           });
         Schema::table('daily_totalizer_readings', function($table) {
              $table->string('reading_date')->nullable(); 
-          });    }
+          });  
+  }
 
     /**
      * Reverse the migrations.
