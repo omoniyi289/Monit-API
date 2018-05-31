@@ -84,8 +84,11 @@ class ProductPriceChangeLogService
                     $data['product_name'] = $product['name'];
 
                     $station_users =  $station->station_users;
+                    //return $station_users;
                     foreach ($station_users as $key => $value) {
                         $user =  $value->user;
+                        if($user->role !== null ){
+
                         $role_permissions = $user->role->role_permissions;
                         foreach ($role_permissions as $key => $value) {
                                     $permission = $value->permission;
@@ -95,7 +98,9 @@ class ProductPriceChangeLogService
                                 
                             }    
                             }
-                    
+                        
+                        
+                    }
                     //return $emails;
 
                    

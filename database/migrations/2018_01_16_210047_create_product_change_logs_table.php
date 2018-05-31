@@ -21,7 +21,7 @@ class CreateProductChangeLogsTable extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('approved_by')->nullable();
-            $table->boolean('is_approved')->default(0);
+            $table->boolean('is_approved')->nullable();
             $table->unsignedInteger('station_id');
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade');
             $table->foreign('station_id')->references('id')->on('stations')->onUpdate('cascade');
