@@ -35,13 +35,14 @@ class FromMail_PriceChangeController extends BaseController
                     $station_users =  $station->station_users;
                     foreach ($station_users as $key => $value) {
                         $user =  $value->user;
+                        if($user->role !== null ){
                         $role_permissions = $user->role->role_permissions;
                         foreach ($role_permissions as $key => $value) {
                                     $permission = $value->permission;
                                 if($permission['UI_slug'] == "EPCR"){
                                         Mail::to($user['email'])->send(new PriceChangeExecuteMail($station,$user,$approver['fullname'], $prd ));
                                     }
-                                
+                                }
                             }    
                       }
             

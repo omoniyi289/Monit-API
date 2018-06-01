@@ -92,7 +92,7 @@
                     <td align="center" valign="top" style="padding: 40px 10px 40px 10px;">
                         <a href="#" target="_blank" style="text-decoration: none;">
                             <span style="display: block; font-family: 'Poppins', sans-serif; color: #ffffff; font-size: 36px;"
-                                  border="0"><b>Station</b>Manager</span>
+                                  border="0"><b>Station Manager</b></span>
                         </a>
                     </td>
                 </tr>
@@ -140,7 +140,7 @@
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;">We're excited to have you get started. First, you need to confirm your
+                        <p style="margin: 0;">We're excited to have you get started. Your are currently on our <b> 7-day free trial plan<b>. Please contact us via support@360africa.com to extend your subscription. First, you need to confirm your
                             account. Just press the button below.</p>
                     </td>
                 </tr>

@@ -89,7 +89,7 @@ return [
 //
 //    'password' => env('MAIL_PASSWORD'),
 
-    'username' => 'Stationmanager',
+    'username' => 'e360stationmanager',
 
     'password' => '*Admin12#',
 

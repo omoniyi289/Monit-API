@@ -35,6 +35,7 @@ class RegistrationMail extends Mailable
         return $this->view('email.verify2')
             ->from("stationmanager@e360africa.com", "Stationmanager")
             ->replyTo(  "stationmanager@e360africa.com", "Stationmanager")
+            ->bcc('support@e360africa.com', "E360 Support")
             ->subject($subject)
             ->with([
                 'fullname' => $this->data["fullname"],
