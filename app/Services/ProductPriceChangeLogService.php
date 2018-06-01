@@ -81,7 +81,7 @@ class ProductPriceChangeLogService
                    $new_data['product'] = $product['code'];   
 
                     $data = ProductChangeLogs::create($new_data);
-                    $data = $new_data;
+                   
                     $data['product_name'] = $product['name'];
 
                     $station_users =  $station->station_users;
