@@ -31,7 +31,7 @@ class FromMail_PriceChangeController extends BaseController
            //send mail to executors for this stastion with EPCR permision
                    $product= Products::where('id', $prd['product_id'])->first();
                     $prd['product_name'] = $product['name'];
-
+                    if(count($station) > 0 and $station->station_users !== null ){
                     $station_users =  $station->station_users;
                     foreach ($station_users as $key => $value) {
                         $user =  $value->user;
@@ -45,6 +45,7 @@ class FromMail_PriceChangeController extends BaseController
                                 }
                             }    
                       }
+                    }
             
             }
 
