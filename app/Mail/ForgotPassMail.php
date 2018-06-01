@@ -33,8 +33,8 @@ class ForgotPassMail extends Mailable
     {
         $subject = "Station Manager Support";
         return $this->view('email.forgotpass')
-            ->from("stationmanager@e360africa.com", "Stationmanager")
-            ->replyTo(  "stationmanager@e360africa.com", "Stationmanager")
+            ->from("support@e360africa.com", "Stationmanager")
+            ->replyTo(  "support@e360africa.com", "Stationmanager")
             ->subject($subject)
             ->with([
                 'fullname' => $this->data["fullname"],

@@ -91,8 +91,8 @@
                 <tr>
                     <td align="center" valign="top" style="padding: 40px 10px 40px 10px;">
                         <a href="#" target="_blank" style="text-decoration: none;">
-                            <span style="display: block; font-family: 'Poppins', sans-serif; color: #ffffff; font-size: 36px;"
-                                  border="0"><b>Station Manager</b></span>
+                            <span style="display: block; font-family: 'Poppins', sans-serif; color: #ffffff; font-size: 20px;"
+                                  border="0"><b>E360 Station Manager</b></span>
                         </a>
                     </td>
                 </tr>

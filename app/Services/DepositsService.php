@@ -71,7 +71,7 @@ class DepositsService
 
       $result = DailyTotalizerReadings::where('station_id',$params['station_id']);
        //return date_format(date_create($params['date']),"Y-m-d");
-       $result->where('created_at', 'LIKE', date_format(date_create($params['selected_date']),"Y-m-d").'%');
+       $result->where('reading_date', 'LIKE', date_format(date_create($params['selected_date']),"Y-m-d").'%');
       $pump_data = $result->get();
       $total_amount=0;
       foreach ($pump_data as $key => $value) {

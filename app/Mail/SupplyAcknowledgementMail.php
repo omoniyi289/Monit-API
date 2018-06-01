@@ -36,8 +36,8 @@ class SupplyAcknowledgementMail extends Mailable
     {
         $subject = "Fuel Supply Acknowledgment";
         return $this->view('email.fuel_supply_acknowledgement')
-            ->from("stationmanager@e360africa.com", "Station Manager 2.0")
-            ->replyTo(  "stationmanager@e360africa.com", "Station Manager 2.0")
+            ->from("support@e360africa.com", "Station Manager 2.0")
+            ->replyTo(  "support@e360africa.com", "Station Manager 2.0")
             ->subject($subject)
             ->with([
                 'user' => $this->user,

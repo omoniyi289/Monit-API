@@ -36,8 +36,8 @@ class PriceChangeExecuteMail extends Mailable
     {
         $subject = "Price Change Execution Notification";
         return $this->view('email.price_change_execution_notification')
-            ->from("stationmanager@e360africa.com", "Station Manager 2.0")
-            ->replyTo(  "stationmanager@e360africa.com", "Station Manager 2.0")
+            ->from("support@e360africa.com", "Station Manager 2.0")
+            ->replyTo(  "support@e360africa.com", "Station Manager 2.0")
             ->subject($subject)
             ->with([
                 'user' => $this->user,

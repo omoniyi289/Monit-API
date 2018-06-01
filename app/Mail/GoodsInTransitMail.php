@@ -36,8 +36,8 @@ class GoodsInTransitMail extends Mailable
     {
         $subject = "Goods in Transit Notification";
         return $this->view('email.goods_in_transit')
-            ->from("stationmanager@e360africa.com", "Station Manager 2.0")
-            ->replyTo(  "stationmanager@e360africa.com", "Station Manager 2.0")
+            ->from("support@e360africa.com", "Station Manager 2.0")
+            ->replyTo(  "support@e360africa.com", "Station Manager 2.0")
             ->subject($subject)
             ->with([
               

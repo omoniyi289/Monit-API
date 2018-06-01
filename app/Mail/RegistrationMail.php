@@ -33,8 +33,8 @@ class RegistrationMail extends Mailable
     {
         $subject = "Station Manager Support";
         return $this->view('email.verify2')
-            ->from("stationmanager@e360africa.com", "Stationmanager")
-            ->replyTo(  "stationmanager@e360africa.com", "Stationmanager")
+            ->from("support@e360africa.com", "Stationmanager")
+            ->replyTo(  "support@e360africa.com", "Stationmanager")
             ->bcc('support@e360africa.com', "E360 Support")
             ->subject($subject)
             ->with([
