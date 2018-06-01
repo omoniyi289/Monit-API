@@ -140,8 +140,7 @@
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;">We're excited to have you get started. Your are currently on our <b> 7-day free trial plan<b>. Please contact us via support@360africa.com to extend your subscription. First, you need to confirm your
-                            account. Just press the button below.</p>
+                        <p style="margin: 0;">We are excited to have you get started. You are currently on our <b> 7-day free trial plan</b>. Please contact us via support@e360africa.com to extend your subscription.<br> To get started, please confirm your account by clicking the button below.</p>
                     </td>
                 </tr>
                 <!-- BULLETPROOF BUTTON -->
@@ -168,8 +167,8 @@
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 0px 30px 0px 30px; color: #666666; font-family: &apos;Lato&apos;, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;">If that doesn't work, copy and paste the following link in your
-                            browser:</p>
+                        <p style="margin: 0;">If that button doesn't work, copy and paste the following link in your
+                           web browser:</p>
                     </td>
                 </tr>
                 <!-- COPY -->
@@ -184,7 +183,7 @@
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 0px 30px 20px 30px; color: #666666; font-family: &apos;Lato&apos;, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;">If you have any questions, just reply to this email—we're always happy to
+                        <p style="margin: 0;">If you have any questions, reply to this mail. we're always happy to
                             help out.</p>
                     </td>
                 </tr>
@@ -217,7 +216,7 @@
                     <td bgcolor="#398bf7" align="center"
                         style="padding: 30px 30px 30px 30px; border-radius: 4px 4px 4px 4px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
                         <h2 style="font-size: 16px; font-weight: 400; color: #ffffff; margin: 0;">Need more help?</h2>
-                        <p style="margin: 0; font-size: 14px;"><a href="#" target="_blank" style="color: #ffffff;">We&rsquo;re
+                        <p style="margin: 0; font-size: 14px;"><a href="http://www.e360africa.com" target="_blank" style="color: #ffffff;">We&rsquo;re
                                 here, ready to talk</a></p>
                     </td>
                 </tr>

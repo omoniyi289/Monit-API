@@ -28,7 +28,7 @@ class TanksController extends BaseController
 
     public function create(ApiTankRequest $request){
         $tank_request = $request->get('tank',[]);
-        $exist_name = $this->tank_service->get_tank_by_code($tank_request['code']);
+        $exist_name = $this->tank_service->get_tank_by_code($tank_request['code'], $tank_request['station_id']);
         if (count($exist_name) == 1){
                return $this->response(0, 8000, "error! tank with this same code already exist", $exist_name, 400);
             }

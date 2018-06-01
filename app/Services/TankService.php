@@ -74,9 +74,9 @@ class TankService
     {
         return Tanks::where('station_id',$station_id)->with('product')->get();
     }
-    public function get_tank_by_code($name)
+    public function get_tank_by_code($name, $station_id)
     {
-        return $this->tank_repository->get_where("code", $name);
+        return Tanks::where("code", $name)->where('station_id',$station_id)->get();
     }
     private function get_requested_tank($station_id, array $options = [])
     {

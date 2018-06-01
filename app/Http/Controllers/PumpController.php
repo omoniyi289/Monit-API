@@ -25,7 +25,7 @@ class PumpController extends BaseController
 
     public function create(ApiPumpsRequest $request) {
         $pump_request = $request->get('pump',[]);
-        $exist_name = $this->pump_service->get_pump_by_code($pump_request['pump_nozzle_code']);
+        $exist_name = $this->pump_service->get_pump_by_code($pump_request['pump_nozzle_code'], $pump_request['station_id']);
         if (count($exist_name) == 1){
                return $this->response(0, 8000, "error! pump with this same code already exist", $exist_name, 400);
             }

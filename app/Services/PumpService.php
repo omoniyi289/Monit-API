@@ -62,9 +62,9 @@ class PumpService
     {
         return $this->get_requested_pump($user_id);
     }
-    public function get_pump_by_code($name)
+    public function get_pump_by_code($name, $station_id)
     {
-        return $this->pump_repository->get_where("pump_nozzle_code", $name);
+        return Pumps::where("pump_nozzle_code", $name)->where('station_id',$station_id)->with('product')->get();
     }
       public function get_by_station_id($station_id)
     {
