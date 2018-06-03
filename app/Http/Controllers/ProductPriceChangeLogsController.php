@@ -47,7 +47,7 @@ class ProductPriceChangeLogsController extends BaseController
          $data = $request->get('product_change_log', []);
         $output = '';
        // return $data['set_time'];
-        $request = ProductChangeLogs::where('id', $data['log_id'])->update(['executed_by' => $data['executed_by'], 'is_executed' =>$data['is_executed'], 'valid_from' =>$data['set_time']]);
+        $request = ProductChangeLogs::where('id', $data['log_id'])->update(['executed_by' => $data['executed_by'], 'is_executed' =>$data['is_executed'], 'valid_from' =>date_format(date_create($data['set_time']),"Y-m-d H:i:s")]);
         
         
         if($data['is_executed'] == 1){
