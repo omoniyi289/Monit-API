@@ -47,9 +47,9 @@ class ProductPriceChangeLogsController extends BaseController
          $data = $request->get('product_change_log', []);
          $output = '';
          //i noticed a hour time lag from the frontend library 
-         $data['set_time']=date('Y-m-d H:i:s',strtotime($data['set_time'].'+ 0 hour'));
+         $date=date('Y-m-d H:i:s',strtotime($data['set_time'].'+ 0 hour'));
            
-         $request = ProductChangeLogs::where('id', $data['log_id'])->update(['executed_by' => $data['executed_by'], 'is_executed' =>$data['is_executed'], 'valid_from' =>date_format(date_create($data['set_time']),"Y-m-d H:i:s")]);
+         $request = ProductChangeLogs::where('id', $data['log_id'])->update(['executed_by' => $data['executed_by'], 'is_executed' =>$data['is_executed'], 'valid_from' =>date_format(date_create($date),"Y-m-d H:i:s")]);
         
         
         if($data['is_executed'] == 1){
