@@ -45,12 +45,15 @@ class ProductPriceChangeLogsController extends BaseController
 
     public function execute_approval(ApiProductsPriceRequest $request){
          $data = $request->get('product_change_log', []);
-        $output = '';
-       // return $data['set_time'];
-        $request = ProductChangeLogs::where('id', $data['log_id'])->update(['executed_by' => $data['executed_by'], 'is_executed' =>$data['is_executed'], 'valid_from' =>date_format(date_create($data['set_time']),"Y-m-d H:i:s")]);
+         $output = '';
+         //i noticed a hour time lag from the frontend library 
+         $data['set_time']=date('Y-m-d H:i:s',strtotime($data['set_time'].'+ 0 hour'));
+           
+         $request = ProductChangeLogs::where('id', $data['log_id'])->update(['executed_by' => $data['executed_by'], 'is_executed' =>$data['is_executed'], 'valid_from' =>date_format(date_create($data['set_time']),"Y-m-d H:i:s")]);
         
         
         if($data['is_executed'] == 1){
+            //return  $data['set_time'];
             $prd = ProductChangeLogs::where('id', $data['log_id'])->get()->first();
               
            $output = [ "code" => 1, "description"=>"price changed successfully"];//SBE Station Process ends here
