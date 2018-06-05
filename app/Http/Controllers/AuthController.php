@@ -52,7 +52,7 @@ class AuthController extends BaseController
                     $data = $user;
                     if ($token){
                         $data['token'] = $token;
-                        UserLoginActivityLog::create(['email'=> $data['email'], 'user_id'=> $data['id'], 'login_time'=> date('Y-m-d H:i:s') ]);
+                        UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version') ]);
                         return $this->response(1, 8000, "authentication successful", $data);
                     }elseif (!$token){
                         return $this->response(0, 8000, "oop!!! unable to create token with invalid credentials",
@@ -154,10 +154,8 @@ class AuthController extends BaseController
              $data = $user;
              $identifier= 'user';
             
-        }/*else if(!empty($station_user) || $station_user != null){
-            $data = $station_user;
-            $identifier = 'company_user';
-        }*/
+        }
+
         else{
             return $this->response(0, 8000, "emil not found",null,400);
         }   
@@ -168,9 +166,7 @@ class AuthController extends BaseController
             if($identifier == 'user'){
                 $result = $this->user_service->update($user['id'],$user_request);
             }
-            /*else if($identifier == 'company_user'){
-                $result =  $this->station_user_service->profile_update($station_user['id'],$user_request);
-            }*/
+            
           $mail_data = [
             'fullname' => $data['fullname'],
             'email' => $data['email'],

@@ -68,7 +68,7 @@ class PumpService
     }
       public function get_by_station_id($station_id)
     {
-       return Pumps::where('station_id',$station_id)->with('product')->get();
+       return Pumps::where('station_id',$station_id)->with('product')->orderBy('pump_nozzle_code', 'ASC')->get();
     }
     private function get_requested_pump($user_id, array $options = [])
     {

@@ -75,8 +75,8 @@ class DepositsService
       $pump_data = $result->get();
       $total_amount=0;
       foreach ($pump_data as $key => $value) {
-          $total_amount = $total_amount + $value['shift_1_cash_collected'] 
-          + $value['shift_2_cash_collected'] + $value['cash_collected'];
+          $total_amount = $total_amount + ( ($value['close_shift_totalizer_reading'] 
+          - $value['open_shift_totalizer_reading']) * $value['ppv']);
       }
        return $total_amount;
     }

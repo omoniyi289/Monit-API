@@ -16,7 +16,8 @@ class AddV1IdToItemsVariantByStationTable extends Migration
          Schema::table('itemvariants_by_station', function (Blueprint $table) {
             $table->string('v1_id')->nullable();
            
-        });      }
+        });     
+    }
 
     /**
      * Reverse the migrations.

@@ -96,12 +96,12 @@ class MigrationController extends BaseController
         $data = $this->migration_service->treadings_update_migrate();
         return $this->response(1, 8000, "transfers", $data);
     }
-     public function pt1_product_migrate(Request $request) {
-        $data = $this->migration_service->pt1_product_migrate();
+     public function ptt_product_migrate(Request $request) {
+        $data = $this->migration_service->ptt_product_migrate();
         return $this->response(1, 8000, "transfers", $data);
     }
-    public function pt2_product_migrate(Request $request) {
-        $data = $this->migration_service->pt2_product_migrate();
+    public function ptp_product_migrate(Request $request) {
+        $data = $this->migration_service->ptp_product_migrate();
         return $this->response(1, 8000, "transfers", $data);
     }
     public function pp_migrate(Request $request) {

@@ -67,7 +67,7 @@ class TankService
     }
      public function get_by_station_id($station_id)
     {
-       return Tanks::where('station_id',$station_id)->with('product')->get();
+       return Tanks::where('station_id',$station_id)->with('product')->orderBy('code', 'ASC')->get();
     }
 
      public function get_by_id($station_id, array $options = [])

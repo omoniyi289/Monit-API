@@ -730,18 +730,24 @@ class MigrationService
         $this->database->beginTransaction();
         $arr=array();
         $counter = 0;
+        //return $counter; 
         try{
             
-                 $sql = "SELECT * FROM daily_totalizer_reading";
+                 $sql = "SELECT * FROM daily_totalizer_reading where reading_date > '2018-06-03 00:00:00'";
             
             $result = mysqli_query($this->conn,$sql);
-            //return mysqli_num_rows($result);
+           // return mysqli_num_rows($result);
             if (mysqli_num_rows($result) > 0 and $result !=false ) {
                 // output data of each row
                 while($row =mysqli_fetch_assoc($result) ){
                     //array_push($arr, $row);
                   $data_exist= DailyTotalizerReadings::where('v1_id', $row['iDailyTotalizerReadingId'])->get()->first();
                   if(count($data_exist) > 0){
+                      if($data_exist['status']== 'Open' and $row['status'] == 'Closed'){
+                        DailyTotalizerReadings::where('v1_id', $row['iDailyTotalizerReadingId'])->update([ 'status'=>  $row['status'], 'open_shift_totalizer_reading'=> $row['opening_shift_totalizer_reading'], 'shift_1_totalizer_reading'=> $row['shift_1_totalizer_reading'], 'shift_2_totalizer_reading' => $row ['shift_2_totalizer_reading'],'close_shift_totalizer_reading'=>$row['closing_shift_totalizer_reading'], 'shift_1_cash_collected'=>  $row['shift_1_cash_collected'], 
+                    'shift_2_cash_collected' => $row ['shift_2_cash_collected'],'cash_collected'=>$row['cash_collected'], 'ppv'=>  $row['PPV'], 'reading_date'=>  $row['reading_date'], 
+                    'shift_2_cash_collected' => $row ['shift_2_cash_collected'] ]);
+                      }
                       continue;
                   }
 
@@ -781,7 +787,7 @@ class MigrationService
         $counter = 0;
         try{
 
-      $sql = "SELECT * FROM daily_stock_readings";
+      $sql = "SELECT * FROM daily_stock_readings where reading_date > '2018-06-03 00:00:00' ";
             
             $result = mysqli_query($this->conn,$sql);
             //return mysqli_num_rows($result);
@@ -791,6 +797,10 @@ class MigrationService
                     //array_push($arr, $row);
                   $data_exist= DailyStockReadings::where('v1_id', $row['iDailyStockReadingsId'])->get()->first();
                   if(count($data_exist) > 0){
+                      if($data_exist['status']== 'Open' and $row['status'] == 'Closed'){
+                        DailyStockReadings::where('v1_id', $row['iDailyStockReadingsId'])->update([ 'v1_id'=> $row['iDailyStockReadingsId'], 'status'=>  $row['status'], 'reading_date'=>  $row['reading_date'],  'phy_shift_end_volume_reading' => $row['phy_shift_end_volume_reading'],'phy_shift_start_volume_reading' => $row['phy_shift_start_volume_reading'],'return_to_tank'=>$row['return_to_tank'],
+                        'end_delivery'=>$row['end_delivery'] ]);
+                      }
                       continue;
                   }
                     $date_array = explode(".", $row['datecreated']);
@@ -803,7 +813,7 @@ class MigrationService
 
                     $new_tg = DailyStockReadings::create(['company_id'=> $station['company_id'], 'v1_id'=> $row['iDailyStockReadingsId'], 'station_id' => $station ['station_id'],'tank_id'=>$station['id'], 'status'=>  $row['status'], 
                     'tank_code' => $station ['code'], 'created_by'=> $user['id'], 'created_at'=>  $row['datecreated'], 'reading_date'=>  $row['reading_date'],  'phy_shift_end_volume_reading' => $row['phy_shift_end_volume_reading'],'phy_shift_start_volume_reading' => $row['phy_shift_start_volume_reading'],'return_to_tank'=>$row['return_to_tank'],
-                        'end_delivery'=>$row['end_delivery'], ]); 
+                        'end_delivery'=>$row['end_delivery'] ]); 
                 }
             }
               //return 1;   # code...
@@ -896,13 +906,13 @@ class MigrationService
         $this->database->commit();
         return $counter;
     }
-     public function pt1_product_migrate(){
+     public function ptt_product_migrate(){
         $this->database->beginTransaction();
         $arr=array();
         $counter = 0;
         try{
 
-      $sql2 = DailyStockReadings::with('tank.product')->get(['id', 'tank_id']);   
+      $sql2 = DailyStockReadings::with('tank.product')->where('product', null)->get(['id', 'tank_id']);   
           foreach ($sql2 as $key => $value) {
                  $product_code = $value['tank']['product']['code'];
               $new_tg = DailyStockReadings::where('id', $value['id'])->update(['product'=>$product_code]);
@@ -915,13 +925,13 @@ class MigrationService
         $this->database->commit();
         return $counter;
     }
-    public function pt2_product_migrate(){
+    public function ptp_product_migrate(){
         $this->database->beginTransaction();
         $arr=array();
         $counter = 0;
         try{
 
-      $sql = DailyTotalizerReadings::with('pump.product')->get(['id', 'pump_id']);   
+      $sql = DailyTotalizerReadings::with('pump.product')->where('product', null)->get(['id', 'pump_id']);   
           foreach ($sql as $key => $value) {
                  $product_code = $value['pump']['product']['code'];
               $new_tg = DailyTotalizerReadings::where('id', $value['id'])->update(['product'=>$product_code]);

@@ -24,8 +24,12 @@ Route::get('/v1/p_t_map_mg', 'MigrationController@p_t_map_migrate');
 
 Route::get('/v1/preadings_mg', 'MigrationController@preadings_migrate');
 Route::get('/v1/treadings_mg', 'MigrationController@treadings_migrate');
-Route::get('/v1/pt1_product_mg', 'MigrationController@pt1_product_migrate');
-Route::get('/v1/pt2_product_mg', 'MigrationController@pt2_product_migrate');
+
+Route::get('/v1/preadings_update_mg', 'MigrationController@preadings_update_migrate');
+Route::get('/v1/treadings_update_mg', 'MigrationController@treadings_update_migrate');
+
+Route::get('/v1/ptt_product_mg', 'MigrationController@ptt_product_migrate');
+Route::get('/v1/ptp_product_mg', 'MigrationController@ptp_product_migrate');
 Route::get('/v1/pp_mg', 'MigrationController@pp_migrate');
 Route::get('/v1/pplog_mg', 'MigrationController@pplog_migrate');
 
@@ -41,9 +45,6 @@ Route::get('/v1/demo_station_mg', 'FGDemoMigrationController@station_migrate');
 
 Route::get('/v1/demo_preadings_mg', 'FGDemoMigrationController@preadings_migrate');
 Route::get('/v1/demo_treadings_mg', 'FGDemoMigrationController@treadings_migrate');
-
-Route::get('/v1/preadings_update_mg', 'MigrationController@preadings_update_migrate');
-Route::get('/v1/treadings_update_mg', 'MigrationController@treadings_update_migrate');
 
 Route::get('/v1/demo_pt1_product_mg', 'FGDemoMigrationController@pt1_product_migrate');
 Route::get('/v1/demo_pt2_product_mg', 'FGDemoMigrationController@pt2_product_migrate');
