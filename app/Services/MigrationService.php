@@ -726,6 +726,96 @@ class MigrationService
         return $counter;
     }
 
+    public function preadings_update_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+            
+                 $sql = "SELECT * FROM daily_totalizer_reading";
+            
+            $result = mysqli_query($this->conn,$sql);
+            //return mysqli_num_rows($result);
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){
+                    //array_push($arr, $row);
+                  $data_exist= DailyTotalizerReadings::where('v1_id', $row['iDailyTotalizerReadingId'])->get()->first();
+                  if(count($data_exist) > 0){
+                      continue;
+                  }
+
+                    $date_array = explode(".", $row['datecreated']);
+                    $row['datecreated'] = $date_array[0];
+                     $station = Pumps::where('v1_id',$row['pumpid'])->get()->first();
+                   
+                      if(count($station) > 0){
+                    $user = User::where('v1_id' , $row['createdby'])->get()->first();
+                   
+                     $counter++;
+                   
+
+                    $new_tg = DailyTotalizerReadings::create(['company_id'=> $station['company_id'], 'v1_id'=> $row['iDailyTotalizerReadingId'], 'station_id' => $station ['station_id'],'pump_id'=>$station['id'], 'status'=>  $row['status'], 
+                    'nozzle_code' => $station ['pump_nozzle_code'],'open_shift_totalizer_reading'=> $row['opening_shift_totalizer_reading'], 'shift_1_totalizer_reading'=> $row['shift_1_totalizer_reading'], 'shift_2_totalizer_reading' => $row ['shift_2_totalizer_reading'],'close_shift_totalizer_reading'=>$row['closing_shift_totalizer_reading'], 'shift_1_cash_collected'=>  $row['shift_1_cash_collected'],'created_by' => $user['id'], 
+                    'shift_2_cash_collected' => $row ['shift_2_cash_collected'],'cash_collected'=>$row['cash_collected'], 'ppv'=>  $row['PPV'], 'created_at'=>  $row['datecreated'], 'reading_date'=>  $row['reading_date'], 
+                    'shift_2_cash_collected' => $row ['shift_2_cash_collected'] ]); 
+                  }
+
+                
+              
+            }
+              //return 1;   # code...
+            }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+
+     public function treadings_update_migrate(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+
+      $sql = "SELECT * FROM daily_stock_readings";
+            
+            $result = mysqli_query($this->conn,$sql);
+            //return mysqli_num_rows($result);
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){
+                    //array_push($arr, $row);
+                  $data_exist= DailyStockReadings::where('v1_id', $row['iDailyTotalizerReadingId'])->get()->first();
+                  if(count($data_exist) > 0){
+                      continue;
+                  }
+                    $date_array = explode(".", $row['datecreated']);
+                    $row['datecreated'] = $date_array[0];
+                     $station = Tanks::where('v1_id',$row['tankid'])->get()->first();
+                   
+                      if(count($station) > 0){
+                   $user = User::where('v1_id' , $row['createdby'])->get()->first();
+                     $counter++;
+
+                    $new_tg = DailyStockReadings::create(['company_id'=> $station['company_id'], 'v1_id'=> $row['iDailyStockReadingsId'], 'station_id' => $station ['station_id'],'tank_id'=>$station['id'], 'status'=>  $row['status'], 
+                    'tank_code' => $station ['code'], 'created_by'=> $user['id'], 'created_at'=>  $row['datecreated'], 'reading_date'=>  $row['reading_date'],  'phy_shift_end_volume_reading' => $row['phy_shift_end_volume_reading'],'phy_shift_start_volume_reading' => $row['phy_shift_start_volume_reading'],'return_to_tank'=>$row['return_to_tank'],
+                        'end_delivery'=>$row['end_delivery'], ]); 
+                }
+            }
+              //return 1;   # code...
+            }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
     public function preadings_migrate(){
         $this->database->beginTransaction();
         $arr=array();

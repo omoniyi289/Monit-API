@@ -52,7 +52,7 @@ class AuthController extends BaseController
                     $data = $user;
                     if ($token){
                         $data['token'] = $token;
-                        UserLoginActivityLog::create(['email'=> $data['email'], 'user_id'=> $data['id'], 'login_time'=> date('Y-m-d h:i:s') ]);
+                        UserLoginActivityLog::create(['email'=> $data['email'], 'user_id'=> $data['id'], 'login_time'=> date('Y-m-d H:i:s') ]);
                         return $this->response(1, 8000, "authentication successful", $data);
                     }elseif (!$token){
                         return $this->response(0, 8000, "oop!!! unable to create token with invalid credentials",
