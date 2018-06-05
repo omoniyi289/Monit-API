@@ -789,7 +789,7 @@ class MigrationService
                 // output data of each row
                 while($row =mysqli_fetch_assoc($result) ){
                     //array_push($arr, $row);
-                  $data_exist= DailyStockReadings::where('v1_id', $row['iDailyTotalizerReadingId'])->get()->first();
+                  $data_exist= DailyStockReadings::where('v1_id', $row['iDailyStockReadingsId'])->get()->first();
                   if(count($data_exist) > 0){
                       continue;
                   }

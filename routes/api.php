@@ -41,6 +41,10 @@ Route::get('/v1/demo_station_mg', 'FGDemoMigrationController@station_migrate');
 
 Route::get('/v1/demo_preadings_mg', 'FGDemoMigrationController@preadings_migrate');
 Route::get('/v1/demo_treadings_mg', 'FGDemoMigrationController@treadings_migrate');
+
+Route::get('/v1/preadings_update_mg', 'MigrationController@preadings_update_migrate');
+Route::get('/v1/treadings_update_mg', 'MigrationController@treadings_update_migrate');
+
 Route::get('/v1/demo_pt1_product_mg', 'FGDemoMigrationController@pt1_product_migrate');
 Route::get('/v1/demo_pt2_product_mg', 'FGDemoMigrationController@pt2_product_migrate');
 
