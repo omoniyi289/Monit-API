@@ -733,7 +733,7 @@ class MigrationService
         //return $counter; 
         try{
             
-                 $sql = "SELECT * FROM daily_totalizer_reading where reading_date > '2018-06-03 00:00:00'";
+                 $sql = "SELECT * FROM daily_totalizer_reading where reading_date >= '2018-05-31 00:00:00'";
             
             $result = mysqli_query($this->conn,$sql);
            // return mysqli_num_rows($result);
@@ -787,7 +787,7 @@ class MigrationService
         $counter = 0;
         try{
 
-      $sql = "SELECT * FROM daily_stock_readings where reading_date > '2018-06-03 00:00:00' ";
+      $sql = "SELECT * FROM daily_stock_readings where reading_date >= '2018-05-31 00:00:00' ";
             
             $result = mysqli_query($this->conn,$sql);
             //return mysqli_num_rows($result);

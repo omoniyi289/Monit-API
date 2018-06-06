@@ -82,11 +82,10 @@ class DailyStockReadingsService
             $result->where('reading_date', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
        }
        else{
-        //$timecheck = DailyStockReadings::where('station_id',$params['station_id'])->get();
-        //$result->where('reading_date', 'LIKE', date('Y-m-d').'%');
-        $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
+      ////get the last input date
+        $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('reading_date', 'desc')->get()->first();
         $result->where('reading_date', 'LIKE',"%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
-        $result->orderBy('id', 'desc');
+        $result->orderBy('reading_date', 'desc');
        }
        return $result->get();
     }
@@ -96,9 +95,9 @@ class DailyStockReadingsService
        $result = DailyStockReadings::where('station_id',$params['station_id']);
        //return date_format(date_create($params['date']),"Y-m-d");
       
-        $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
+        $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('reading_date', 'desc')->get()->first();
         $result->where('reading_date', 'LIKE', "%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
-        $result->orderBy('id', 'desc');
+        $result->orderBy('reading_date', 'desc');
        
        return $result->get();
     }
