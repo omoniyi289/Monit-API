@@ -455,12 +455,12 @@ class MigrationService
                   if($module== 'Sales & Stock'){
                       $inhouse= 'Daily Operations Report';
                   }
-                  else if ($module== 'Station League Table'){
-                    $inhouse = 'Station League Table Report';
-                  }
-                  else if ($module== 'Bank Payments'){
-                    $inhouse = 'Bank Payments Report';
-                  }
+                  //else if ($module== 'Station League Table'){
+                  //  $inhouse = 'Station League Table Report';
+                //  }
+              //    else if ($module== 'Bank Payments'){
+            //        $inhouse = 'Bank Payments Report';
+           //       }
 
 
                      $notf = NotificationModules::where('name',$inhouse)->get()->first();

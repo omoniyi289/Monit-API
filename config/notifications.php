@@ -30,6 +30,16 @@ return [
                     "name" => "S.M Daily Upload Downtime Alert",
                     "UI_slug" => "DUDN"
                 ]
+                ,
+                 "daily_operation" => [
+                    "name" => "Daily Operations Report",
+                    "UI_slug" => "DORe"
+                ]
+                ,
+                 "daily_station_manager_report" => [
+                    "name" => "Daily Station Manager Report",
+                    "UI_slug" => "DSMR"
+                ]
 
     ],
 ];

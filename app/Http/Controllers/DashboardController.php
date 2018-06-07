@@ -49,22 +49,11 @@ class DashboardController extends BaseController
         //pumps
         $pump_query = Pumps::with('product');
         $tank_query = Tanks::with('product');
-        $back_day ='-3 days';
         //return $start_date.' '.$end_date;
-        if($start_date == 'init'){
-            $start_date = date('Y-m-d', strtotime($back_day))." 00:00:00";
-        }else{
-          $start_date = date_format(date_create($start_date),"Y-m-d")." 00:00:00";  
-        }
-        if($end_date == 'init'){
-            //$end_date = date('Y-m-d h:i:s');
-           // $end_date ='-1 day';
-            $end_date = date('Y-m-d', strtotime('-1 day'))." 23:23:23"; 
-        }else{
-            $end_date = date_format(date_create($end_date),"Y-m-d")." 23:23:23";  
-        }
-
-        
+       
+        $start_date = date_format(date_create($start_date),"Y-m-d")." 00:00:00";  
+        $end_date = date_format(date_create($end_date),"Y-m-d")." 23:23:23";  
+      
         $pump_data = DailyTotalizerReadings::select('close_shift_totalizer_reading', 'open_shift_totalizer_reading', 'ppv', 'reading_date', 'pump_id', 'station_id', 'product')->where('reading_date','>=', $start_date)->where('reading_date','<=', $end_date)->orderBy('reading_date', 'ASC')->with(array('pump'=>function($query){
             $query->select('id','pump_nozzle_code');}))->with(array('station'=>function($query){
             $query->select('id','name');}));
@@ -185,6 +174,8 @@ class DashboardController extends BaseController
        $final_submission['total_pumps'] = $station_count > 0 ? count($pump_query) : 0;
        $final_submission['total_tanks'] = $station_count > 0 ? count($tank_query) : 0;
        $final_submission['total_stations'] = $station_count;
+       $final_submission['start_date'] = $start_date;
+       $final_submission['end_date'] = $end_date;
        $final_submission['total_pump_sales'] = $station_count > 0 ? $total_pump_sales:0;    
        $final_submission['total_tank_sales'] = $station_count > 0 ? $total_tank_sales:0;
        $final_submission['total_vol_supplied'] = $station_count > 0 ? $total_vol_supplied
