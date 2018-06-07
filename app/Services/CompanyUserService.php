@@ -142,7 +142,12 @@ class CompanyUserService
     }
       public function get_by_company_id($company_id)
     {
-       return User::where('company_id',$company_id)->with('station_users.station')->with('role')->with('user_notifications.module')->get();
+       return User::select('id', 'company_id', 'role_id', 'fullname', 'email', 'phone_number', 'username', 'status')->where('company_id',$company_id)
+            ->with(['station_users.station'=>function($query){
+            $query->select('id','name');}])
+            ->with('role:id,name')
+            ->with('user_notifications.module:id,name,active')
+            ->get();
     }
 
     public function add_roles($user_id, array $role_ids)

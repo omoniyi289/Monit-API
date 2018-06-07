@@ -83,7 +83,7 @@ class RoleService
     }
       public function get_by_company_id($company_id)
     {
-       return Role::where("company_id",$company_id)->with('role_permissions.permission')->get();
+       return Role::select('id', 'name','description')->where("company_id",$company_id)->with('role_permissions.permission:id,name')->get();
     }
     public function delete($role_id, array $options = [])
     {   CompanyUserRole::where('role_id',$role_id)->delete();
