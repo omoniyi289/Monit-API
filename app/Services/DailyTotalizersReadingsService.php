@@ -26,7 +26,12 @@ class DailyTotalizersReadingsService
         try{
           //return $data['created_at'];
             foreach ($data['readings'] as $value) {
-
+                    //to avoid double entry
+                  $present = DailyTotalizerReadings::where('pump_id', $value['pump_id'])->where('reading_date', $data['reading_date'])->get();
+                  if(count($present) > 0){
+                          continue;
+                      }
+                  //else continue insert
                     $pump = DailyTotalizerReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['pump_nozzle_code'], 'open_shift_totalizer_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened', 'reading_date'=> $data['reading_date'], 'product'=> $value['product']]);
                 }
             

@@ -36,30 +36,28 @@ class FromMail_FuelSupplyController extends BaseController
         
         if($data['status'] == 'Approved'){
             $req = FuelSupply::where('request_code', $data['request_code'])->get()->first();
-            $station = Station::where('id', $req['station_id'])->get()->first();
-            ///change this to priviledged guys later
-            $permission = Permission::where('UI_slug', 'PFRe')->get()->first();
-            $roles= RolePermission::where('permission_id', $permission['id'])->get();
-            if(count($roles) >0 ){
-            $user = User::with('role');
-            foreach ($roles as $key => $value) {
-                if($key == 0){
-                    $user= $user->where('role_id', $value['role_id']);
-                }else{
-                    $user= $user->orWhere('role_id', $value['role_id']);
-                     }
-             }
-             $user= $user->get();
-        //return $data['last_modified_by'];
-            $sss= Products::where('id', $req['product_id'])->first();
-            $req['product_name'] = $sss['name'];
-           // return $req;
-            foreach ($user as $value2) {
-                Mail::to($value2['email'])->send(new SupplyAcknowledgementMail($station,$value2, $req , $req['request_code']));
-            }
+           $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $req['station_id'])->get()->first();
+           //send mail to executors for this station with PFRe permision
+                   $product= Products::where('id', $req['product_id'])->first();
+                    $req['product_name'] = $product['name'];
+                    if(count($station) > 0 and $station->station_users !== null ){
+                    $station_users =  $station->station_users;
+                    foreach ($station_users as $key => $value) {
+                        $user =  $value->user;
+                        if($user->role !== null ){
+                        $role_permissions = $user->role->role_permissions;
+                        foreach ($role_permissions as $key => $value) {
+                                    $permission = $value->permission;
+                                if($permission['UI_slug'] == "PFRe"){
+                                           Mail::to($user['email'])->send(new SupplyAcknowledgementMail($station,$user, $req , $req['request_code']));
+
+                                    }
+                                }
+                            }    
+                      }
+                    
             
            $reply_id = 1;
-           //return $user;
             }
             }
 

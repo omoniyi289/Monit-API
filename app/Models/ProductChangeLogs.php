@@ -11,7 +11,7 @@ class ProductChangeLogs extends Model
     protected $table = 'product_change_logs';
     protected $fillable = [
         'current_price_tag','requested_price_tag', 'company_id', 'product_id' , 'updated_by',
-        'approved_by','station_id', 'is_approved','v1_id', 'executed_by', 'is_executed', 'valid_from', 'product',
+        'approved_by','station_id', 'is_approved','is_approved_level_2','is_approved_level_3','v1_id', 'executed_by', 'is_executed', 'valid_from', 'product',
     ];
 
     public function station(){

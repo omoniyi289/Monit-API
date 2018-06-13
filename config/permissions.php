@@ -36,6 +36,16 @@ return [
                     "description" => "permission to Create Price Change Request",
                     "UI_slug" => "APCR"
                 ],
+                "approve_price_change_request_2" => [
+                    "name" => "Approve Price Change- Level 2",
+                    "description" => "permission to Create Price Change Request- Level 2",
+                    "UI_slug" => "APCRL2"
+                ],
+                "approve_price_change_request_3" => [
+                    "name" => "Approve Price Change- Level 3",
+                    "description" => "permission to Create Price Change Request- Level 3",
+                    "UI_slug" => "APCRL3"
+                ],
 
                  "execute_price_change_request" => [
                     "name" => "Execute Price Change Request",

@@ -71,6 +71,7 @@ Route::get('/v1/paga/live/connect', 'PagaBusinessConnectController@connect');
 Route::get('/v1/stock-received/print-delivery-pdf', 'StockReceivedController@get_delivery_pdf');
 Route::get('/v1/fuel-supply/print-waybill-pdf', 'StockReceivedController@get_waybill_pdf');
 Route::get('/v1/roles/permissions/{role_id}', 'RoleController@get_role_permissions');
+Route::get('/v1/fuel-supply/autorequest', 'FuelSupplyController@autorequest');
 Route::post('/v1/demo_dashboard', 'FGDemoDashboardController@get_filtered');
 
   Route::get('/v1/test', function () {
@@ -233,6 +234,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/product_price_change/{product_price_change_id}', 'ProductPriceChangeLogsController@get_by_id');
      Route::get('/v1/product_price_change/by_station/{product_price_change_id}', 'ProductPriceChangeLogsController@get_by_station_id');
     Route::put('/v1/product_price_change/{product_price_change_id}', 'ProductPriceChangeLogsController@update');
+    Route::get('/v1/product_price_change/verify_approval/{params}', 'ProductPriceChangeLogsController@verify_approval');
 
     /*
      * PUMPS ENDPOINT

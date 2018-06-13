@@ -42,7 +42,15 @@ class ProductPriceChangeLogsController extends BaseController
         $data = $this->product_price_change_logs_service->create_new_request($product_change_log_request);
         return $this->response(1, 8000, "product changed, but yet to be approved", $data);
     }
-
+    public function verify_approval(Request $request) {
+        $stock_update_request = $request->all();
+        $data = $this->product_price_change_logs_service->verify_approval($stock_update_request);
+        //return $data;
+        if($data['statusCode'] == 1)
+            return $this->response(1, 8000, "request details", $data);
+        else
+            return $this->response(0, 8000,$data['message'] , $data, 400);
+     }
     public function execute_approval(ApiProductsPriceRequest $request){
          $data = $request->get('product_change_log', []);
          $output = '';

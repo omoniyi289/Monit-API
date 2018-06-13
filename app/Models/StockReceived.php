@@ -11,7 +11,7 @@ class StockReceived extends Model
 {
     //
     protected $table = 'stock_received';
-    protected $fillable = ['quantity_supplied','quantity_requested','quantity_loaded','stock_received_by', 'company_id', 'product_id','arrival_time','truck_departure_time','station_id', 'quantity_before_discharge', 'last_modified_by', 'truck_reg_number', 'request_code','quantity_after_discharge','waybill_number','driver_name','waybill_printed_by'
+    protected $fillable = ['quantity_supplied','quantity_requested','quantity_loaded','stock_received_by', 'company_id', 'product_id','arrival_time','truck_departure_time','station_id', 'quantity_before_discharge', 'last_modified_by', 'truck_reg_number', 'request_code','quantity_after_discharge','waybill_number','driver_name','waybill_printed_by', 'waybill_path'
     ];
 
     public function station(){

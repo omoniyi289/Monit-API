@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Requests\ApiCompanyRequest;
 use App\Requests\ApiFuelSupplyRequest;
 use App\Services\CompanyService;
+use App\Services\CompanyUserService;
 use App\Services\FuelSupplyService;
 use App\Services\StockReceivedService;
 use Core\Controllers\BaseController;
@@ -13,10 +14,12 @@ class FuelSupplyController extends BaseController
 {
     private $fuel_supply_service;
     private $stock_received_service;
-    public function __construct(FuelSupplyService $fuel_supply_service, StockReceivedService $stock_received_service)
+    private $company_user_service;
+    public function __construct(FuelSupplyService $fuel_supply_service, StockReceivedService $stock_received_service, CompanyUserService $company_user_service)
     {
         $this->fuel_supply_service = $fuel_supply_service;
         $this->stock_received_service = $stock_received_service;
+        $this->company_user_service = $company_user_service;
     }
 
     public function create(ApiFuelSupplyRequest $request) {
@@ -66,11 +69,16 @@ class FuelSupplyController extends BaseController
         return $this->response(1, 8000, "fuel requests", $data);
     }
 
+    public function autorequest(){
+          $data = $this->fuel_supply_service->autorequest();
+        return $this->response(1, 8000, "fuel requests", $data);
+    }
     public function get_by_id($stock_id) {
         $resource_options = $this->parse_resource_options();
         $data = $this->fuel_supply_service->get_by_id($stock_id,$resource_options);
         return $this->response(1, 8000, "request details", $data);
     }
+     
     public function get_by_request_code(Request $request) {
         $stock_update_request = $request->all();
         $resource_options = $this->parse_resource_options();

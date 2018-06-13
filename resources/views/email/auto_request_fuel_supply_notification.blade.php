@@ -140,19 +140,18 @@
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 10px 10px 10px 10px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;">A price change request with the details below has been made.</p>
+                        <p style="margin: 0;">Our system just calcualte that {{$station}} is  from re-order level,hence a fuel supply requet has been auto-generated.</p>
                     </td>
                 </tr>
                  <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 10px 10px 10px 10px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
                         <p style="margin: 0;">
-                            {{$data['approval_level_indicator_string']}} : {{$creator_name}}<br>
+                           
                             Product: {{$data['product_name']}}<br>
-                            Current Price: {{$data['current_price_tag']}}<br>
-                            Requested Price: {{$data['requested_price_tag']}}<br>
+                            Request Quantity: {{$data['quantity_requested']}} Litres<br>
                             Date: {{date('D d-m-Y')}}<br>
-                            Requested At : {{$station}}<br>
+                            
                         </p>
                     </td>
                 </tr>
@@ -165,7 +164,7 @@
                                     <table border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td align="center" style="border-radius: 3px;" bgcolor="blue">
-                                                <a href="https://www.e360stationmanager.com/#/pricing/validate-request?external_query=true&log_id={{$data['id']}}&user_id={{$user['id']}}&{{$data['is_approved_type']}}=1"
+                                                <a href="https://www.e360stationmanager.com/#/fuel-supply/validate-request?external_query=true&request_code={{$request_code}}&user_id={{$user['id']}}&status=Approved"
                                                    style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
                                                     Approve</a>
                                             </td>
@@ -173,7 +172,7 @@
                                                
                                             </td>
                                             <td align="center" style="border-radius: 3px;" bgcolor="red">
-                                                <a href="https://www.e360stationmanager.com/#/pricing/validate-request?external_query=true&log_id={{$data['id']}}&user_id={{$user['id']}}&{{$data['is_approved_type']}}=0"
+                                                <a href="https://www.e360stationmanager.com/#/fuel-supply/validate-request?external_query=true&request_code={{$request_code}}&user_id={{$user['id']}}&status=Disapproved"
                                                    style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
                                                     Disapprove</a>
                                             </td>
@@ -242,7 +241,8 @@
             <![endif]-->
         </td>
     </tr>
-    </table>
+  
+</table>
 
 </body>
 
