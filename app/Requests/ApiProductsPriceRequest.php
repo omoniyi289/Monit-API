@@ -21,7 +21,7 @@ class ApiProductsPriceRequest extends APIRequest
         return [
             'product_change_log' => 'array|required',
             'product_change_log.requested_price_tag' => 'required|string',
-            'product_change_log.updated_by' => 'required|integer',
+            //'product_change_log.updated_by' => 'required|integer',
             'product_change_log.company_id' => 'required|integer',
             'product_change_log.station_id' => 'required|integer',
             'product_change_log.product_id' => 'required|integer',
