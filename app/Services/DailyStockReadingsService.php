@@ -13,6 +13,7 @@ use App\Reposities\CompanyRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use App\Models\DailyStockReadings;
+use App\Tanks;
 class DailyStockReadingsService
 {
     private $database;
@@ -45,7 +46,7 @@ class DailyStockReadingsService
     {
         $this->database->beginTransaction();
         try {
-            //DailyStockReadings::update($stock, $data);
+           
             foreach ($data['readings'] as $value) {
                     if($value['status'] == 'Closed'){
                     $stock = DailyStockReadings::where('reading_date', $data['reading_date'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'return_to_tank'=>$value['rtt'],'end_delivery'=>$value['qty_received'] ,'status' =>'Closed']);
@@ -86,21 +87,32 @@ class DailyStockReadingsService
        //return date_format(date_create($params['date']),"Y-m-d");
        if(isset($params['date'])){
             $result->where('reading_date', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
+             return $result->get();
+       }else if(isset($params['opening_station'])){
+            $tanks = Tanks::where('station_id',$params['station_id'])->with('product')->orderBy('code', 'ASC')->get();
+            foreach ($tanks as $key => $value) {
+            ////get the last input date
+            $last_reading = DailyStockReadings::select('id','phy_shift_end_volume_reading')->where('tank_id',$value['id'])->orderBy('reading_date', 'desc')->get()->first();
+              $tanks[$key]['last_closing_reading'] = $last_reading['phy_shift_end_volume_reading'];
+        }
+     
+            return $tanks;
        }
        else{
-      ////get the last input date
-        $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('reading_date', 'desc')->get()->first();
-        $result->where('reading_date', 'LIKE',"%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
-        $result->orderBy('reading_date', 'desc');
-       }
-       return $result->get();
+            ////get the last input date
+            $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('reading_date', 'desc')->get()->first();
+            $result->where('reading_date', 'LIKE',"%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
+            $result->orderBy('reading_date', 'desc');
+             return $result->get();
+           }
+      
     }
+  
        public function close_station($params)
     {   
 
        $result = DailyStockReadings::where('station_id',$params['station_id']);
-       //return date_format(date_create($params['date']),"Y-m-d");
-      
+
         $timecheck = DailyStockReadings::where('station_id',$params['station_id'])->orderBy('reading_date', 'desc')->get()->first();
         $result->where('reading_date', 'LIKE', "%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
         $result->orderBy('reading_date', 'desc');

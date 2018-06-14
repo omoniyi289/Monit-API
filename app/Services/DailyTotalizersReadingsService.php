@@ -108,13 +108,24 @@ class DailyTotalizersReadingsService
        $result = DailyTotalizerReadings::where('station_id',$params['station_id']);
        if(isset($params['date'])){
             $result->where('reading_date', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
+             return $result->get();
+       }else if(isset($params['opening_station'])){
+            $pumps = Pumps::where('station_id',$params['station_id'])->with('product')->orderBy('pump_nozzle_code', 'ASC')->get();
+            foreach ($pumps as $key => $value) {
+            ////get the last input date
+            $last_reading = DailyTotalizerReadings::select('id','close_shift_totalizer_reading')->where('pump_id',$value['id'])->orderBy('reading_date', 'desc')->get()->first();
+              $pumps[$key]['last_closing_reading'] = $last_reading['close_shift_totalizer_reading'];
+        }
+     
+            return $pumps;
        }
        else{
         $timecheck = DailyTotalizerReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
         $result->where('reading_date', 'LIKE',"%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
         $result->orderBy('id', 'desc');
+         return $result->get();
        }
-       return $result->get();
+       
     }
     private function get_requested_stock($stock_id, array $options = [])
     {
