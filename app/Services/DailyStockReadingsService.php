@@ -27,12 +27,12 @@ class DailyStockReadingsService
         try{
             foreach ($data['readings'] as $value) {
                 //to avoid double entry
-                $present = DailyStockReadings::where('tank_id', $value['tank_id'])->where('reading_date', $data['reading_date'])->get();
+                $present = DailyStockReadings::where('tank_id', $value['tank_id'])->where('reading_date', 'LIKE', "%".date_format(date_create($data['reading_date']),"Y-m-d")."%")->get();
                 if(count($present) > 0){
                         continue;
                     }
                 //else continue insert
-                    $stock = DailyStockReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'tank_id' => $value['tank_id'],'tank_code' => $value['tank_code'], 'phy_shift_start_volume_reading' => $value['opening_reading'],'created_by' => $data['created_by'],'reading_date' => $data['reading_date'], 'status' =>'Opened', 'product'=> $value['product']]);
+                    $stock = DailyStockReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'tank_id' => $value['tank_id'],'tank_code' => $value['tank_code'], 'phy_shift_start_volume_reading' => $value['opening_reading'],'created_by' => $data['created_by'],'reading_date' => date_format(date_create($data['reading_date']),"Y-m-d").' 00:00:00', 'status' =>'Opened', 'product'=> $value['product']]);
                 }
             
         }catch (Exception $exception){
