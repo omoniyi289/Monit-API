@@ -115,7 +115,7 @@ class ProductPriceChangeLogService
                                   if($permission['UI_slug'] == "APCRL2"){
                                          
                                             $is_email_sent = true;
-                                           Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['fullname'], $data ));
+                                           Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
                                       }
                                   }
                               }    
@@ -133,7 +133,7 @@ class ProductPriceChangeLogService
                                   if($permission['UI_slug'] == "APCRL3"){
                                           //Mail::to($user['email'])->send(new PriceChangeExecuteMail($station,$user,$approver['fullname'], $prd ));
                                             $is_email_sent = true;
-                                           Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['fullname'], $data ));
+                                           Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
                                       }
                                         }
                                     }    
