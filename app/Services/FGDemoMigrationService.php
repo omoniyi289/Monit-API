@@ -26,7 +26,7 @@ class FGDemoMigrationService
     private $servername = "185.130.207.215";
     private $username = "samuel.j";
     private $password = "Tr-3re@Aza4r";
-    private $dbname = "station_manager_1";
+    private $dbname = "station_manager";
     private $conn ='';
 
     private $ms_servername = "185.173.25.163";
@@ -632,28 +632,29 @@ class FGDemoMigrationService
         $counter = 0;
         try{
             
-                 $sql = "SELECT * FROM daily_totalizer_reading";
+                 $sql = "SELECT * FROM daily_totalizer_readings";
             
             $result = mysqli_query($this->conn,$sql);
-            //return mysqli_num_rows($result);
+          //  return mysqli_num_rows($result);
             if (mysqli_num_rows($result) > 0 and $result !=false ) {
                 // output data of each row
                 while($row =mysqli_fetch_assoc($result) ){
                     //array_push($arr, $row);
-                    $date_array = explode(".", $row['datecreated']);
-                    $row['datecreated'] = $date_array[0];
-                    $pump = Pumps::where('v1_id',$row['pumpid'])->get()->first();
+                    $date_array = explode(".", $row['created_at']);
+                    $row['created_at'] = $date_array[0];
                     $station = FGDemoStation::where('id',mt_rand(1, 936))->get()->first();
+                   $pump = Pumps::where('station_id',$row['station_id'])->get()->first();
                     
-                      if(count($pump) > 0){
+                    
+                   //   if(count($pump) > 0){
                   
                      $counter++;
 
                     $new_tg = FGDemoDailyTotalizerReadings::create(['company_id'=> $station['company_id'], 'station_id' => $station['id'],'pump_id'=>$pump['id'], 'status'=>  $row['status'], 
-                    'nozzle_code' => $pump['pump_nozzle_code'],'open_shift_totalizer_reading'=> $row['opening_shift_totalizer_reading'], 'shift_1_totalizer_reading'=> $row['shift_1_totalizer_reading'], 'shift_2_totalizer_reading' => $row ['shift_2_totalizer_reading'],'close_shift_totalizer_reading'=>$row['closing_shift_totalizer_reading'], 'shift_1_cash_collected'=>  $row['shift_1_cash_collected'],
-                    'shift_2_cash_collected' => $row ['shift_2_cash_collected'],'cash_collected'=>$row['cash_collected'], 'ppv'=>  $row['PPV'], 'created_at'=>  $row['datecreated'], 'reading_date'=>  $row['reading_date'], 
+                    'nozzle_code' => $pump['nozzle_code'],'open_shift_totalizer_reading'=> $row['open_shift_totalizer_reading'], 'shift_1_totalizer_reading'=> $row['shift_1_totalizer_reading'], 'shift_2_totalizer_reading' => $row ['shift_2_totalizer_reading'],'close_shift_totalizer_reading'=>$row['close_shift_totalizer_reading'], 'shift_1_cash_collected'=>  $row['shift_1_cash_collected'],
+                    'shift_2_cash_collected' => $row ['shift_2_cash_collected'],'cash_collected'=>$row['cash_collected'], 'ppv'=>  $row['ppv'], 'created_at'=>  $row['created_at'], 'reading_date'=>  $row['reading_date'], 'product' => $row['product'],
                     'shift_2_cash_collected' => $row ['shift_2_cash_collected'] ]); 
-                  }
+                 // }
 
                 
               
@@ -683,19 +684,19 @@ class FGDemoMigrationService
                 // output data of each row
                 while($row =mysqli_fetch_assoc($result) ){
                     //array_push($arr, $row);
-                    $date_array = explode(".", $row['datecreated']);
-                    $row['datecreated'] = $date_array[0];
-                     $tank = Tanks::where('v1_id',$row['tankid'])->get()->first();
+                   // $date_array = explode(".", $row['datecreated']);
+                   // $row['datecreated'] = $date_array[0];
                    
-                      if(count($tank) > 0){
+                     // if(count($tank) > 0){
                    $station = FGDemoStation::where('id',mt_rand(1, 936))->get()->first();
-                    
+                  $tank = Tanks::where('station_id',$row['station_id'])->get()->first();
+                  
                      $counter++;
 
                     $new_tg = FGDemoDailyStockReadings::create(['company_id'=> $station['company_id'], 'station_id' => $station ['id'],'tank_id'=>$tank['id'], 'status'=>  $row['status'], 
-                    'tank_code' => $tank ['code'], 'created_at'=>  $row['datecreated'], 'reading_date'=>  $row['reading_date'],  'phy_shift_end_volume_reading' => $row['phy_shift_end_volume_reading'],'phy_shift_start_volume_reading' => $row['phy_shift_start_volume_reading'],'return_to_tank'=>$row['return_to_tank'],
+                    'tank_code' => $tank['code'], 'created_at'=>  $row['created_at'], 'reading_date'=>  $row['reading_date'],  'phy_shift_end_volume_reading' => $row['phy_shift_end_volume_reading'],'phy_shift_start_volume_reading' => $row['phy_shift_start_volume_reading'],'return_to_tank'=>$row['return_to_tank'],'product' => $row['product'],
                         'end_delivery'=>$row['end_delivery'], ]); 
-                }
+              //  }
             }
               //return 1;   # code...
             }

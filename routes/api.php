@@ -72,11 +72,11 @@ Route::get('/v1/stock-received/print-delivery-pdf', 'StockReceivedController@get
 Route::get('/v1/fuel-supply/print-waybill-pdf', 'StockReceivedController@get_waybill_pdf');
 Route::get('/v1/roles/permissions/{role_id}', 'RoleController@get_role_permissions');
 Route::get('/v1/fuel-supply/autorequest', 'FuelSupplyController@autorequest');
-Route::post('/v1/demo_dashboard', 'FGDemoDashboardController@get_filtered');
 
-  Route::get('/v1/test', function () {
-   return view('delivery-note');
-    });
+///ng demo 
+Route::post('/v1/demo_dashboard', 'FGDemoController@get_dashboard_kpis');
+Route::post('/v1/station_delivery', 'FGDemoController@add_station_delivery');
+Route::post('/v1/demo_station_replenishment_plan', 'FGDemoController@get_demo_station_replenishment_plan');
 
 Route::group(['middleware' => ['jwt.auth']], function () {
     /*
