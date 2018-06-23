@@ -9,7 +9,7 @@ class UserLoginActivityLog extends Model
 {
     //
      protected $table = 'user_login_activity_log';
-    protected $fillable = [	'login_time', 	'email', 'user_id' ,'browser_name' ,'browser_version', 'os_version', 'location_cordinate' ];
+    protected $fillable = [	'login_time', 	'email', 'user_id' ,'browser_name' ,'browser_version', 'os_version', 'location_cordinate', 'location_address' ];
     
 
 }

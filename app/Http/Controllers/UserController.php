@@ -17,6 +17,7 @@ use App\Services\CompanyService;
 use App\Services\CompanyUserService;
 use App\User;
 use App\Util;
+use App\Models\PasswordChangeActivityLog;
 use Core\Controllers\BaseController;
 use Core\Traits\BuilderTrait;
 use Illuminate\Http\JsonResponse;
@@ -48,6 +49,20 @@ class UserController extends BaseController
      * @param ApiUserRequest $request
      * @return JsonResponse
      */
+     public function users_with_default_password(){
+        $users_with_default =array();
+        $users_without_default = array();
+        $users= User::where('status', 'Active')->get();
+        //$users = User::where('');
+        foreach ($users as $key => $value){
+            if(password_verify('123456', $value['password'])){
+                array_push($users_with_default, $value['email']);
+            }else{
+                array_push($users_without_default, $value['email']);
+            }
+        }
+        return array(['with' => $users_with_default, 'without' => $users_without_default]);
+     }
     public function create(ApiUserRequest $request)
     {
         $user_request = $request->get('user', []);
@@ -95,9 +110,12 @@ class UserController extends BaseController
             $user =  $this->user_service->get_by_id($user_id);
             if (!empty($user) || $user != null){
                 $check_password = password_verify($user_request['currentpassword'],$user['password']);
-                //return $user;
+               
                 if ($check_password){
                     $user_request['password'] = bcrypt($user_request['password']);
+                    //log the change
+                    PasswordChangeActivityLog::create([ 'email'=> $user_request['email'], 'user_id'=> $user_request['id'], 'change_time'=> date('Y-m-d H:i:s') ]);
+
                     $password_message=", password changed";
                    
                 }else{

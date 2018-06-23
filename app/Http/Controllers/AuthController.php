@@ -52,7 +52,8 @@ class AuthController extends BaseController
                     $data = $user;
                     if ($token){
                         $data['token'] = $token;
-                        UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version'), 'location_cordinate' => $request->get('location_cordinate') ]);
+                        UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version'), 'location_cordinate' => $request->get('location_cordinate') , 'location_address' => $request->get('location_address') ]);
+                        
                         return $this->response(1, 8000, "authentication successful", $data);
                     }elseif (!$token){
                         return $this->response(0, 8000, "oop!!! unable to create token with invalid credentials",

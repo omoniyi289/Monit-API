@@ -54,11 +54,11 @@ class DashboardController extends BaseController
         $start_date = date_format(date_create($start_date),"Y-m-d")." 00:00:00";  
         $end_date = date_format(date_create($end_date),"Y-m-d")." 23:23:23";  
       
-        $pump_data = DailyTotalizerReadings::select('close_shift_totalizer_reading', 'open_shift_totalizer_reading', 'ppv', 'reading_date', 'pump_id', 'station_id', 'product', 'created_at')->where('reading_date','>=', $start_date)->where('reading_date','<=', $end_date)->orderBy('reading_date', 'ASC')->with(array('pump'=>function($query){
+        $pump_data = DailyTotalizerReadings::select('close_shift_totalizer_reading', 'open_shift_totalizer_reading', 'ppv', 'reading_date', 'pump_id', 'station_id', 'product', 'updated_at')->where('reading_date','>=', $start_date)->where('reading_date','<=', $end_date)->orderBy('reading_date', 'ASC')->with(array('pump'=>function($query){
             $query->select('id','pump_nozzle_code');}))->with(array('station'=>function($query){
             $query->select('id','name');}));
 
-        $tank_data = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery', 'created_at')->where('reading_date','>=', $start_date)->where('reading_date','<=', $end_date)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
+        $tank_data = DailyStockReadings::select('phy_shift_start_volume_reading', 'phy_shift_end_volume_reading', 'return_to_tank', 'reading_date', 'tank_id', 'station_id', 'product', 'end_delivery', 'start_delivery', 'updated_at')->where('reading_date','>=', $start_date)->where('reading_date','<=', $end_date)->orderBy('reading_date', 'ASC')->with(array('tank'=>function($query){
             $query->select('id','code');}))->with(array('station'=>function($query){
             $query->select('id','name');}));
 
