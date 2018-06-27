@@ -55,6 +55,9 @@ class CompanyService
     public function get_all(array $options = []){
         return Company::all();
     }
+     public function get_active(array $options = []){
+        return Company::where('active', 1)->get();
+    }
     public function get_by_id($user_id, array $options = [])
     {
         ///leave it at get, else trouble in frontend

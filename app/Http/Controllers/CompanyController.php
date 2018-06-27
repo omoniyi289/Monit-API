@@ -67,6 +67,15 @@ class CompanyController extends BaseController
             return $this->response(0, 8000, $exception->getMessage(), null,500);
         }
     }
+    public function get_active(){
+        try {
+            $resource_options = $this->parse_resource_options();
+            $data = $this->company_service->get_active($resource_options);
+            return $this->response(1, 8000, "all companies", $data);
+        }catch (Exception $exception){
+            return $this->response(0, 8000, $exception->getMessage(), null,500);
+        }
+    }
         public function update($company_id,Request $request)
     {   try {
         $totalizer_update_request = $request->get('company', []);

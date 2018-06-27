@@ -57,8 +57,11 @@ Route::get('/v1/stock_transfer_mg', 'MigrationController@stock_transfer_migrate'
 
 
 /*
- * AUTH ENDPOINT
+ * OFF-AUTH MIDDLEWARE ENDPOINT
  * */
+Route::get('/rops', function () {
+    return view('rops');
+});
 Route::get('/v1/uwp', 'UserController@users_with_default_password');
 Route::post('/v1/auth', 'AuthController@auth');
 Route::post('/v1/analytics_login', 'AuthController@analytics_login');
@@ -127,7 +130,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     /*
      * COMPANY ENDPOINT
      * */
-    Route::get('/v1/companies/e360_super_user', 'CompanyController@get_all');
+    Route::get('/v1/companies/e360_super_user', 'CompanyController@get_active');
     Route::get('/v1/companies/first_company_user/{user_id}', 'CompanyController@get_for_prime_user');
     Route::get('/v1/companies/company_user/{company_id}', 'CompanyController@get_by_id');
     Route::post('/v1/companies', 'CompanyController@create');
