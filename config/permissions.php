@@ -150,6 +150,13 @@ return [
                     "UI_slug" => "AMEx"
                 ],             
         ],
+         "rops" => [
+                "rops" => [
+                    "name" => "Add and Manage Retail Price Surveys",
+                    "description" => "permission to Add and Manage Retail Price Surveys",
+                    "UI_slug" => "AMPS30"
+                ],             
+        ],
 
         "fuel_supply" => [
                 "request_supply" => [
