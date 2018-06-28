@@ -350,6 +350,13 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/deposits/validate_amount/{param}', 'DepositsController@validate_amount');
     Route::patch('/v1/deposits', 'DepositsController@update');
 
+  /*
+     * ROPS ENDPOINT
+     * */
+    Route::get('/v1/rops', 'ROPSController@get_by_params');
+    Route::post('/v1/rops', 'ROPSController@create');
+    Route::patch('/v1/rops', 'ROPSController@update');
+
      /*
        Dashboard ENDPOINT
         */

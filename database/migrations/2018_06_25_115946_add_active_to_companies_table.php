@@ -15,7 +15,8 @@ class AddActiveToCompaniesTable extends Migration
     {
          Schema::table('companies', function (Blueprint $table) {
             $table->integer('active')->default(1); 
-             });     }
+             });  
+  }
 
     /**
      * Reverse the migrations.
