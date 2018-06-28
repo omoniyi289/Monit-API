@@ -39,6 +39,10 @@ return [
                  "daily_station_manager_report" => [
                     "name" => "Daily Station Manager Report",
                     "UI_slug" => "DSMR"
+                ],
+                 "retail_price_survey_report" => [
+                    "name" => "Retail Price Survey Report",
+                    "UI_slug" => "RPSR"
                 ]
 
     ],
