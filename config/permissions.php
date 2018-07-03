@@ -152,8 +152,8 @@ return [
         ],
          "rops" => [
                 "rops" => [
-                    "name" => "Add and Manage Retail Price Surveys",
-                    "description" => "permission to Add and Manage Retail Price Surveys",
+                    "name" => "Add and Manage Fuel Price Surveys",
+                    "description" => "permission to Add and Manage Fuel Price Surveys",
                     "UI_slug" => "AMPS30"
                 ],             
         ],

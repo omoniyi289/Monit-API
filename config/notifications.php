@@ -32,16 +32,21 @@ return [
                 ]
                 ,
                  "daily_operation" => [
-                    "name" => "Daily Operations Report",
+                    "name" => "Daily Station Operations Report",
                     "UI_slug" => "DORe"
                 ]
                 ,
+                 "weekly_operation" => [
+                    "name" => "Weekly Station Operations Report",
+                    "UI_slug" => "WORe"
+                ]
+                ,
                  "daily_station_manager_report" => [
-                    "name" => "Daily Station Manager Report",
+                    "name" => "Daily Report for Station Managers",
                     "UI_slug" => "DSMR"
                 ],
                  "retail_price_survey_report" => [
-                    "name" => "Retail Price Survey Report",
+                    "name" => "Retail Price Comparison Report",
                     "UI_slug" => "RPSR"
                 ]
 
