@@ -22,6 +22,9 @@ use App\Products;
 use App\User;
 use App\Services\ProductPriceService;
 use App\Models\CompanyUserRole;
+use App\Events\PriceChangeApprovalGenerated;
+
+
 class ProductPriceChangeLogService
 {
     private $database;
@@ -97,7 +100,10 @@ class ProductPriceChangeLogService
                                     $permission = $value->permission;
                                 if($permission['UI_slug'] == "APCR"){
                                         $is_email_sent = true;
-                                        Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
+                                      //  Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
+
+                                        $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $new_data['creator_name'],'product_change_result' => $data];
+                                           event(new PriceChangeApprovalGenerated($mail_data));
                                    }                            
                             }    
                             }                                       
@@ -115,7 +121,10 @@ class ProductPriceChangeLogService
                                   if($permission['UI_slug'] == "APCRL2"){
                                          
                                             $is_email_sent = true;
-                                           Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
+                                           //Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
+
+                                           $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $new_data['creator_name'],'product_change_result' => $data];
+                                           event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                   }
                               }    
@@ -131,9 +140,12 @@ class ProductPriceChangeLogService
                           foreach ($role_permissions as $key => $value) {
                                       $permission = $value->permission;
                                   if($permission['UI_slug'] == "APCRL3"){
-                                          //Mail::to($user['email'])->send(new PriceChangeExecuteMail($station,$user,$approver['fullname'], $prd ));
-                                            $is_email_sent = true;
-                                           Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
+      
+                                           $is_email_sent = true;
+                                           //Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
+
+                                            $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $new_data['creator_name'],'product_change_result' => $data];
+                                           event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                         }
                                     }    

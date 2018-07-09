@@ -5,13 +5,12 @@ use Core\Controllers\BaseController;
 use Illuminate\Http\Request;
 use App\User;
 use App\Station;
-use App\Mail\PriceChangeExecuteMail;
-use App\Mail\PriceChangeMail;
-use Mail;
 use App\Products;
 use App\ProductPrices;
 use App\ProductChangeLogs;
 use App\Services\SoapPriceChangeService;
+use App\Events\PriceChangeExecutionGenerated;
+use App\Events\PriceChangeApprovalGenerated;
 
 class FromMail_PriceChangeController extends BaseController
 {
@@ -29,11 +28,11 @@ class FromMail_PriceChangeController extends BaseController
         if(isset($data['is_approved_level_3']) and $data['is_approved_level_3'] != null){
              $output = ProductChangeLogs::where('id', $data['log_id'])->update(['approved_by' => $data['approved_by'], 'is_approved_level_3' =>$data['is_approved_level_3']]);
           if($data['is_approved_level_3'] == 1){
-            $prd = ProductChangeLogs::where('id', $data['log_id'])->get()->first();
-           $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $prd['station_id'])->get()->first();
+            $product_change_result = ProductChangeLogs::where('id', $data['log_id'])->get()->first();
+           $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $product_change_result['station_id'])->get()->first();
            //send mail to executors for this stastion with EPCR permision
-                   $product= Products::where('id', $prd['product_id'])->first();
-                    $prd['product_name'] = $product['name'];
+                   $product= Products::where('id', $product_change_result['product_id'])->first();
+                    $product_change_result['product_name'] = $product['name'];
                     if(count($station) > 0 and $station->station_users !== null ){
                     $station_users =  $station->station_users;
                     foreach ($station_users as $key => $value) {
@@ -43,7 +42,9 @@ class FromMail_PriceChangeController extends BaseController
                         foreach ($role_permissions as $key => $value) {
                                     $permission = $value->permission;
                                 if($permission['UI_slug'] == "EPCR"){
-                                        Mail::to($user['email'])->send(new PriceChangeExecuteMail($station,$user,$approver['fullname'], $prd ));
+                                    
+                                        $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
+                                        event(new PriceChangeExecutionGenerated($mail_data));
                                     }
                                 }
                             }    
@@ -55,14 +56,14 @@ class FromMail_PriceChangeController extends BaseController
             else if( isset($data['is_approved_level_2']) and $data['is_approved_level_2'] != null ){
              $output = ProductChangeLogs::where('id', $data['log_id'])->update(['approved_by' => $data['approved_by'], 'is_approved_level_2' =>$data['is_approved_level_2']]);
               if($data['is_approved_level_2'] == 1){
-              $prd = ProductChangeLogs::where('id', $data['log_id'])->get()->first();
-             $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $prd['station_id'])->get()->first();
+              $product_change_result = ProductChangeLogs::where('id', $data['log_id'])->get()->first();
+             $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $product_change_result['station_id'])->get()->first();
              //send mail to executors for this stastion with EPCR permision
-                      $product= Products::where('id', $prd['product_id'])->first();
-                      $prd['product_name'] = $product['name'];
+                      $product= Products::where('id', $product_change_result['product_id'])->first();
+                      $product_change_result['product_name'] = $product['name'];
                       //set the approval level to level 1
-                      $prd['is_approved_type'] = 'is_approved_level_3';
-                      $prd['approval_level_indicator_string'] = 'Last Approved By';
+                      $product_change_result['is_approved_type'] = 'is_approved_level_3';
+                      $product_change_result['approval_level_indicator_string'] = 'Last Approved By';
                       if(count($station) > 0 and $station->station_users !== null ){
                       $station_users =  $station->station_users;
                       ///first try send to users with level 3 having ensured there is a third level
@@ -75,9 +76,12 @@ class FromMail_PriceChangeController extends BaseController
                           foreach ($role_permissions as $key => $value) {
                                       $permission = $value->permission;
                                   if($permission['UI_slug'] == "APCRL3"){
-                                          //Mail::to($user['email'])->send(new PriceChangeExecuteMail($station,$user,$approver['fullname'], $prd ));
+                                       
                                             $is_email_sent = true;
-                                           Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$approver['fullname'], $prd ));
+                                           
+
+                                           $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
+                                           event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                   }
                               }    
@@ -93,7 +97,9 @@ class FromMail_PriceChangeController extends BaseController
                           foreach ($role_permissions as $key => $value) {
                                       $permission = $value->permission;
                                   if($permission['UI_slug'] == "EPCR"){
-                                          Mail::to($user['email'])->send(new PriceChangeExecuteMail($station,$user,$approver['fullname'], $prd ));
+                              
+                                          $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
+                                          event(new PriceChangeExecutionGenerated($mail_data));
                                       }
                                         }
                                     }    
@@ -107,14 +113,14 @@ class FromMail_PriceChangeController extends BaseController
               //approval for level 1
              $output = ProductChangeLogs::where('id', $data['log_id'])->update(['approved_by' => $data['approved_by'], 'is_approved' =>$data['is_approved']]);
               if($data['is_approved'] == 1){
-              $prd = ProductChangeLogs::where('id', $data['log_id'])->get()->first();
-              $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $prd['station_id'])->get()->first();
+              $product_change_result = ProductChangeLogs::where('id', $data['log_id'])->get()->first();
+              $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $product_change_result['station_id'])->get()->first();
              //send mail to approvers for this station with APCRL2 permision
-                      $product= Products::where('id', $prd['product_id'])->first();
-                      $prd['product_name'] = $product['name'];
+                      $product= Products::where('id', $product_change_result['product_id'])->first();
+                      $product_change_result['product_name'] = $product['name'];
                       //set the approval level to level 1
-                      $prd['is_approved_type'] = 'is_approved_level_2';
-                      $prd['approval_level_indicator_string'] = 'Last Approved By';
+                      $product_change_result['is_approved_type'] = 'is_approved_level_2';
+                      $product_change_result['approval_level_indicator_string'] = 'Last Approved By';
                       if(count($station) > 0 and $station->station_users !== null ){
                       $station_users =  $station->station_users;
                       ///first try send to users with level 2 having ensured there is a second or third level
@@ -129,7 +135,8 @@ class FromMail_PriceChangeController extends BaseController
                                   if($permission['UI_slug'] == "APCRL2"){
                                          
                                             $is_email_sent = true;
-                                           Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$approver['fullname'], $prd ));
+                                           $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
+                                           event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                   }
                               }    
@@ -145,9 +152,10 @@ class FromMail_PriceChangeController extends BaseController
                           foreach ($role_permissions as $key => $value) {
                                       $permission = $value->permission;
                                   if($permission['UI_slug'] == "APCRL3"){
-                                          //Mail::to($user['email'])->send(new PriceChangeExecuteMail($station,$user,$approver['fullname'], $prd ));
+                                         
                                             $is_email_sent = true;
-                                           Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$approver['fullname'], $prd ));
+                                           $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
+                                           event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                         }
                                     }    
@@ -164,7 +172,9 @@ class FromMail_PriceChangeController extends BaseController
                           foreach ($role_permissions as $key => $value) {
                                       $permission = $value->permission;
                                   if($permission['UI_slug'] == "EPCR"){
-                                          Mail::to($user['email'])->send(new PriceChangeExecuteMail($station,$user,$approver['fullname'], $prd ));
+                                          $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
+                                          //return $mail_data;
+                                          event(new PriceChangeExecutionGenerated($mail_data));
                                       }
                                         }
                                     }    
