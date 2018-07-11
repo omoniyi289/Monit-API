@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Mail\PriceChangeExecuteMail;
 use Mail;
 
-class SendPriceChangeExecutionMail
+class SendPriceChangeExecutionMail implements ShouldQueue
 {
     /**
      * Create the event listener.

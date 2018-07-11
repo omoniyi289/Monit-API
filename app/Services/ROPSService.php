@@ -11,7 +11,9 @@ namespace App\Services;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use App\Models\ROPS;
-
+use App\Events\ROPSGenerated;
+use App\Models\UsersInStations_Details;
+use App\Station;
 class ROPSService
 {
     private $database;
@@ -23,17 +25,27 @@ class ROPSService
     }
     public function create(array $data) {
         $this->database->beginTransaction();
+        $inserted_rops = '';
         try{
-           // return $data;
-            $data['survey_date']= date_format(date_create($data['survey_date']),"Y-m-d");
-            //date_format(date_create($params['selected_date']),"Y-m-d")
-            $survey = ROPS::create($data);
-        }catch (Exception $exception){
+               // return $data;
+                $data['survey_date']= date_format(date_create($data['survey_date']),"Y-m-d");
+                //date_format(date_create($params['selected_date']),"Y-m-d")
+                $survey = ROPS::create($data);
+                $inserted_rops =  ROPS::where('id', $survey['id'])->with('uploader:fullname')->with('station:name')->get()->first();
+                ///generate pdf and send report
+                $mail_data = [
+                   'receiver_data'=> $survey,
+                    'date' => $data['survey_date']
+                ];
+                event(new ROPSGenerated($mail_data));
+              }
+
+        catch (Exception $exception){
             $this->database->rollBack();
             throw $exception;
         }
         $this->database->commit();
-         return ROPS::where('id', $survey['id'])->get()->first();
+        return $inserted_rops;
     }
 
     public function get_by_date($date){
@@ -48,6 +60,8 @@ class ROPSService
             return ROPS::where('survey_date',$survey_date)->where('station_id',$params['station_id'])->get();
             }
     }
-   
+
+
+ 
     
 }

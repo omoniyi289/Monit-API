@@ -22,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\PriceChangeApprovalGenerated' => [
           'App\Listeners\SendPriceChangeApprovalMail'
         ],
+        'App\Events\ROPSGenerated' => [
+          'App\Listeners\SendROPSMail'
+        ],
     ];
 
     /**

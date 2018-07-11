@@ -18,11 +18,12 @@ ssh root@185.130.207.215 <<-EOF
     cp ./lara-config/.env ./live
     cd ./live
     composer install --no-dev --optimize-autoloader --no-plugins --no-scripts
-    composer update
+    #composer update
     php artisan key:generate
     #php artisan route:cache resolve closure based routes before caching
     php artisan migrate --force
     php artisan db:seed
+    php artisan queue:restart
     chmod -R 755 .
     chown -R www-data:www-data .
 EOF
