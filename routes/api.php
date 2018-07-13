@@ -148,6 +148,14 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::delete('/v1/company_users/{user_id}', 'CompanyUserController@delete');
 
 
+    /*
+     * COMPANY NOTIFICATONS  ENDPOINT
+     * */
+    Route::get('/v1/notification_settings', 'CompanyNotificationsController@get_all');
+    Route::get('/v1/notification_settings/{company_id}', 'CompanyNotificationsController@get_by_company_id');
+    Route::post('/v1/notification_settings', 'CompanyNotificationsController@create');
+    
+
 
      /*
      * REGION ENDPOINT
