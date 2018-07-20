@@ -48,6 +48,10 @@ return [
                  "retail_price_survey_report" => [
                     "name" => "Retail Price Comparison Report",
                     "UI_slug" => "RPSR"
+                ], 
+                 "tank_diagostic_report" => [
+                    "name" => "Tank Diagnostic Report",
+                    "UI_slug" => "TDRe"
                 ]
 
     ],

@@ -150,6 +150,13 @@ return [
                     "UI_slug" => "AMEx"
                 ],             
         ],
+        "customer_acquisation" => [
+                "manage_cas" => [
+                    "name" => "Add and Manage Customers",
+                    "description" => "permission to Add and Manage Customers",
+                    "UI_slug" => "AMCu40"
+                ],             
+        ],
          "rops" => [
                 "rops" => [
                     "name" => "Add and Manage Fuel Price Surveys",

@@ -146,6 +146,83 @@ class AuthController extends BaseController
           }
     
     }
+
+        public function ecas_login(Request $request){
+        $user =  $this->user_service->get_user_for_analytics($request->get('email'));
+        //return $request->all();
+
+        if (!empty($user) || $user != null){
+            if ($user['is_verified'] == 0){
+                return $this->response(0, 0, "account yet to be verified",null,400);
+            }
+            $check_password = password_verify($request->get('password'),$user['password']);
+            if ($check_password){
+                $credentials = [
+                    'email' => $user['email'],
+                    'is_verified' => $user['is_verified'],
+                    'auth_key' => $user['auth_key']
+                ];
+                try{
+                    $token = JWTAuth::fromUser($user,$credentials);
+                   // $data = $user;
+                    if ($token){
+                        $user['token'] = $token;
+
+                        $station_array = array();
+                        $has_ecas_permission = false;
+
+                        foreach ($user->station_users as $key => $value) {
+                          array_push($station_array, $value->station);
+                        }
+                        if($user->role !=null and $user->role->role_permissions !=null ){
+                        foreach ($user->role->role_permissions as $key => $value) {
+
+                          if($value->permission['name'] == 'Add and Manage Customers'){
+                              $has_ecas_permission = true;
+                          }
+                        }
+                      }
+                        //return $perm_array;
+                        if($user->role == null){
+                            $user->role = (object)['name' => 'Nil'];
+                        }
+
+                        if($user->companies == null){
+                            $user->companies = (object)['name' => 'Nil','id' => 'Nil'];
+                        }
+
+
+                        $data =  (object)[
+                          "company_id"=> $user['company_id'],
+                         "user_id"=> $user['id'],
+                          "stations"=> $station_array,
+                         ];
+
+                        if(!$has_ecas_permission and $user['role_id']  != 'master'){
+                          return $this->response(0, 8000, "permission not set for user", null, 400);
+                        }else{
+                          return $this->response(1, 8000, "authentication successful", $data);
+                        }
+                    }elseif (!$token){
+                        return $this->response(0, 8000, "oop!!! unable to create token with invalid credentials",
+                            null, 400);
+                    }
+                }catch (JWTException $exception){
+                    return $this->response(0, 8000, "oop!!! an error occur while processing token",
+                        null,500);
+                }
+            }else{
+                return $this->response(0, 8000, "invalid email or password",
+                    null, 400);
+            }
+        }
+          else {
+      
+              return $this->response(0, 8000, "user does not exist",
+                     null, 400);
+          }
+    
+    }
    public function passwordreset(Request $request){
         //= $request->get('email');
         $user =  $this->user_service->get_user_by_email($request->get('email'))->first();

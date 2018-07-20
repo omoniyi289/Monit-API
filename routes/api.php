@@ -62,6 +62,7 @@ Route::get('/v1/stock_transfer_mg', 'MigrationController@stock_transfer_migrate'
 Route::get('/v1/uwp', 'UserController@users_with_default_password');
 Route::post('/v1/auth', 'AuthController@auth');
 Route::post('/v1/analytics_login', 'AuthController@analytics_login');
+Route::post('/v1/ecas_login', 'AuthController@ecas_login');
 Route::post('/v1/auth/forgotpass/verifyemail', 'AuthController@passwordreset');
 Route::get('/v1/users/verify/{verification_code}', 'UserController@verify_user');
 Route::post('/v1/users', 'UserController@create');
