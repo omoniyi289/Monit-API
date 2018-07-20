@@ -78,7 +78,6 @@ class AuthController extends BaseController
 
         public function analytics_login(Request $request){
         $user =  $this->user_service->get_user_for_analytics($request->get('email'));
-        //return $user;
         if (!empty($user) || $user != null){
             if ($user['is_verified'] == 0){
                 return $this->response(0, 0, "account yet to be verified",null,400);
@@ -149,8 +148,7 @@ class AuthController extends BaseController
 
         public function ecas_login(Request $request){
         $user =  $this->user_service->get_user_for_analytics($request->get('email'));
-        //return $request->all();
-
+      
         if (!empty($user) || $user != null){
             if ($user['is_verified'] == 0){
                 return $this->response(0, 0, "account yet to be verified",null,400);
@@ -195,7 +193,9 @@ class AuthController extends BaseController
                         $data =  (object)[
                           "company_id"=> $user['company_id'],
                          "user_id"=> $user['id'],
-                          "stations"=> $station_array,
+                         "username"=> $user['fullname'],
+                         "email"=> $user['email'],
+                         "stations"=> $station_array,
                          ];
 
                         if(!$has_ecas_permission and $user['role_id']  != 'master'){
