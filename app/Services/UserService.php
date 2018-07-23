@@ -78,6 +78,13 @@ class UserService
         return $user;
         
     }
+    ///e360 customer acquisation system
+    public function get_user_for_ecas($email)
+    {
+        $user = User::where("email", $email)->with('role.role_permissions.permission')->with('companies:id,sms_sender_id')->with('station_users.station:id,name')->get()->first();
+        return $user;
+        
+    }
 
     public function get_user_by_username($username)
     {

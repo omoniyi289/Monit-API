@@ -147,7 +147,7 @@ class AuthController extends BaseController
     }
 
         public function ecas_login(Request $request){
-        $user =  $this->user_service->get_user_for_analytics($request->get('email'));
+        $user =  $this->user_service->get_user_for_ecas($request->get('email'));
       
         if (!empty($user) || $user != null){
             if ($user['is_verified'] == 0){
@@ -195,6 +195,7 @@ class AuthController extends BaseController
                          "user_id"=> $user['id'],
                          "username"=> $user['fullname'],
                          "email"=> $user['email'],
+                          "company_sms_sender_id"=> $user->companies->sms_sender_id,
                          "stations"=> $station_array,
                          ];
 
