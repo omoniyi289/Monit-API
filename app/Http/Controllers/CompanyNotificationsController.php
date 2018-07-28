@@ -38,23 +38,24 @@ class CompanyNotificationsController extends BaseController
     public function get_all(){
         $resource_options = $this->parse_resource_options();
         $data = $this->company_notification_service->get_all($resource_options);
-        return $this->response(1, 8000, "all users", $data);
+        return $this->response(1, 8000, "all notifications", $data);
     }
-    public function get_by_company_id($company_id) {
+
+    public function get_by_params(Request $request) {
         $resource_options = $this->parse_resource_options();
-        $data = $this->company_notification_service->get_by_company_id($company_id,$resource_options);
-        return $this->response(1, 8000, "requested users", $data);
+        $data = $this->company_notification_service->get_by_params($request->all());
+        return $this->response(1, 8000, "requested notifications", $data);
     }
      public function get_by_id($id) {
         $resource_options = $this->parse_resource_options();
         $data = $this->company_notification_service->get_by_id($id,$resource_options);
-        return $this->response(1, 8000, "requested users", $data);
+        return $this->response(1, 8000, "requested notifications", $data);
     }
     public function delete($id) {
             try {
                 $resource_options = $this->parse_resource_options();
                 $data = $this->company_notification_service->delete($id, $resource_options);
-                return $this->response(1, 8000, "company deleted", $data);
+                return $this->response(1, 8000, "notification deleted", $data);
             }catch (Exception $exception){
                 return $this->response(0, 8000, $exception->getMessage(), null,500);
             }

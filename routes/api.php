@@ -49,11 +49,8 @@ Route::get('/v1/demo_treadings_mg', 'FGDemoMigrationController@treadings_migrate
 Route::get('/v1/demo_pt1_product_mg', 'FGDemoMigrationController@pt1_product_migrate');
 Route::get('/v1/demo_pt2_product_mg', 'FGDemoMigrationController@pt2_product_migrate');
 
-/*Route::get('/v1/items_mg', 'MigrationController@items_migrate');
-Route::get('/v1/item_variants_mg', 'MigrationController@item_variants_migrate');
-Route::get('/v1/stock_count_mg', 'MigrationController@stock_count_migrate');
-Route::get('/v1/stock_transfer_mg', 'MigrationController@stock_transfer_migrate');
-*/
+Route::get('/v1/pm_setter', '\App\Initializers\CompanyPermissionAndNofiticationSetter@pm_setter');
+
 
 
 /*
@@ -84,8 +81,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     /*
     * USER ENDPOINT
      * * */
-    Route::get('/v1/users', 'UserController@get_all');
-    Route::get('/v1/users', 'UserController@get_all');
+    Route::get('/v1/users', 'UserController@get_by_params');
     Route::get('/v1/users/{user_id}', 'UserController@get_by_id');
     Route::post('/v1/users/{user_id}/roles', 'UserController@add_roles');
     Route::patch('/v1/users/profile/{user_id}', 'UserController@profile_update');
@@ -129,6 +125,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
      * COMPANY ENDPOINT
      * */
     Route::get('/v1/companies/e360_super_user', 'CompanyController@get_active');
+    Route::get('/v1/companies/all', 'CompanyController@get_all');
     Route::get('/v1/companies/first_company_user/{user_id}', 'CompanyController@get_for_prime_user');
     Route::get('/v1/companies/company_user/{company_id}', 'CompanyController@get_by_id');
     Route::post('/v1/companies', 'CompanyController@create');
@@ -150,12 +147,26 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 
 
     /*
-     * COMPANY NOTIFICATONS  ENDPOINT
+     * NOTIFICATONS  SETTINGS ENDPOINT
      * */
-    Route::get('/v1/notification_settings', 'CompanyNotificationsController@get_all');
-    Route::get('/v1/notification_settings/{company_id}', 'CompanyNotificationsController@get_by_company_id');
+    Route::get('/v1/notification_settings', 'CompanyNotificationsController@get_by_params');
     Route::post('/v1/notification_settings', 'CompanyNotificationsController@create');
     
+    /*
+     *Company Notifications ENDPOINT
+     * */
+    Route::get('/v1/company_notifications', 'CompanyNotificationsController@get_by_params');  
+    Route::post('/v1/company_notifications', 'CompanyNotificationsController@create');
+    Route::get('/v1/company_notifications/{id}', 'CompanyNotificationsController@get_by_id');
+ 
+
+     /*
+     *Company Permissions ENDPOINT
+     * */
+    Route::get('/v1/company_permissions', 'CompanyPermissionController@get_by_params');
+    Route::post('/v1/company_permissions', 'CompanyPermissionController@create');
+    Route::get('/v1/company_permissions/{id}', 'CompanyPermissionController@get_by_id');
+    Route::put('/v1/company_permissions/{id}', 'CompanyPermissionController@update');
 
 
      /*

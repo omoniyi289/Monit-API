@@ -156,6 +156,11 @@ class UserController extends BaseController
         return $this->response(1, 8000, "user successfully updated", $data);
     }
 
+     public function get_by_params(Request $request){
+        $company_users = $this->user_service->get_by_params($request->all());
+        return $this->response(1, 8000, "registered users", $company_users);
+    }
+
     public function get_by_id($user_id) {
         $resource_options = $this->parse_resource_options();
         $data = $this->user_service->get_by_id($user_id,$resource_options);

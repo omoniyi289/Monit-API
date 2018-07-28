@@ -58,6 +58,11 @@ class UserService
         $user = $this->get_requested_user($user_id);
         $this->database->beginTransaction();
         try {
+            if(isset($data['make_super_admin']) && $data['make_super_admin'] == 'Yes'){
+                //make user an e360 super admin
+                $data['company_id'] = 'master';
+                $data['role_id'] = 'master';
+            }
             $this->user_repository->update($user, $data);
         } catch (Exception $exception) {
             $this->database->rollBack();
@@ -84,6 +89,16 @@ class UserService
         $user = User::where("email", $email)->with('role.role_permissions.permission')->with('companies:id,sms_sender_id')->with('station_users.station:id,name')->get()->first();
         return $user;
         
+    }
+    public function get_by_params($request)
+    {
+        $result = User::with('companies:id,name');
+        if(isset($request['company_id'])){
+            $company_id = $request['company_id'];
+            $result = $result->where('company_id', $company_id);
+
+        }  
+        return $result->get();
     }
 
     public function get_user_by_username($username)

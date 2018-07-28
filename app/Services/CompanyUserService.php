@@ -52,6 +52,11 @@ class CompanyUserService
         try {
             $data['is_verified'] = 1;
             $data['auth_key'] = str_random(6);
+            if(isset($data['make_super_admin']) && $data['make_super_admin'] == 'Yes'){
+                //make user an e360 super admin
+                $data['company_id'] = 'master';
+                $data['role_id'] = 'master';
+            }
             $company_user = $this->company_user_repository->create($data);
             ///add station_company_user
             foreach($data['selected_stations'] as $value) {
@@ -80,6 +85,11 @@ class CompanyUserService
         try {
             StationUsers::where('company_user_id',$company_user_id)->delete();
             UserNotifications::where('company_user_id',$company_user_id)->delete();
+            if(isset($data['make_super_admin']) && $data['make_super_admin'] == 'Yes'){
+                //make user an e360 super admin
+                $data['company_id'] = 'master';
+                $data['role_id'] = 'master';
+            }
             $this->company_user_repository->update($company_user, $data);
             if(isset($data['selected_stations'])){
             foreach($data['selected_stations'] as $value) {

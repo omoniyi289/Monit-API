@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\NotificationModules;
+use App\Company;
 
-class CompanyNotifications extends Model
+class CompanyNotification extends Model
 {
     protected $fillable = [
         'notification_id','notification_name', 'company_id', 'notification_weekday','notification_daytime',
@@ -13,9 +15,12 @@ class CompanyNotifications extends Model
 
    
  protected $table = 'company_notifications';
- //public function company_user_role_privileges() {
-   //     return $this->hasManyThrough(Permission::class, RolePermission::class, 'permission_id', 'id', );
-    //}
+  public function notification(){
+    	return $this->hasOne(NotificationModules::class, "id", 'notification_id');
+    } 
+    public function company(){
+        return $this->belongsTo(Company::class,"company_id");
+    }  
 
     
 }
