@@ -47,8 +47,8 @@ class ROPSReportMail extends Mailable
                  'station' => $this->pdf[0]['station']
 
             ]);
-           //Dear First, Please find attached the daily operations report for company_name stations
-        foreach ($this->pdf as $value) {
+   
+           foreach ($this->pdf as $value) {
             $file = storage_path('app/rops_reports/'.$value['station'].'.pdf');
 
             $mail_build = $mail_build->attach($file, [

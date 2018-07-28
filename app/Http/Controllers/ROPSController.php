@@ -19,8 +19,8 @@ class ROPSController extends BaseController
          //return $request;
 
         $rops_request = $request->get('rops',[]);
-        $survey_date = date_format(date_create($rops_request['survey_date']),"Y-m-d");
-        $surveys = $this->rops_service->get_by_date($survey_date);
+       // $survey_date = date_format(date_create($rops_request['survey_date']),"Y-m-d");
+        $surveys = $this->rops_service->get_by_params($rops_request);
         if(count($surveys) > 0){
              return $this->response(0, 8000, "Oops! survey already submitted for today",null,400);
           }
