@@ -17,7 +17,7 @@ ssh root@185.130.207.215 <<-EOF
     mkdir ./temp # create new temp directory for next deployment
     cp ./lara-config/.env ./live
     cd ./live
-    composer install --no-dev --optimize-autoloader --no-plugins --no-scripts
+    composer install --no-dev --no-plugins --no-scripts
     #composer update
     php artisan key:generate
     #php artisan route:cache resolve closure based routes before caching
