@@ -76,13 +76,13 @@ class ProductPriceChangeLogService
     public function create_new_request($new_data)
     {
                    
-                    $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $new_data['station_id'])->get()->first();
-                    
-                   
+                    $station = Station::with('station_users.user.role.role_permissions.permission')->where('id', $new_data['station_id'])->get()->first();  
                     /*get users with privilege to this station with permission to approve price change(APCR)*/
                    $product= Products::where('id', $new_data['product_id'])->first();
                    $new_data['product'] = $product['code'];   
-
+                   if(isset($new_data['v1_id'])){
+                      unset($new_data['v1_id']);
+                    }
                     $data = ProductChangeLogs::create($new_data);
                    
                     $data['product_name'] = $product['name'];

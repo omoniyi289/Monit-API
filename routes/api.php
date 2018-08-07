@@ -378,19 +378,25 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 /*
      *Velox Customers ENDPOINT
      * */
-    Route::get('/v1/velox_customer_account', 'VeloxCustomerController@get_by_params');
-    Route::post('/v1/velox_customer_account', 'VeloxCustomerController@create');
-    Route::get('/v1/velox_customer_account/{id}', 'VeloxCustomerController@get_by_id');
-    Route::patch('/v1/velox_customer_account/{id}', 'VeloxCustomerController@update');
+    Route::get('/v1/velox_customer_accounts', 'VeloxCustomerController@get_by_params');
+    Route::post('/v1/velox_customer_accounts', 'VeloxCustomerController@create');
+    Route::get('/v1/velox_customer_accounts/{id}', 'VeloxCustomerController@get_by_id');
+    Route::patch('/v1/velox_customer_accounts/{id}', 'VeloxCustomerController@update');
 
 /*
      *Velox Customers ENDPOINT
      * */
-    Route::get('/v1/velox_manage_payment', 'VeloxPaymentController@get_by_params');
-    Route::post('/v1/velox_manage_payment', 'VeloxPaymentController@create');
-    Route::get('/v1/velox_manage_payment/{id}', 'VeloxPaymentController@get_by_id');
-    Route::patch('/v1/velox_manage_payment/{id}', 'VeloxPaymentController@update');
+    Route::get('/v1/velox_manage_payments', 'VeloxPaymentController@get_by_params');
+    Route::post('/v1/velox_manage_payments', 'VeloxPaymentController@create');
+    Route::get('/v1/velox_manage_payments/{id}', 'VeloxPaymentController@get_by_id');
+    Route::patch('/v1/velox_manage_payments/{id}', 'VeloxPaymentController@update');
 
+/*
+     *Velox Customers ENDPOINT
+     * */
+    Route::get('/v1/velox_manage_purchases', 'VeloxPurchaseController@get_by_params');
+    Route::get('/v1/velox_manage_purchases/{id}', 'VeloxPurchaseController@get_by_id');
+    
      /*
        Dashboard ENDPOINT
         */
