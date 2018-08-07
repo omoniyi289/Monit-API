@@ -16,7 +16,6 @@ class CreateItemvariantsByStationTable extends Migration
         Schema::create('itemvariants_by_station', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('item_id');    
-            //$table->foreign('item_id')->references('id')->on('items')->onUpdate('cascade');
             $table->integer('company_id')->nullable();    
             $table->integer('station_id')->nullable();
             $table->string('variant_option');
