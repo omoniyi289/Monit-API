@@ -164,6 +164,13 @@ return [
                     "UI_slug" => "AMPS30"
                 ],             
         ],
+         "velox_customer_management" => [
+                "vcm" => [
+                    "name" => "Velox Customer Management",
+                    "description" => "permission to use Velox Management tools",
+                    "UI_slug" => "EVCM50"
+                ],             
+        ],
 
         "fuel_supply" => [
                 "request_supply" => [

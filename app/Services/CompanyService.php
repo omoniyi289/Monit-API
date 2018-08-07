@@ -6,8 +6,11 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Http\Request;
 use App\Company;
+use App\RolePermission;
 use App\Models\CompanyPermission;
 use App\Models\CompanyNotification;
+use App\Models\UserNotifications;
+
 class CompanyService
 {
     private $database;
@@ -51,7 +54,13 @@ class CompanyService
 
              $new_permission_ids = array();
              $new_notification_ids = array();
-             if(isset($data['selected_privileges'])){
+
+            //get current company notifications and permissions
+                $current_permissions = CompanyPermission::where('company_id', $data['id'])->get(['permission_id']);
+
+                $current_notifications = CompanyNotification::where('company_id', $data['id'])->get(['notification_id']);
+            //delete and re-update with new notifications and permissions forthe company
+              if(isset($data['selected_privileges'])){
                  CompanyPermission::where('company_id', $data['id'])->delete();
                  foreach ($data['selected_privileges'] as $value) {
                     CompanyPermission::create([ 'permission_id' => $value['id'], 'company_id' => $data['id']]);
@@ -66,12 +75,20 @@ class CompanyService
                     array_push($new_notification_ids, $value['id']);
                     }
                 }
-            //clean up user_notifications and their role permssions
-                $current_permissions = CompanyPermission::where('company_id', $data['id'])->get(['permission_id']);
 
-                $current_notifications = CompanyNotification::where('company_id', $data['id'])->get(['notification_id']);
+            foreach ($current_permissions as $key => $value) {
+              if(!in_array($value['permission_id'], $new_permission_ids)){
+                    //permission no longer exist for the company so delete or all their user roles with it
+                    RolePermission::where('permission_id', $value['permission_id'])->where('company_id', $data['id'])->delete();
+              }
+            }
 
-
+            foreach ($current_notifications as $key => $value) {
+              if(!in_array($value['notification_id'], $new_notification_ids)){
+                    //notifications no longer exist for the company so delete or all their users with it
+                    UserNotifications::where('notification_id', $value['notification_id'])->where('company_id', $data['id'])->delete();
+              }
+            }
 
         } catch (Exception $exception) {
             $this->database->rollBack();

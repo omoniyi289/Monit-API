@@ -57,6 +57,7 @@ class CompanyUserService
                 $data['company_id'] = 'master';
                 $data['role_id'] = 'master';
             }
+            
             $company_user = $this->company_user_repository->create($data);
             ///add station_company_user
             foreach($data['selected_stations'] as $value) {
@@ -64,7 +65,7 @@ class CompanyUserService
                 }
             ///add station_company_user
             foreach($data['selected_notifications'] as $value) {
-                    UserNotifications::create(['company_user_id' => $company_user['id'],'notification_id' => $value['id'], 'name' => $value['name']]);
+                    UserNotifications::create(['company_user_id' => $company_user['id'],'notification_id' => $value['id'], 'name' => $value['name'], 'company_id' => $data['company_id']]);
                 }                
             
 
@@ -98,7 +99,7 @@ class CompanyUserService
             }
             if(isset($data['selected_notifications'])){
             foreach($data['selected_notifications'] as $value) {
-                    UserNotifications::create(['company_user_id' => $company_user_id, 'notification_id' => $value['id'], 'name' => $value['name']]);
+                    UserNotifications::create(['company_user_id' => $company_user_id, 'notification_id' => $value['id'], 'name' => $value['name'], 'company_id' => $data['company_id']]);
                 }
             }
         } catch (Exception $exception) {
