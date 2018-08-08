@@ -160,7 +160,7 @@
                                     <table border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td align="center" style="border-radius: 3px;" bgcolor="#398bf7">
-                                                <a href="https://www.e360stationmanager.com/#/login"
+                                                <a href="{{env('FRONTEND_URL')}}/#/login"
                                                    style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 12px 50px; border-radius: 2px; border: 1px solid #398bf7; display: inline-block;">
                                                     Login Here</a>
                                             </td>
@@ -183,7 +183,7 @@
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 20px 30px 20px 30px; color: #666666; font-family: &apos;Lato&apos;, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 25px;">
-                        <p style="margin: 0;"><a href="https://www.e360stationmanager.com/#/login" target="_blank" style="color: #398bf7;">https://www.e360stationmanager.com/#/login</a>
+                        <p style="margin: 0;"><a href="{{env('FRONTEND_URL')}}/#/login" target="_blank" style="color: #398bf7;">{{env('FRONTEND_URL')}}/#/login</a>
                         </p>
                     </td>
                 </tr>

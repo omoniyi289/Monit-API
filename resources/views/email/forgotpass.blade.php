@@ -74,7 +74,6 @@
 
 <!-- HIDDEN PREHEADER TEXT -->
 <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Poppins', sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
-    We're thrilled to have you here! Get ready to dive into your new account.
 </div>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%"
@@ -137,12 +136,13 @@
             <![endif]-->
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                 <!-- COPY -->
+                
                 <tr>
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
                         <p style="margin: 0;">A request was sent through your email to reset your e360 station manager account password.</p>
                         <p style="margin: 0;">Your temporary password is <b>{{$new_pass}}</b>. </p>
-                        <p><a href="https://www.e360stationmanager.com/#/login">LOGIN</a> to change it to your desired password in your profile settings</p>
+                        <p><a href="{{env('FRONTEND_URL')}}/#/login">LOGIN</a> to change it to your desired password in your profile settings</p>
                     </td>
                 </tr>
                 <!-- COPY -->
