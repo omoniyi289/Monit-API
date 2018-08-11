@@ -155,13 +155,7 @@ class ProductPriceChangeLogService
 
 
 
-
-
-
-
-
-                 
-                  return $data;
+return  ProductChangeLogs::where("id", $data['id'])->with('product')->with('approver')->get()->first();
     }
     public function get_by_station_id($station_id, array $options = [])
     {

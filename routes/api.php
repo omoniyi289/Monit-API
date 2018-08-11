@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 /*
  * V1-V2 MIGRATION ENDPOINT ENDPOINT
  * */
+
+Route::get('/v1/update_demo_readings', 'MigrationController@get_up_to_date_readings_of_a_reliable_station_for_demo');
 Route::get('/v1/company_mg', 'MigrationController@company_migrate');
 Route::get('/v1/user_mg', 'MigrationController@user_migrate');
 Route::get('/v1/station_mg', 'MigrationController@station_migrate');

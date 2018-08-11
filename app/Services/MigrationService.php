@@ -44,6 +44,27 @@ class MigrationService
     private $dbname = "station_manager_1";
     private $conn ='';
 
+    private $local_servername = "127.0.0.1";
+    private $local_username = "newroot";
+    private $local_password = "some_password";
+    private $local_dbname = "station_manager";
+    private $local_conn ='';
+
+    private $staging_servername = "185.130.207.215";
+    private $staging_username = "samuel.j";
+    private $staging_password = "Tr-3re@Aza4r";
+    private $staging_dbname = "station_manager_test";
+    private $staging_conn ='';
+
+    private $prod_servername = "34.246.63.12";
+    private $prod_username = "niyio";
+    private $prod_password = "tu@r7r7brA+a";
+    private $prod_dbname = "station_manager";
+    private $prod_conn ='';
+
+
+
+
     private $ms_servername = "185.173.25.163";
     private $ms_username = "samuel.j";
     private $ms_password = "P@ssw0rd%%";
@@ -57,12 +78,14 @@ class MigrationService
     {
         $this->database = $database;
         $this->dispatcher = $dispatcher;
-       // $this->company_repository = $company_repository;
-        // Create connection
+  
         $this->conn =   mysqli_connect($this->servername, $this->username, $this->password, $this->dbname);
-        //$this->ms_conn =   mssql_connect($this->ms_servername, $this->ms_username, $this->ms_password);
-       // $selected = mssql_select_db($this->ms_dbname, $this->ms_conn)
-  //or die("Couldn't open ms database "); 
+        $this->local_conn =   mysqli_connect($this->local_servername, $this->local_username, $this->local_password, $this->local_dbname);
+
+        $this->staging_conn =   mysqli_connect($this->staging_servername, $this->staging_username, $this->staging_password, $this->staging_dbname);
+      
+      $this->prod_conn =   mysqli_connect($this->prod_servername, $this->prod_username, $this->prod_password, $this->prod_dbname);
+      
         // Check connection
        if (!$this->conn) {
                  return ("Connection failed: " . mysqli_connect_error());
@@ -832,7 +855,7 @@ class MigrationService
         $counter = 0;
         try{
             
-                 $sql = "SELECT * FROM daily_totalizer_reading";
+          $sql = "SELECT * FROM daily_totalizer_reading";
             
             $result = mysqli_query($this->conn,$sql);
             //return mysqli_num_rows($result);
@@ -1230,6 +1253,51 @@ class MigrationService
         $this->database->commit();
         return $counter;
     }
+
+
+public function get_up_to_date_readings_of_a_reliable_station_for_demo(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+        $sql = "SELECT * FROM daily_stock_readings where station_id = 13";    
+        $result = mysqli_query($this->prod_conn,$sql);
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){    
+                      if(true){
+                     $counter++;         
+                $insert = "INSERT INTO daily_stock_readings ('company_id', 'station_id', 'tank_id', 'status', 'tank_code', 'created_at', 'reading_date', 'phy_shift_end_volume_reading' ,
+                                 'phy_shift_start_volume_reading', 'product', 'return_to_tank', 'end_delivery' ) VALUES ( 1, 1, '".$row['tank_id']."', '".$row['status']."', '".$row['tank_code']."', '".$row['created_at']."', '".$row['reading_date']."', '".$row['phy_shift_end_volume_reading']."', '".$row['phy_shift_start_volume_reading']."', '".$row['product']."', '".$row['return_to_tank']."', '".$row['end_delivery']."' ) ";
+
+                  $result2 = mysqli_query($this->prod_conn,$insert);
+                }
+            }
+           }
+
+           $sql = "SELECT * FROM daily_totalizer_readings where station_id = 13";    
+        $result = mysqli_query($this->prod_conn,$sql);
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){    
+                      if(true){
+                     $counter++;         
+                $insert = "INSERT INTO daily_totalizer_readings ('company_id', 'station_id', 'pump_id', 'status', 'nozzle_code', 'created_at', 'reading_date', 'open_shift_totalizer_reading' ,
+                                 'close_shift_totalizer_reading', 'product', 'ppv', 'cash_collected' ) VALUES ( 1, 1, '".$row['pump_id']."', '".$row['status']."', '".$row['nozzle_code']."', '".$row['created_at']."', '".$row['reading_date']."', '".$row['open_shift_totalizer_reading']."', '".$row['close_shift_totalizer_reading']."', '".$row['product']."', '".$row['ppv']."', '".$row['cash_collected']."' ) ";
+
+                  $result2 = mysqli_query($this->prod_conn,$insert);
+                }
+            }
+           }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+   
  
        
 }
