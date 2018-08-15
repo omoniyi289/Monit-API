@@ -35,7 +35,7 @@ class CompanyService
                     CompanyPermission::create([ 'permission_id' => $value['id'], 'company_id' => $company['id']]);
                 }
                 foreach ($data['selected_notifications'] as $value) {
-                    CompanyNotification::create([ 'notification_id' => $value['id'],'notification_name' => $value['name'], 'company_id' => $company['id']]);
+                    CompanyNotification::create([ 'notification_id' => $value['id'] , 'notification_UI_slug' => $value['UI_slug'] , 'notification_name' => $value['name'], 'company_id' => $company['id']]);
                 }
             
         }catch (Exception $exception){
@@ -43,7 +43,7 @@ class CompanyService
             throw $exception;
         }
         $this->database->commit();
-        return Company::where('id', $company['id'])->with('company_notifications.notification:id,name')->with('company_permissions.permission')->get()->first();
+        return Company::where('id', $company['id'])->with('company_notifications.notification')->with('company_permissions.permission')->get()->first();
     }
      public function update($company_id, array $data)
     {
@@ -58,8 +58,12 @@ class CompanyService
             //get current company notifications and permissions
                 $current_permissions = CompanyPermission::where('company_id', $data['id'])->get(['permission_id']);
 
-                $current_notifications = CompanyNotification::where('company_id', $data['id'])->get(['notification_id']);
-            //delete and re-update with new notifications and permissions forthe company
+                $current_notifications = CompanyNotification::where('company_id', $data['id'])->get();
+                $current_notifications_array =  array();
+                foreach ($current_notifications as $key => $value) {
+                    array_push($current_notifications_array, $value);
+                 }
+            //delete and re-update with new notifications and permissions for the company
               if(isset($data['selected_privileges'])){
                  CompanyPermission::where('company_id', $data['id'])->delete();
                  foreach ($data['selected_privileges'] as $value) {
@@ -71,7 +75,15 @@ class CompanyService
              if(isset($data['selected_notifications'])){
                  CompanyNotification::where('company_id', $data['id'])->delete();
                  foreach ($data['selected_notifications'] as $value) {
-                    CompanyNotification::create([ 'notification_id' => $value['id'],'notification_name' => $value['name'],  'company_id' => $data['id']]);
+                    //if company alreadt set notifcation weekday and daytime, keep the settings
+                    $notification_daytime= null;
+                    $notification_weekday= null;
+                    $key = array_search($value['id'], array_column($current_notifications_array, 'notification_id'));
+                     $notification_weekday= $current_notifications_array[$key]['notification_weekday'];
+                     $notification_daytime= $current_notifications_array[$key]['notification_daytime'];
+                  
+                   
+                    CompanyNotification::create(['notification_id' => $value['id'],'notification_name' => $value['name'],'notification_UI_slug' => $value['UI_slug'],  'company_id' => $data['id'],'notification_weekday' => $notification_weekday,  'notification_daytime' => $notification_daytime ]);
                     array_push($new_notification_ids, $value['id']);
                     }
                 }
@@ -95,7 +107,7 @@ class CompanyService
             throw $exception;
         }
         $this->database->commit();
-        return Company::with('company_permissions.permission')->with('company_notifications.notification:id,name')->get();
+        return Company::with('company_permissions.permission')->with('company_notifications.notification')->get();
     }
     public function get_company_by_name($name){
         return $this->company_repository->get_where('name',$name);
@@ -106,15 +118,15 @@ class CompanyService
     }
 
     public function get_all(array $options = []){
-        return Company::with('company_permissions.permission:id,name')->with('company_notifications.notification:id,name')->get();
+        return Company::with('company_permissions.permission:id,name')->with('company_notifications.notification')->get();
     }
      public function get_active(array $options = []){
-        return Company::with('company_permissions.permission')->with('company_notifications.notification:id,name')->where('active', 1)->get();
+        return Company::with('company_permissions.permission')->with('company_notifications.notification')->where('active', 1)->get();
     }
     public function get_by_id($user_id, array $options = [])
     {
         ///leave it at get, else trouble in frontend
-        return Company::with('company_permissions.permission')->with('company_notifications.notification:id,name')->where('id', $user_id)->get();
+        return Company::with('company_permissions.permission')->with('company_notifications.notification')->where('id', $user_id)->get();
     }
     public function get_for_prime_user($user_id, array $options = [])
     {

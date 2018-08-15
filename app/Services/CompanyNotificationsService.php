@@ -57,7 +57,7 @@ class CompanyNotificationsService
 
        public function get_by_params($request)
     {
-        $result = CompanyNotification::with('notification:id,name');
+        $result = CompanyNotification::with('notification');
         if(isset($request['company_id'])){
             $company_id = $request['company_id'];
             $result = $result->where('company_id', $company_id);
