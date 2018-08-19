@@ -10,30 +10,29 @@ namespace App\Reposities;
 use Illuminate\Support\Facades\DB;
 use App\User;
 use Core\Repository\BaseRepository;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class VeloxPaymentRepository 
 {
 
-    // public function create(array $data){
+     public function create(array $data){
 
-    //     return DB::insert('insert into company_vendors (company_id, vendor_id, created_at, updated_at, status) values (?,?,?,?,?)',[ $data['company_id'], $data['vendor_id'], date("Y-m-d H:i:s"), date("Y-m-d H:i:s"), 'Request Pending']);
-    // }
+   $client = new Client(); //GuzzleHttp\Client
+    $response = $client->request('POST',env('VELOX_API_URL').'/sm_manage_payments',[
+        'form_params' => $data ] 
+        );
+     $result= json_decode($response->getBody()->getContents());
+     return $result;
+    }
 
-    // public function update($data){
-    //     return DB::update('update company_vendors set status = ? where id = ?', [$data['status'], $data['id']]);
-    // }
-
-    // public function get_by_params($vendor_id){
-
-    //     return DB::connection('mysql2')->select('select p_history.* ,
-
-    //          WHERE customer_vendor.vendor_id = ?' , [$vendor_id]);
-
-    // }
-    
-    // public function delete($data){
-    //     $company_user->fill($data);
-    //     $company_user->save();
-    //     return $company_user;
-    // }
+   public function get_by_params($request){
+      //return $request;
+    $client = new Client(); //GuzzleHttp\Client
+    $response = $client->request('GET',env('VELOX_API_URL').'/sm_manage_payments',[
+        'query' => $request ] 
+        );
+     $result= json_decode($response->getBody()->getContents());
+     return $result;
+    }
 }

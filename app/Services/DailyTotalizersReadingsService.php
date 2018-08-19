@@ -13,13 +13,25 @@ use Illuminate\Events\Dispatcher;
 use App\Models\DailyTotalizerReadings;
 use App\Pumps;
 use App\ProductPrices;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Station;
+use App\Services\StationService;
+use Maatwebsite\Excel\Facades\Excel;
+
 class DailyTotalizersReadingsService
 {
     private $database;
+    private $station_service;
 
-    public function __construct(DatabaseManager $database)
+    public function __construct(DatabaseManager $database, StationService $station_service)
     {
         $this->database = $database;
+        $this->station_service = $station_service;
+        $this->csv_error_log = array();
+        $this->csv_success_rows = array();
+        $this->user_station_ids = array();
+        $this->current_user = array();
     }
     public function create(array $data) {
         $this->database->beginTransaction();
@@ -41,6 +53,43 @@ class DailyTotalizersReadingsService
         }
         $this->database->commit();
         return $pump;
+    }
+
+    public function upload_parsed_csv_data(array $data) {
+        $this->database->beginTransaction();
+        //return $data;
+        try{
+                foreach ($data['readings'] as $value) {
+                    $company_id = $value['company_id'];
+                    $station_id = $value['station_id'];
+                    $pump_id = $value['pump_id'];
+                    $nozzle_code = $value['pump_nozzle_code'];
+                    $opening_totalizer = isset($value['opening_totalizer']) ? $value['opening_totalizer'] : 0;
+                    $closing_totalizer = isset($value['closing_totalizer']) ? $value['closing_totalizer'] : 0;
+                    $created_by = $data['last_modified_by'];
+                    $reading_date = $value['date'];
+                    $status = 'Closed'; 
+                    $product = $value['product'];
+                    $ppv = isset($value['ppv']) ? $value['ppv'] : 0;
+                    $cash_collected = isset($value['cash_collected']) ? $value['cash_collected'] : 0;
+                    $last_modified_by = $data['last_modified_by'];
+
+                    //to avoid double entry
+                    $present = DailyTotalizerReadings::where('pump_id', $pump_id)->where('reading_date', 'LIKE', "%".date_format(date_create($reading_date),"Y-m-d")."%")->get();
+                    if(count($present) > 0){
+                            continue;
+                        }
+                    //else continue insert
+                        $stock = DailyTotalizerReadings::create(['company_id' => $company_id, 'station_id' => $station_id, 'pump_id' => $pump_id,'nozzle_code' => $nozzle_code, 'open_shift_totalizer_reading' => $opening_totalizer, 'close_shift_totalizer_reading' => $closing_totalizer,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'ppv'=>$ppv,
+                            'cash_collected'=>$cash_collected,'last_modified_by'=>$last_modified_by ]);
+                    }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $stock;
     }
      public function update(array $data)
     {
@@ -94,6 +143,40 @@ class DailyTotalizersReadingsService
         }
         return $query->get();
     }
+
+    public function handle_file_upload($request)
+    {
+      $this->current_user = JWTAuth::parseToken()->authenticate();
+      $user_id = $this->current_user->id;
+
+        if($request->hasFile('file')) {
+
+            $fileItself = $request->file('file');
+            $rows = array();
+            $load = Excel::load($fileItself, function($reader) {})->get();
+            $row = $load[0];
+            if(!isset($row->station_name)){
+                array_push($this->csv_error_log , ["message" => "Station Name column not specified"]);
+            }else if(!isset($row->pump_nozzle_code)){
+                array_push($this->csv_error_log , ["message" => "Nozzle Code column not specified"]);
+            }else if(!isset($row->date)){
+                array_push($this->csv_error_log , ["message" => "Date column not specified"]);
+            }else{
+              //to verify if user has access to upload for that station
+               $user_stations_details = $this->station_service->get_stations_by_user_id($user_id);
+               foreach ($user_stations_details as $key => $value) {
+                  array_push($this->user_station_ids, $value['station_id']);
+               }
+
+               ///validate station, tank_code and reading_dae
+                foreach($load as $key => $row) {
+                $this->validate_station_pump_code_and_upload_date($key, $row);
+                }
+            }
+        }
+        return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
+    }
+
     public function get_by_id($stock_id, array $options = [])
     {
         return $this->get_requested_stock($stock_id);
@@ -130,5 +213,34 @@ class DailyTotalizersReadingsService
     private function get_requested_stock($stock_id, array $options = [])
     {
         return DailyTotalizerReadings::where('id', $stock_id)->get();
+    }
+    private function validate_station_pump_code_and_upload_date($key, $row){
+     
+        $station_details  = Station::where('name', $row['station_name'])->get(['id', 'company_id'])->first();
+        $real_key = (int)$key+1;
+        if(count($station_details) == 0){
+            array_push( $this->csv_error_log, ["message" => "Station ". $row['station_name']. " on row ".$real_key." not found, please confirm station name (check spelling)" ] );
+        }if($this->current_user->company_id != 'master' and !in_array($station_details['id'], $this->user_station_ids)){
+            array_push($this->csv_error_log, ["message" => "You are not permitted to upload readings for ". $row['station_name']. " on row ".$real_key ]);
+        }else{
+            $row['station_id'] = $station_details['id'];
+            $row['company_id'] = $station_details['company_id'];
+            $pump_details  = Pumps::with('product:id,code')->where('pump_nozzle_code', $row['pump_nozzle_code'])->where('station_id', $station_details['id'])->get(['id','product_id'])->first();
+
+            if(count($pump_details) == 0){
+                array_push($this->csv_error_log , ["message" => $row['pump_nozzle_code']. " on row ".$real_key." not found for  station ".$row['station_name']. " please confirm nozzle code (check spelling)"]);
+            }else{
+                $row['pump_id'] = $pump_details['id'];
+                $row['product'] = $pump_details->product['code'];
+                $date = "%".date_format(date_create($row['date']),"Y-m-d")."%";
+                $readings_details  = DailyTotalizerReadings::where('nozzle_code', $row['pump_nozzle_code'])->where('station_id', $station_details['id'])->where('reading_date','LIKE', $date)->get(['id'])->first();
+                if(count($readings_details) > 0){
+                    array_push($this->csv_error_log , ["message" => "Reading already exist for ". $row['pump_nozzle_code']. " on row ".$real_key." please contact admin to modify, delete the row for now"]);
+                }else{
+                   array_push($this->csv_success_rows, $row);
+                } 
+            }
+        }
+        
     }
 }

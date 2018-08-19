@@ -21,14 +21,27 @@ class DailyTotalizersReadingsController extends BaseController
 
         $totalizer_request = $request->get('pumps',[]);
         $data = $this->daily_totalizers_readings_service->create($totalizer_request);
-        return $this->response(1, 8000, "stock successfully created", $data);
+        return $this->response(1, 8000, "sales successfully created", $data);
     }
       public function update(Request $request)
     {
         $totalizer_update_request = $request->get('pumps', []);
         $data = $this->daily_totalizers_readings_service->update($totalizer_update_request);
-        return $this->response(1, 8000, "stock successfully updated", $data);
+        return $this->response(1, 8000, "sales successfully updated", $data);
     }
+       public function file_upload(Request $request)
+    {
+        $totalizer_update_request = $request;
+        $data = $this->daily_totalizers_readings_service->handle_file_upload($totalizer_update_request);
+        return $this->response(1, 8000, "sales file loaded", $data);
+    }
+       public function parsed_csv_data(Request $request)
+    {
+        $totalizer_update_request = $request->get('pumps', []);
+        $data = $this->daily_totalizers_readings_service->upload_parsed_csv_data($totalizer_update_request);
+        return $this->response(1, 8000, "sales successfully uploaded", $data);
+    }
+
 
     public function get_all(){
         $resource_options = $this->parse_resource_options();

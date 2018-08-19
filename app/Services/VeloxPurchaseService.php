@@ -28,30 +28,10 @@ class VeloxPurchaseService
         $this->vp_repository = $vp_repository;
     }
    
-    
-     public function get_company_id_on_velox($company_id)
+      public function get_by_params($request)
     {
-        return VeloxVendor::where('sm_company_id', $company_id)->get()->first();
-
+             $result = $this->vp_repository->get_by_params($request);  
+             return $result->data;  
     }
-   
-     public function get_by_params($request)
-    {
-        $result = VeloxFuelPurchaseHistory::where('id', '>', 0);
-        if(isset($request['customer_id'])){
-            $customer_id = $request['customer_id'];
-            $result = $result->where('company_id', $customer_id);
-
-        }  
-
-        if(isset($request['vendor_id'])){
-            $company_id = $request['vendor_id'];
-            $velox_company_detials = $this->get_company_id_on_velox($company_id);
-            $result = $result->where('vendor_id', $velox_company_detials['id']);
-
-        }          
-        return $result->get();
-    }
-  
    
 }
