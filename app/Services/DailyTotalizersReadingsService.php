@@ -220,7 +220,7 @@ class DailyTotalizersReadingsService
         $real_key = (int)$key+1;
         if(count($station_details) == 0){
             array_push( $this->csv_error_log, ["message" => "Station ". $row['station_name']. " on row ".$real_key." not found, please confirm station name (check spelling)" ] );
-        }if($this->current_user->company_id != 'master' and !in_array($station_details['id'], $this->user_station_ids)){
+        }else if($this->current_user->company_id != 'master' and !in_array($station_details['id'], $this->user_station_ids)){
             array_push($this->csv_error_log, ["message" => "You are not permitted to upload readings for ". $row['station_name']. " on row ".$real_key ]);
         }else{
             $row['station_id'] = $station_details['id'];

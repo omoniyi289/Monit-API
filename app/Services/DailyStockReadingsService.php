@@ -15,17 +15,23 @@ use Illuminate\Events\Dispatcher;
 use App\Models\DailyStockReadings;
 use App\Tanks;
 use Maatwebsite\Excel\Facades\Excel;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Station;
+
 
 class DailyStockReadingsService
 {
     private $database;
 
-    public function __construct(DatabaseManager $database)
+    public function __construct(DatabaseManager $database, StationService $station_service)
     {
         $this->database = $database;
         $this->csv_error_log = array();
+        $this->station_service = $station_service;
         $this->csv_success_rows = array();
+        $this->user_station_ids = array();
+        $this->current_user = array();
     }
     public function create(array $data) {
         $this->database->beginTransaction();
@@ -123,9 +129,9 @@ class DailyStockReadingsService
         return $this->get_requested_stock($stock_id);
     }
     public function handle_file_upload($request)
-    {
+    {   $this->current_user = JWTAuth::parseToken()->authenticate();
+        $user_id = $this->current_user->id;
         if($request->hasFile('file')) {
-
             $fileItself = $request->file('file');
             $rows = array();
             $load = Excel::load($fileItself, function($reader) {})->get();
@@ -137,6 +143,11 @@ class DailyStockReadingsService
             }else if(!isset($row->date)){
                 array_push($this->csv_error_log , ["message" => "Date column not specified"]);
             }else{
+                //to verify if user has access to upload for that station
+               $user_stations_details = $this->station_service->get_stations_by_user_id($user_id);
+               foreach ($user_stations_details as $key => $value) {
+                  array_push($this->user_station_ids, $value['station_id']);
+               }
                 foreach($load as $key => $row) {
                 $this->validate_station_tank_code_and_upload_date($key, $row);
                 }
@@ -193,6 +204,8 @@ class DailyStockReadingsService
         $real_key = (int)$key+1;
         if(count($station_details) == 0){
             array_push( $this->csv_error_log, ["message" => "Station ". $row['station_name']. " on row ".$real_key." not found, please confirm station name (check spelling)" ] );
+        }else if($this->current_user->company_id != 'master' and !in_array($station_details['id'], $this->user_station_ids)){
+            array_push($this->csv_error_log, ["message" => "You are not permitted to upload readings for ". $row['station_name']. " on row ".$real_key ]);
         }else{
             $row['station_id'] = $station_details['id'];
             $row['company_id'] = $station_details['company_id'];
