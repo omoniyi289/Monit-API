@@ -7,6 +7,7 @@ use App\Services\CompanyService;
 use App\Services\DailyTotalizersReadingsService;
 use Core\Controllers\BaseController;
 use Illuminate\Http\Request;
+use Response;
 
 class DailyTotalizersReadingsController extends BaseController
 {
@@ -28,6 +29,11 @@ class DailyTotalizersReadingsController extends BaseController
         $totalizer_update_request = $request->get('pumps', []);
         $data = $this->daily_totalizers_readings_service->update($totalizer_update_request);
         return $this->response(1, 8000, "sales successfully updated", $data);
+    }
+    
+     public function get_template_csv(Request $request){
+         //    $headers = array('Content-Type: application/pdf');
+       //     return  response()->download(public_path('/stock.csv'), 'info.pdf', $headers);
     }
        public function file_upload(Request $request)
     {

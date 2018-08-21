@@ -181,10 +181,7 @@ class DailyTotalizersReadingsService
     {
         return $this->get_requested_stock($stock_id);
     }
-   //   public function get_by_station_id($stock_id)
-    //{
-      // return DailyTotalizerReadings::where('station_id',$stock_id)->get();
-    //}
+  
       public function get_by_params($params)
     {   
 

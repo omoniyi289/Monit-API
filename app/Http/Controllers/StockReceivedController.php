@@ -58,7 +58,6 @@ class StockReceivedController extends BaseController
         $pdf = PDF::setPaper('a4', 'portrait');
               $pdf = $pdf->loadView('waybill-note', compact('data'))->setPaper('a4', 'portrait');
            return   $final_pdf = $pdf->download('better.pdf');
-     //$headers = array('Content-Type: application/pdf');
     }
 
     public function get_by_id($stock_id) {

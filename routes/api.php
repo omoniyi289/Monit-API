@@ -72,6 +72,8 @@ Route::get('/v1/paga/connect', 'PagaConnectController@connect');
 Route::get('/v1/paga/live/connect', 'PagaBusinessConnectController@connect');
 Route::get('/v1/stock-received/print-delivery-pdf', 'StockReceivedController@get_delivery_pdf');
 Route::get('/v1/fuel-supply/print-waybill-pdf', 'StockReceivedController@get_waybill_pdf');
+Route::get('/v1/stock-readings/get-template-csv', 'DailyStockReadingsController@get_template_csv');
+Route::get('/v1/totalizer-readings/get-template-csv', 'DailyTotalizersReadingsController@get_template_csv');
 Route::get('/v1/roles/permissions/{role_id}', 'RoleController@get_role_permissions');
 Route::get('/v1/fuel-supply/autorequest', 'FuelSupplyController@autorequest');
 
