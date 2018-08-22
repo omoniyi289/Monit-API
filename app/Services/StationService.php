@@ -76,6 +76,10 @@ class StationService
     {
         return $this->station_repository->get_where("name", $name);
     }
+     public function get_station_by_code($code)
+    {
+        return $this->station_repository->get_where("code", $code);
+    }
     public function get_by_id($station_id, array $options = [])
     {
         return $this->get_requested_station($station_id);
