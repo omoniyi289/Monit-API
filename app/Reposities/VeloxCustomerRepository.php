@@ -5,7 +5,6 @@
  * Date: 1/12/18
  * Time: 6:45 PM
  */
-
 namespace App\Reposities;
 use Illuminate\Support\Facades\DB;
 use App\User;
