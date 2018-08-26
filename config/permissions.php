@@ -167,8 +167,13 @@ return [
          "velox_customer_management" => [
                 "vcm" => [
                     "name" => "Velox Customer Management",
-                    "description" => "permission to use Velox Management tools",
+                    "description" => "permission to manage Customer Accounts, Payments and Purchases",
                     "UI_slug" => "EVCM50"
+                ],
+                "cpcl" => [
+                    "name" => "Approve Velox Customer Payment and Credit Limit",
+                    "description" => "permission to approve Customer Payment and Credit Limit",
+                    "UI_slug" => "EVCMPC50"
                 ],             
         ],
 

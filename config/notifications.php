@@ -16,6 +16,10 @@ return [
                 "station_league_table" => [
                     "name" => "Station League Table Report",
                     "UI_slug" => "SLTR"
+                ]
+                ,"station_league_table_spreadsheet" => [
+                    "name" => "Station League Table Report- Spreadsheet",
+                    "UI_slug" => "SLTSS"
                 ],
                  "bank_payment" => [
                     "name" => "Bank Payments Report",
