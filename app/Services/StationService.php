@@ -53,9 +53,12 @@ class StationService
         $this->database->commit();
         return $station;
     }
-    public function delete($user_id, array $options = [])
+    public function delete($station_id, array $options = [])
     {
-        return  Station::where('id',$user_id)->delete();
+        StationUsers::where('station_id',$station_id)->delete();
+         
+        return Station::where('id',$station_id)->delete();
+        
     }
 
     public function get_all(array $options = []){
