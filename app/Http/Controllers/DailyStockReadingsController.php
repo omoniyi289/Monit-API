@@ -36,10 +36,24 @@ class DailyStockReadingsController extends BaseController
         $data = $this->daily_stock_readings_service->handle_file_upload($stock_update_request);
         return $this->response(1, 8000, "stock file loaded", $data);
     }
+        public function bovas_file_upload(Request $request)
+    {
+        $stock_update_request = $request;
+        $data = $this->daily_stock_readings_service->bovas_handle_file_upload($stock_update_request);
+        return $this->response(1, 8000, "stock file loaded", $data);
+    }
+   
        public function parsed_csv_data(Request $request)
     {
         $stock_update_request = $request->get('stocks', []);
         $data = $this->daily_stock_readings_service->upload_parsed_csv_data($stock_update_request);
+        return $this->response(1, 8000, "stock successfully uploaded", $data);
+    }
+
+        public function bovas_parsed_csv_data(Request $request)
+    {
+        $stock_update_request = $request->get('stocks', []);
+        $data = $this->daily_stock_readings_service->bovas_upload_parsed_csv_data($stock_update_request);
         return $this->response(1, 8000, "stock successfully uploaded", $data);
     }
 

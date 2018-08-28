@@ -176,6 +176,38 @@ class DailyTotalizersReadingsService
         }
         return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
     }
+    public function bovas_handle_file_upload($request)
+    {
+      $this->current_user = JWTAuth::parseToken()->authenticate();
+      $user_id = $this->current_user->id;
+
+        if($request->hasFile('file')) {
+
+            $fileItself = $request->file('file');
+            $rows = array();
+            $load = Excel::load($fileItself, function($reader) {})->get();
+            $row = $load[0];
+            if(!isset($row->station_code)){
+                array_push($this->csv_error_log , ["message" => "Station Code column not specified"]);
+            }else if(!isset($row->product)){
+                array_push($this->csv_error_log , ["message" => "Product column not specified"]);
+            }else if(!isset($row->date)){
+                array_push($this->csv_error_log , ["message" => "Date column not specified"]);
+            }else{
+              //to verify if user has access to upload for that station
+               $user_stations_details = $this->station_service->get_stations_by_user_id($user_id);
+               foreach ($user_stations_details as $key => $value) {
+                  array_push($this->user_station_ids, $value['station_id']);
+               }
+
+               ///validate station, tank_code and reading_dae
+                foreach($load as $key => $row) {
+                $this->bovas_validate_station_pump_code_and_upload_date($key, $row);
+                }
+            }
+        }
+        return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
+    }
 
     public function get_by_id($stock_id, array $options = [])
     {
@@ -240,6 +272,39 @@ class DailyTotalizersReadingsService
                    array_push($this->csv_success_rows, $row);
                 } 
             }
+        }
+        
+    }
+
+    private function bovas_validate_station_pump_code_and_upload_date($key, $row){
+     
+        $station_details  = Station::where('code', $row['station_code'])->get(['id', 'company_id', 'name'])->first();
+        $real_key = (int)$key+1;
+        $row['station_id'] = $station_details['id'];
+        $row['company_id'] = $station_details['company_id'];
+        $row['station_name'] = $station_details['name'];
+        if(count($station_details) == 0){
+            array_push( $this->csv_error_log, ["message" => "Station with code ". $row['station_code']. " on row ".$real_key." not found, please confirm station code (check spelling)" ] );
+        }else if($this->current_user->company_id != 'master' and !in_array($station_details['id'], $this->user_station_ids)){
+            array_push($this->csv_error_log, ["message" => "You are not permitted to upload readings for ". $row['station_code']. " on row ".$real_key ]);
+        }else{
+            
+
+            //$pump_details  = Pumps::with('product:id,code')->where('pump_nozzle_code', $row['pump_nozzle_code'])->where('station_id', $station_details['id'])->get(['id','product_id'])->first();
+
+            // if(count($pump_details) == 0){
+            //     array_push($this->csv_error_log , ["message" => $row['pump_nozzle_code']. " on row ".$real_key." not found for  station ".$row['station_code']. " (".$row['station_name']. ") please confirm nozzle code (check spelling)"]);
+            // }else{
+                //$row['pump_id'] = $pump_details['id'];
+                //$row['product'] = $pump_details->product['code'];
+                $date = "%".date_format(date_create($row['date']),"Y-m-d")."%";
+                $readings_details  = DailyTotalizerReadings::where('nozzle_code', $row['product'])->where('station_id', $station_details['id'])->where('reading_date','LIKE', $date)->get(['id'])->first();
+                if(count($readings_details) > 0){
+                    array_push($this->csv_error_log , ["message" => "Reading already exist for ". $row['product']. " on row ".$real_key." please contact admin to modify, delete the row for now"]);
+                }else{
+                   array_push($this->csv_success_rows, $row);
+                } 
+           // }
         }
         
     }

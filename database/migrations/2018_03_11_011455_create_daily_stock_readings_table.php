@@ -17,8 +17,8 @@ class CreateDailyStockReadingsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('company_id');
             $table->unsignedInteger('station_id');
-            $table->unsignedInteger('tank_id');
-            $table->string("tank_code")->nullable();;
+            $table->unsignedInteger('tank_id')->nullable();
+            $table->string("tank_code")->nullable();
             $table->integer("phy_shift_start_volume_reading")->nullable();
             $table->integer("phy_shift_end_volume_reading")->nullable();
             $table->integer("atg_shift_start_volume_reading")->nullable();

@@ -13,6 +13,7 @@ use App\Reposities\CompanyRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use App\Models\DailyStockReadings;
+use App\Models\DailyTotalizerReadings;
 use App\Tanks;
 use Maatwebsite\Excel\Facades\Excel;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -53,7 +54,7 @@ class DailyStockReadingsService
         $this->database->commit();
         return $stock;
     }
-        public function upload_parsed_csv_data(array $data) {
+    public function upload_parsed_csv_data(array $data) {
         $this->database->beginTransaction();
         //return $data;
         try{
@@ -80,6 +81,56 @@ class DailyStockReadingsService
                     //else continue insert
                         $stock = DailyStockReadings::create(['company_id' => $company_id, 'station_id' => $station_id, 'tank_id' => $tank_id,'tank_code' => $tank_code, 'phy_shift_start_volume_reading' => $phy_shift_start_volume_reading, 'phy_shift_end_volume_reading' => $phy_shift_end_volume_reading,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'return_to_tank'=>$return_to_tank,
                             'end_delivery'=>$end_delivery,'last_modified_by'=>$last_modified_by ]);
+                    }
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $stock;
+    }
+    public function bovas_upload_parsed_csv_data(array $data) {
+        $this->database->beginTransaction();
+        //return $data;
+        try{
+                foreach ($data['readings'] as $value) {
+                    $company_id = $value['company_id'];
+                    $station_id = $value['station_id'];
+                    //$tank_id = $value['tank_id'];
+                    //code is product
+                    $tank_code = $value['product'];
+                    $phy_shift_start_volume_reading = isset($value['opening_dip']) ? $value['opening_dip'] : 0;
+                    $phy_shift_end_volume_reading = isset($value['closing_dip']) ? $value['closing_dip'] : 0;
+                    $created_by = $data['last_modified_by'];
+                    $reading_date = $value['date'];
+                    $status = 'Closed'; 
+                    $ppv = $value['ppv'];
+                    $product = $value['product'];
+                    $opening_totalizer = 0;
+                    
+
+                    $return_to_tank = isset($value['rtt']) ? $value['rtt'] : 0;
+                    $end_delivery = isset($value['delivery']) ? $value['delivery'] : 0;
+                    $closing_totalizer = $phy_shift_start_volume_reading - $phy_shift_end_volume_reading + $end_delivery + $return_to_tank;
+                    $last_modified_by = $data['last_modified_by'];
+
+                    //to avoid double entry
+                    $present = DailyStockReadings::where('tank_code', $product)->where('reading_date', 'LIKE', "%".date_format(date_create($reading_date),"Y-m-d")."%")->get();
+
+                    $present_2 = DailyTotalizerReadings::where('nozzle_code', $product)->where('reading_date', 'LIKE', "%".date_format(date_create($reading_date),"Y-m-d")."%")->get();
+
+                    if(count($present) == 0){
+     
+                    //else continue insert
+                        $stock = DailyStockReadings::create(['company_id' => $company_id, 'station_id' => $station_id,'tank_code' => $product, 'phy_shift_start_volume_reading' => $phy_shift_start_volume_reading, 'phy_shift_end_volume_reading' => $phy_shift_end_volume_reading,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'return_to_tank'=>$return_to_tank,
+                            'end_delivery'=>$end_delivery,'last_modified_by'=>$last_modified_by ]);
+                         }
+                    if(count($present_2) == 0){
+                        $sales = DailyTotalizerReadings::create(['company_id' => $company_id, 'station_id' => $station_id, 'nozzle_code' => $product, 'open_shift_totalizer_reading' => $opening_totalizer, 'close_shift_totalizer_reading' => $closing_totalizer,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'ppv'=>$ppv,
+                            'last_modified_by'=>$last_modified_by ]);
+                    }
+
                     }
             
         }catch (Exception $exception){
@@ -155,6 +206,36 @@ class DailyStockReadingsService
         }
         return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
     }
+
+    public function bovas_handle_file_upload($request)
+    {   
+        $this->current_user = JWTAuth::parseToken()->authenticate();
+        $user_id = $this->current_user->id;
+        if($request->hasFile('file')) {
+            $fileItself = $request->file('file');
+            $rows = array();
+            $load = Excel::load($fileItself, function($reader) {})->get();
+            $row = $load[0];
+            if(!isset($row->station_code)){
+                array_push($this->csv_error_log , ["message" => "Station Code column not specified"]);
+            }else if(!isset($row->product)){
+                array_push($this->csv_error_log , ["message" => "Product column not specified"]);
+            }else if(!isset($row->date)){
+                array_push($this->csv_error_log , ["message" => "Date column not specified"]);
+            }else{
+                //to verify if user has access to upload for that station
+               $user_stations_details = $this->station_service->get_stations_by_user_id($user_id);
+               foreach ($user_stations_details as $key => $value) {
+                  array_push($this->user_station_ids, $value['station_id']);
+               }
+                foreach($load as $key => $row) {
+                $this->bovas_validate_station_tank_code_and_upload_date($key, $row);
+                }
+            }
+        }
+        return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
+    }
+
       public function get_by_params($params)
     {   
 
@@ -228,6 +309,39 @@ class DailyStockReadingsService
                    array_push($this->csv_success_rows, $row);
                 } 
             }
+        }
+        
+    }
+    private function bovas_validate_station_tank_code_and_upload_date($key, $row){
+     
+        $station_details  = Station::where('code', $row['station_code'])->get(['id', 'company_id', 'name'])->first();
+        $real_key = (int)$key+1;
+        
+        $row['station_id'] = $station_details['id'];
+        $row['company_id'] = $station_details['company_id'];
+        $row['station_name'] = $station_details['name'];
+
+        if(count($station_details) == 0){
+            array_push( $this->csv_error_log, ["message" => "Station with code ". $row['station_code']. " on row ".$real_key." not found, please confirm station code (check spelling)" ] );
+        }else if($this->current_user->company_id != 'master' and !in_array($station_details['id'], $this->user_station_ids)){
+            array_push($this->csv_error_log, ["message" => "You are not permitted to upload readings for ". $row['station_code']. " on row ".$real_key ]);
+        }else{
+            
+           // $tank_details  = Tanks::with('product:id,code')->where('code', $row['tank_code'])->where('station_id', $station_details['id'])->get(['id','product_id'])->first();
+
+            // if(count($tank_details) == 0){
+            //     array_push($this->csv_error_log , ["message" => $row['tank_code']. " on row ".$real_key." not found for  station ".$row['station_code']. " (".$row['station_name']. ") please confirm tank code (check spelling)"]);
+            // }else{
+                //$row['tank_id'] = $tank_details['id'];
+                //$row['product'] = $tank_details->product['code'];
+                $date = "%".date_format(date_create($row['date']),"Y-m-d")."%";
+                $readings_details  = DailyStockReadings::where('tank_code', $row['product'])->where('station_id', $station_details['id'])->where('reading_date','LIKE', $date)->get(['id'])->first();
+                if(count($readings_details) > 0){
+                    array_push($this->csv_error_log , ["message" => "Reading already exist for ". $row['product']. " on row ".$real_key." please contact admin to modify, delete the row for now"]);
+                }else{
+                   array_push($this->csv_success_rows, $row);
+                } 
+           // }
         }
         
     }

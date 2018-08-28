@@ -17,7 +17,7 @@ class CreateDailyTotalizerReadingsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('company_id');
             $table->unsignedInteger('station_id');
-            $table->unsignedInteger('pump_id');
+            $table->unsignedInteger('pump_id')->nullable();
             $table->string("pump_number")->nullable();
             $table->string("nozzle_code")->nullable();
             $table->integer("open_shift_totalizer_reading")->nullable();
