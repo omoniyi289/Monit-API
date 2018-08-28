@@ -200,19 +200,23 @@ class DailyStockReadingsService
     }
     private function validate_station_tank_code_and_upload_date($key, $row){
      
-        $station_details  = Station::where('code', $row['station_code'])->get(['id', 'company_id'])->first();
+        $station_details  = Station::where('code', $row['station_code'])->get(['id', 'company_id', 'name'])->first();
         $real_key = (int)$key+1;
+        
+        $row['station_id'] = $station_details['id'];
+        $row['company_id'] = $station_details['company_id'];
+        $row['station_name'] = $station_details['name'];
+
         if(count($station_details) == 0){
             array_push( $this->csv_error_log, ["message" => "Station with code ". $row['station_code']. " on row ".$real_key." not found, please confirm station code (check spelling)" ] );
         }else if($this->current_user->company_id != 'master' and !in_array($station_details['id'], $this->user_station_ids)){
             array_push($this->csv_error_log, ["message" => "You are not permitted to upload readings for ". $row['station_code']. " on row ".$real_key ]);
         }else{
-            $row['station_id'] = $station_details['id'];
-            $row['company_id'] = $station_details['company_id'];
+            
             $tank_details  = Tanks::with('product:id,code')->where('code', $row['tank_code'])->where('station_id', $station_details['id'])->get(['id','product_id'])->first();
 
             if(count($tank_details) == 0){
-                array_push($this->csv_error_log , ["message" => $row['tank_code']. " on row ".$real_key." not found for  station ".$row['station_code']. " please confirm tank code (check spelling)"]);
+                array_push($this->csv_error_log , ["message" => $row['tank_code']. " on row ".$real_key." not found for  station ".$row['station_code']. " (".$row['station_name']. ") please confirm tank code (check spelling)"]);
             }else{
                 $row['tank_id'] = $tank_details['id'];
                 $row['product'] = $tank_details->product['code'];
