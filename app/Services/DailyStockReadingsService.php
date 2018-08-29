@@ -116,9 +116,9 @@ class DailyStockReadingsService
                     $last_modified_by = $data['last_modified_by'];
 
                     //to avoid double entry
-                    $present = DailyStockReadings::where('tank_code', $product)->where('reading_date', 'LIKE', "%".date_format(date_create($reading_date),"Y-m-d")."%")->get();
+                    $present = DailyStockReadings::where('tank_code', $product)->where('station_id', $station_id)->where('reading_date', 'LIKE', "%".date_format(date_create($reading_date),"Y-m-d")."%")->get();
 
-                    $present_2 = DailyTotalizerReadings::where('nozzle_code', $product)->where('reading_date', 'LIKE', "%".date_format(date_create($reading_date),"Y-m-d")."%")->get();
+                    $present_2 = DailyTotalizerReadings::where('nozzle_code', $product)->where('station_id', $station_id)->where('reading_date', 'LIKE', "%".date_format(date_create($reading_date),"Y-m-d")."%")->get();
 
                     if(count($present) == 0){
      
@@ -222,6 +222,8 @@ class DailyStockReadingsService
                 array_push($this->csv_error_log , ["message" => "Product column not specified"]);
             }else if(!isset($row->date)){
                 array_push($this->csv_error_log , ["message" => "Date column not specified"]);
+            }else if(!isset($row->ppv)){
+                array_push($this->csv_error_log , ["message" => "PPV column not specified"]);
             }else{
                 //to verify if user has access to upload for that station
                $user_stations_details = $this->station_service->get_stations_by_user_id($user_id);
