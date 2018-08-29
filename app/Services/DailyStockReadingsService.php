@@ -123,7 +123,7 @@ class DailyStockReadingsService
                     if(count($present) == 0){
      
                     //else continue insert
-                        $tank_info = Tanks::where('code','LIKE', '%'.$product.'%')->get()->first();
+                        $tank_info = Tanks::where('code','LIKE', '%'.$product.'%')->where('station_id', $station_id)->get()->first();
                         $tank_id = 9;
                         if( count($tank_info) == 1){
                         $tank_id = $tank_info['id'];
