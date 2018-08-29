@@ -124,8 +124,11 @@ class DailyStockReadingsService
      
                     //else continue insert
                         $tank_info = Tanks::where('code','LIKE', '%'.$product.'%')->get()->first();
+                        $tank_id = 9;
+                        if( count($tank_info) == 1){
                         $tank_id = $tank_info['id'];
                         $tank_code = $tank_info['code'];
+                            }
 
                         $stock = DailyStockReadings::create(['company_id' => $company_id, 'station_id' => $station_id,'tank_id' => $tank_id,'tank_code' => $tank_code, 'phy_shift_start_volume_reading' => $phy_shift_start_volume_reading, 'phy_shift_end_volume_reading' => $phy_shift_end_volume_reading,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'return_to_tank'=>$return_to_tank,
                             'end_delivery'=>$end_delivery,'last_modified_by'=>$last_modified_by ]);
