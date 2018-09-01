@@ -8,13 +8,10 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
-    protected $fillable = ['name','description','company_id','active', 'v1_id'];
+    protected $fillable = ['id','name','description','company_id','active', 'v1_id'];
 
     public function users() {
-        return $this->belongsToMany(User::class,"user_roles","user_id","role_id");
-    }
-    public function users_via_permission() {
-        return $this->hasMany(User::class, "role_id", "id");
+        return $this->hasMany(User::class);
     }
 
     public function role_permissions(){

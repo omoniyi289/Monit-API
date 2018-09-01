@@ -161,7 +161,7 @@ return  ProductChangeLogs::where("id", $data['id'])->with('product')->with('appr
     {
         return ProductChangeLogs::where("station_id", $station_id)->with('product')->with('approver')->get();
     }
-          public function verify_approval($data)
+  public function verify_approval($data)
     {
         $output = array();
         $user_details = User::where('id', $data['user_id'])->get()->first();

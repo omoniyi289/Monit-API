@@ -404,6 +404,14 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/velox_manage_payments/{id}', 'VeloxPaymentController@get_by_id');
     Route::patch('/v1/velox_manage_payments/{id}', 'VeloxPaymentController@update');
 
+    /*
+     *Velox Payment ENDPOINT
+     * */
+    Route::get('/v1/velox_manage_creditlimits', 'VeloxCreditLimitController@get_by_params');
+    Route::post('/v1/velox_manage_creditlimits', 'VeloxCreditLimitController@create');
+    Route::get('/v1/velox_manage_creditlimits/{id}', 'VeloxCreditLimitController@get_by_id');
+    Route::patch('/v1/velox_manage_creditlimits/{id}', 'VeloxCreditLimitController@update');
+
 /*
      *Velox Purchases ENDPOINT
      * */

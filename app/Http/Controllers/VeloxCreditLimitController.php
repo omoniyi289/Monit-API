@@ -8,45 +8,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\VeloxPaymentService;
+use App\Services\VeloxCreditLimitService;
 use Core\Controllers\BaseController;
 use Illuminate\Http\Request;
 use App\Mail\NewCompanyUserMail;
 use Illuminate\Http\JsonResponse;
 use Mail;
-class VeloxPaymentController extends BaseController
+class VeloxCreditLimitController extends BaseController
 {
-    private $velox_payment_service;
+    private $velox_creditlimit_service;
 
-    public function __construct(VeloxPaymentService $velox_payment_service)
+    public function __construct(VeloxCreditLimitService $velox_creditlimit_service)
     {
-        $this->velox_payment_service = $velox_payment_service;
+        $this->velox_creditlimit_service = $velox_creditlimit_service;
     }
 
     public function create(Request $request) {
        // return $request->all();
         $cv_request = $request->all();
-        $data = $this->velox_payment_service->create($cv_request);
+        $data = $this->velox_creditlimit_service->create($cv_request);
         return $this->response(1, 8000, "cv successfully created", $data);
     }
 
     public function get_by_params(Request $request) {
     //return $request->all();
         $resource_options = $this->parse_resource_options();
-        $data = $this->velox_payment_service->get_by_params($request->all());
+        $data = $this->velox_creditlimit_service->get_by_params($request->all());
         return $this->response(1, 8000, "requested vendors", $data);
     }
     
     public function get_by_id($id) {
         $resource_options = $this->parse_resource_options();
-        $data = $this->velox_payment_service->get_by_id($id,$resource_options);
+        $data = $this->velox_creditlimit_service->get_by_id($id,$resource_options);
         return $this->response(1, 8000, "requested cv", $data);
     }
     
     public function update(Request $request)
     {
         $update_request = $request->all();
-        $data = $this->velox_payment_service->update($update_request);
+        $data = $this->velox_creditlimit_service->update($update_request);
        
         return $this->response(1, 8000, "request successfully updated", $data);     
     

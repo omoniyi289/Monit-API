@@ -16,16 +16,16 @@ use App\Permission;
 use App\Models\VeloxCustomerVendor;
 use App\Models\VeloxCustomerWallet;
 use App\Models\VeloxVendor;
-use App\Models\VeloxPaymentHistory;
-use App\Events\VeloxPaymentRequestGenerated;
-use App\Reposities\VeloxPaymentRepository;
+use App\Models\VeloxCreditLimitHistory;
+use App\Events\VeloxCreditLimitRequestGenerated;
+use App\Reposities\VeloxCreditLimitRepository;
  
-class VeloxPaymentService
+class VeloxCreditLimitService
 {
     private $database;
     private $vp_repository;
 
-    public function __construct(DatabaseManager $database, VeloxPaymentRepository $vp_repository)
+    public function __construct(DatabaseManager $database, VeloxCreditLimitRepository $vp_repository)
     {
         $this->database = $database;
         $this->vp_repository = $vp_repository;
@@ -35,15 +35,17 @@ class VeloxPaymentService
     try{
             $result = $this->vp_repository->create($data);
            if( isset($result) and count($result) > 0 ){
+            //update current credit limit as returned 
+            $data['customer_creditlimit']['current_creditlimit'] = $result->data->current_creditlimit;
             $permission  = Permission::where('UI_slug', 'EVCMPC50')->get(['id'])->first();
-            $role_permission = RolePermission::where('company_id', $data['customer_payment']['company_id'] )->where('permission_id', $permission['id'])->get(['id', 'role_id', 'company_id']);
+            $role_permission = RolePermission::where('company_id', $data['customer_creditlimit']['company_id'] )->where('permission_id', $permission['id'])->get(['id', 'role_id', 'company_id']);
         
             foreach ($role_permission as $key => $value) {
                 $users = User::where('role_id', $value['role_id'])->get(['id', 'email', 'fullname']);  
                 foreach ($users as $key => $user) {
-                   $mail_data = ['user'=>$user, 'data' => $data['customer_payment']
+                   $mail_data = ['user'=>$user, 'data' => $data['customer_creditlimit']
                  ];
-                    event(new VeloxPaymentRequestGenerated($mail_data));                        
+                    event(new VeloxCreditLimitRequestGenerated($mail_data));                        
                 }             
             }    
            }

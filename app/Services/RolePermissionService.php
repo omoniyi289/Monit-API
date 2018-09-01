@@ -33,15 +33,15 @@ class RolePermissionService
     //{
       // return DailyTotalizerReadings::where('station_id',$stock_id)->get();
     //}
-      public function get_by_params($params)
-    {   
-       $permission = Permission::where('UI_slug', $params['UI_slug'])->get()->first();
-       //return $permission;
-       $result = RolePermission::where('permission_id',$permission['id'])->where('company_id',$params['company_id'])->with('roles.users_via_permission');
+    //   public function get_by_params($params)
+    // {   
+    //    $permission = Permission::where('UI_slug', $params['UI_slug'])->get()->first();
+    //    //return $permission;
+    //    $result = RolePermission::where('permission_id',$permission['id'])->where('company_id',$params['company_id'])->with('roles.users_via_permission');
 
     
-       return $result->get();
-    }
+    //    return $result->get();
+    // }
       public function get_by_request_code($req_code)
     {   
 
