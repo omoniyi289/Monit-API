@@ -79,8 +79,11 @@ class CompanyService
                     $notification_daytime= null;
                     $notification_weekday= null;
                     $key = array_search($value['id'], array_column($current_notifications_array, 'notification_id'));
-                     $notification_weekday= $current_notifications_array[$key]['notification_weekday'];
-                     $notification_daytime= $current_notifications_array[$key]['notification_daytime'];
+                    
+                    if(isset($current_notifications_array[$key])){
+                         $notification_weekday= $current_notifications_array[$key]['notification_weekday'];
+                         $notification_daytime= $current_notifications_array[$key]['notification_daytime'];
+                        }
                   
                    
                     CompanyNotification::create(['notification_id' => $value['id'],'notification_name' => $value['name'],'notification_UI_slug' => $value['UI_slug'],  'company_id' => $data['id'],'notification_weekday' => $notification_weekday,  'notification_daytime' => $notification_daytime ]);
