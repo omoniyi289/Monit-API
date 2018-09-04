@@ -66,7 +66,7 @@ class StationService
     }
 
     public function get_station_by_company_id($company_id){
-        return $this->station_repository->get_where("company_id",$company_id);
+        return Station::where("company_id",$company_id)->orderBy('name', 'desc')->get();
     }
     public function get_station_by_state($state){
         return $this->station_repository->get_where("state",$state);
