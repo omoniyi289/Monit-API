@@ -11,7 +11,7 @@ class Station extends Model
         'name','address', 'opening_time','city','state','daily_budget','expenses_type',
         'company_id','station_user_id','is_station_enabled', 'monthly_budget' , 'license_type'
         , 'manager_email' , 'manager_name' , 'manager_phone' , 'created_at', 'updated_at',
-'show_atg_dpk','show_atg_ago','show_atg_pms','show_fcc_dpk','show_fcc_ago','show_fcc_pms','show_atg_data','show_fcc_data','hasFCC','hasATG','regionid','fcc_oem','atg_oem','daily_pms_target','daily_ago_target','daily_dpk_target','daystodelivery','oem_stationid', 'v1_id', 'start_date', 'pc_approval_levels', 'code', 'approved_dpk_tolerance', 'approved_ago_tolerance', 'approved_pms_tolerance'
+'show_atg_dpk','show_atg_ago','show_atg_pms','show_fcc_dpk','show_fcc_ago','show_fcc_pms','show_atg_data','show_fcc_data','hasFCC','hasATG','regionid','fcc_oem','atg_oem','daily_pms_target','daily_ago_target','daily_dpk_target','daystodelivery','oem_stationid', 'v1_id', 'start_date', 'pc_approval_levels', 'code', 'approved_dpk_tolerance', 'approved_ago_tolerance', 'approved_pms_tolerance', 'fcc_active', 'atg_active'
     ];
 
     public function companies() {
