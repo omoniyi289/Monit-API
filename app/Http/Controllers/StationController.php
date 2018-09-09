@@ -39,8 +39,12 @@ class StationController extends BaseController implements GenericInterface
         $user_id = $this->get_user();
         $company_details = $this->company_service->get_company_by_user_id($user_id)->first();
         $exist_name = $this->station_service->get_station_by_name($station_req['name']);
-        if (count($exist_name) == 1){
+        if (count($exist_name) > 0 ){
                return $this->response(0, 8000, "error! station with this same name already exist", $exist_name, 400);
+            }
+        $exist_code = $this->station_service->get_station_by_code($station_req['code']);
+        if (count($exist_code) > 0){
+               return $this->response(0, 8000, "error! station with this same code already exist", $exist_code, 400);
             }
 
         //$station_req['company_id'] = $company_details['id'];
@@ -101,7 +105,18 @@ class StationController extends BaseController implements GenericInterface
     }
 
     public function update($station_id, Request $request)
-    {
+    {  
+        $station_req = $request->get('station');
+        $exist_name = $this->station_service->get_station_by_name($station_req['name']);
+        //return $exist_name;
+        if (count($exist_name) > 0 and $exist_name[0]['id'] != $station_req['id']){
+               return $this->response(0, 8000, "error! station with this same name already exist", $exist_name, 400);
+            }
+        $exist_code = $this->station_service->get_station_by_code($station_req['code']);
+        if (count($exist_code) > 0 and $exist_code[0]['id'] != $station_req['id'] ){
+               return $this->response(0, 8000, "error! station with this same code already exist", $exist_code, 400);
+            }
+
         $station_update_request = $request->get('station', []);
         $data = $this->station_service->update($station_id, $station_update_request);
         return $this->response(1, 8000, "station successfully updated", $data);

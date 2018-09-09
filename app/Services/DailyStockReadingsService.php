@@ -190,6 +190,8 @@ class DailyStockReadingsService
     public function handle_file_upload($request)
     {   $this->current_user = JWTAuth::parseToken()->authenticate();
         $user_id = $this->current_user->id;
+        $company_id = $this->current_user->company_id;
+
         if($request->hasFile('file')) {
             $fileItself = $request->file('file');
             $rows = array();
@@ -208,7 +210,7 @@ class DailyStockReadingsService
                   array_push($this->user_station_ids, $value['station_id']);
                }
                 foreach($load as $key => $row) {
-                $this->validate_station_tank_code_and_upload_date($key, $row);
+                $this->validate_station_tank_code_and_upload_date($key, $row, $company_id);
                 }
             }
         }
@@ -290,10 +292,16 @@ class DailyStockReadingsService
     {
         return DailyStockReadings::where('id', $stock_id)->get();
     }
-    private function validate_station_tank_code_and_upload_date($key, $row){
+    private function validate_station_tank_code_and_upload_date($key, $row, $company_id){
      
+        if($company_id != 'master'){
+        $station_details  = Station::where('code', $row['station_code'])->where('company_id', $company_id)->get(['id', 'company_id', 'name'])->first();
+            }
+        else{
         $station_details  = Station::where('code', $row['station_code'])->get(['id', 'company_id', 'name'])->first();
+        }
         $real_key = (int)$key+1;
+        
         
         $row['station_id'] = $station_details['id'];
         $row['company_id'] = $station_details['company_id'];
@@ -342,21 +350,8 @@ class DailyStockReadingsService
             array_push($this->csv_error_log, ["message" => "You are not permitted to upload readings for ". $row['station_code']. " on row ".$real_key ]);
         }else{
             
-           // $tank_details  = Tanks::with('product:id,code')->where('code', $row['tank_code'])->where('station_id', $station_details['id'])->get(['id','product_id'])->first();
-
-            // if(count($tank_details) == 0){
-            //     array_push($this->csv_error_log , ["message" => $row['tank_code']. " on row ".$real_key." not found for  station ".$row['station_code']. " (".$row['station_name']. ") please confirm tank code (check spelling)"]);
-            // }else{
-                //$row['tank_id'] = $tank_details['id'];
-                //$row['product'] = $tank_details->product['code'];
-                // $date = "%".date_format(date_create($row['date']),"Y-m-d")."%";
-                // $readings_details  = DailyStockReadings::where('tank_code', $row['product'])->where('station_id', $station_details['id'])->where('reading_date','LIKE', $date)->get(['id'])->first();
-                // if(count($readings_details) > 0){
-                //     array_push($this->csv_error_log , ["message" => "Reading already exist for ". $row['product']. " on row ".$real_key." please contact admin to modify, delete the row for now"]);
-                // }else{
                array_push($this->csv_success_rows, $row);
-                // } 
-           // }
+              
         }
         
     }

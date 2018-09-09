@@ -147,12 +147,12 @@
                     <td bgcolor="#ffffff" align="left"
                         style="padding: 10px 10px 10px 10px; color: #666666; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
                         <p style="margin: 0;">
-                            {{$data['approval_level_indicator_string']}} : {{$creator_name}}<br>
-                            Product: {{$data['product_name']}}<br>
-                            Current Price: {{$data['current_price_tag']}}<br>
-                            Requested Price: {{$data['requested_price_tag']}}<br>
-                            Date: {{date('D d-m-Y')}}<br>
-                            Requested At : {{$station}}<br>
+                            {{$data['approval_level_indicator_string']}} : <b> {{$creator_name}} <b><br>
+                            Product: <b>{{$data['product_name']}} </b><br>
+                            Current Price: <b>{{$data['current_price_tag']}} <b><br>
+                            Requested Price: <b> {{$data['requested_price_tag']}} <b><br>
+                            Date: <b>{{date('D d-m-Y')}} <b><br>
+                            Requested At : <b> {{$station}} <b><br>
                         </p>
                     </td>
                 </tr>

@@ -180,6 +180,7 @@ class DailyTotalizersReadingsService
     {
       $this->current_user = JWTAuth::parseToken()->authenticate();
       $user_id = $this->current_user->id;
+      $company_id = $this->current_user->company_id;
 
         if($request->hasFile('file')) {
 
@@ -202,7 +203,7 @@ class DailyTotalizersReadingsService
 
                ///validate station, tank_code and reading_dae
                 foreach($load as $key => $row) {
-                $this->bovas_validate_station_pump_code_and_upload_date($key, $row);
+                $this->bovas_validate_station_pump_code_and_upload_date($key, $row, $company_id);
                 }
             }
         }
@@ -276,10 +277,16 @@ class DailyTotalizersReadingsService
         
     }
 
-    private function bovas_validate_station_pump_code_and_upload_date($key, $row){
+    private function bovas_validate_station_pump_code_and_upload_date($key, $row, $company_id){
      
+        if($company_id != 'master'){
+        $station_details  = Station::where('code', $row['station_code'])->where('company_id', $company_id)->get(['id', 'company_id', 'name'])->first();
+            }
+        else{
         $station_details  = Station::where('code', $row['station_code'])->get(['id', 'company_id', 'name'])->first();
+        }
         $real_key = (int)$key+1;
+        
         $row['station_id'] = $station_details['id'];
         $row['company_id'] = $station_details['company_id'];
         $row['station_name'] = $station_details['name'];

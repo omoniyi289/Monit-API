@@ -174,6 +174,16 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::put('/v1/company_permissions/{id}', 'CompanyPermissionController@update');
 
 
+      /*
+     *Company Permissions ENDPOINT
+     * */
+    Route::get('/v1/company_bank_accounts', 'CompanyBankAccountController@get_by_params');
+    Route::post('/v1/company_bank_accounts', 'CompanyBankAccountController@create');
+    Route::get('/v1/company_bank_accounts/{id}', 'CompanyBankAccountController@get_by_id');
+    Route::put('/v1/company_bank_accounts/{id}', 'CompanyBankAccountController@update');
+    Route::delete('/v1/company_bank_accounts/{id}', 'CompanyBankAccountController@delete');
+
+
      /*
      * REGION ENDPOINT
      * */
@@ -380,6 +390,9 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/deposits/by_station/{param}', 'DepositsController@get_by_station_id');
     Route::get('/v1/deposits/validate_amount/{param}', 'DepositsController@validate_amount');
     Route::patch('/v1/deposits', 'DepositsController@update');
+     Route::post('/v1/deposits/parsed_csv_data', 'DepositsController@parsed_csv_data');
+    Route::post('/v1/deposits/file_upload', 'DepositsController@file_upload');
+    
 
   /*
      * ROPS ENDPOINT
