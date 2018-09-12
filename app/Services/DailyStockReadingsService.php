@@ -63,6 +63,7 @@ class DailyStockReadingsService
                     $station_id = $value['station_id'];
                     $tank_id = $value['tank_id'];
                     $tank_code = $value['tank_code'];
+                    $git_loss = $value['git_loss'];
                     $phy_shift_start_volume_reading = isset($value['opening_dip']) ? $value['opening_dip'] : 0;
                     $phy_shift_end_volume_reading = isset($value['closing_dip']) ? $value['closing_dip'] : 0;
                     $created_by = $data['last_modified_by'];
@@ -79,7 +80,7 @@ class DailyStockReadingsService
                             continue;
                         }
                     //else continue insert
-                        $stock = DailyStockReadings::create(['company_id' => $company_id, 'station_id' => $station_id, 'tank_id' => $tank_id,'tank_code' => $tank_code, 'phy_shift_start_volume_reading' => $phy_shift_start_volume_reading, 'phy_shift_end_volume_reading' => $phy_shift_end_volume_reading,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'return_to_tank'=>$return_to_tank,
+                        $stock = DailyStockReadings::create(['company_id' => $company_id, 'station_id' => $station_id, 'tank_id' => $tank_id,'tank_code' => $tank_code, 'phy_shift_start_volume_reading' => $phy_shift_start_volume_reading, 'phy_shift_end_volume_reading' => $phy_shift_end_volume_reading,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'return_to_tank'=>$return_to_tank,'git_loss' =>$git_loss,
                             'end_delivery'=>$end_delivery,'last_modified_by'=>$last_modified_by ]);
                     }
             
@@ -106,6 +107,7 @@ class DailyStockReadingsService
                     $reading_date = $value['date'];
                     $status = 'Closed'; 
                     $ppv = $value['ppv'];
+                    $git_loss = $value['git_loss'];
                     $product = $value['product'];
                     $opening_totalizer = 0;
                     
@@ -131,7 +133,7 @@ class DailyStockReadingsService
                     //else continue insert
                         
 
-                        $stock = DailyStockReadings::create(['company_id' => $company_id, 'station_id' => $station_id,'tank_id' => $tank_id,'tank_code' => $tank_code, 'phy_shift_start_volume_reading' => $phy_shift_start_volume_reading, 'phy_shift_end_volume_reading' => $phy_shift_end_volume_reading,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'return_to_tank'=>$return_to_tank,
+                        $stock = DailyStockReadings::create(['company_id' => $company_id, 'station_id' => $station_id,'tank_id' => $tank_id,'tank_code' => $tank_code, 'phy_shift_start_volume_reading' => $phy_shift_start_volume_reading, 'phy_shift_end_volume_reading' => $phy_shift_end_volume_reading,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'return_to_tank'=>$return_to_tank ,'git_loss' =>$git_loss,
                             'end_delivery'=>$end_delivery,'last_modified_by'=>$last_modified_by ]);
                   //       }
                    // if(count($present_2) == 0){
@@ -156,9 +158,9 @@ class DailyStockReadingsService
            
             foreach ($data['readings'] as $value) {
                     if($value['status'] == 'Closed'){
-                    $stock = DailyStockReadings::where('reading_date', $data['reading_date'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'return_to_tank'=>$value['rtt'],'end_delivery'=>$value['qty_received'] ,'status' =>'Closed']);
+                    $stock = DailyStockReadings::where('reading_date', $data['reading_date'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'return_to_tank'=>$value['rtt'],'end_delivery'=>$value['qty_received'] ,'status' =>'Closed' ,'git_loss' =>$value['git_loss'] ]);
                     }else if($value['status'] == 'Modified'){
-                    $stock = DailyStockReadings::where('reading_date', $value['reading_date'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'phy_shift_start_volume_reading' => $value['opening_reading'],'return_to_tank'=>$value['rtt'],
+                    $stock = DailyStockReadings::where('reading_date', $value['reading_date'])->where('tank_id', $value['tank_id'])->update(['phy_shift_end_volume_reading' => $value['closing_reading'],'phy_shift_start_volume_reading' => $value['opening_reading'],'return_to_tank'=>$value['rtt'] ,'git_loss' =>$value['git_loss'],
                         'end_delivery'=>$value['qty_received'],'last_modified_by'=>$data['last_modified_by']]);
               }
               }  

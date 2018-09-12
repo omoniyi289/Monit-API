@@ -33,11 +33,11 @@ class RolePermissionController extends BaseController
         return $this->response(1, 8000, "request details", $data);
     }
    
-    // public function get_by_params(Request $request) {
-    //     $stock_update_request = $request->all();
-    //     $resource_options = $this->parse_resource_options();
-    //     $data = $this->role_permission_service->get_by_params($stock_update_request);
-    //     return $this->response(1, 8000, "requested  perms", $data);
-    // }
+    public function get_by_params(Request $request) {
+        $stock_update_request = $request->all();
+        $resource_options = $this->parse_resource_options();
+        $data = $this->role_permission_service->get_by_params($stock_update_request);
+        return $this->response(1, 8000, "requested  perms", $data);
+    }
 
 }
