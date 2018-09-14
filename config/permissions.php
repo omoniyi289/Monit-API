@@ -104,6 +104,12 @@ return [
                     "UI_slug" => "ACur20"
                 ],
 
+                "analytics_com_data" => [
+                    "name" => "Analytics - Competitor Data",
+                    "description" => "Analytics - Competitor Data",
+                    "UI_slug" => "ACom40"
+                ],
+
         ],
 
 

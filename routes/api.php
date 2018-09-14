@@ -3,6 +3,14 @@
 use Illuminate\Http\Request;
 
 /*
+     *SM ENDPOINT EXPOSED TO VELOX
+     * */
+    Route::get('/v1/velox_product_prices', 'VeloxProductPriceController@get_by_params');
+    Route::get('/v1/velox_pumps', 'VeloxPumpController@get_by_params');
+
+
+
+/*
  * V1-V2 MIGRATION ENDPOINT ENDPOINT
  * */
 

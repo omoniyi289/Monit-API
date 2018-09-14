@@ -14,6 +14,7 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use App\Models\DailyStockReadings;
 use App\Models\DailyTotalizerReadings;
+use App\Models\Deposits;
 use App\Tanks;
 use Maatwebsite\Excel\Facades\Excel;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -219,6 +220,49 @@ class DailyStockReadingsService
         return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
     }
 
+    // public function enyo_cash_xxx($request)
+    // {   
+    //     $this->current_user = JWTAuth::parseToken()->authenticate();
+    //     $user_id = $this->current_user->id;
+    //     $company_id = $this->current_user->company_id;
+    //    //  //step 1
+    //    // $station_ids = [38,178,24,29,32,86,5,91,84,30,89,87,27,34,25,1,21,26,181,182];
+    //    //  foreach ($station_ids as $value) {
+    //    //     Deposits::where('station_id', $value)->where('reading_date','>', '2017-12-31')->where('reading_date','<' ,'2018-09-06')->delete();
+    //    //  }
+       
+    //     //step 2
+    //      $entry = array();
+    //     if($request->hasFile('file')) {
+    //         $fileItself = $request->file('file');
+    //         $deposits = array();
+    //       $entry =  Excel::load($fileItself, function($reader){})->get();
+          
+    //       foreach ($entry as $key => $value) {
+    //         foreach ($value as $key_2 => $value_2) {
+            
+    //         if(isset($value_2->station_id) and $value_2->station_id !=null and isset($value_2->date) and $value_2->date !=null  and is_object($value_2->date) and isset($value_2->cash_dep_acc) and $value_2->cash_dep_acc !=null ){
+    //             $new = array('station_id' => $value_2->station_id , 'company_id'=> 8, 'teller_date' => $value_2->date->toDateTimeString(), 'reading_date' => $value_2->date->toDateTimeString(), 'amount' => $value_2->cash_dep_acc, 'upload_type' => 'Replace', 'payment_type' => 'Cash Deposit');
+
+    //             $this->database->beginTransaction();
+    //             try{
+    //                 Deposits::create($new);        
+    //             }catch (Exception $exception){
+    //                 $this->database->rollBack();
+    //                 throw $exception;
+    //             }
+    //             $this->database->commit();
+    //             }
+    //         }
+         
+    //         }
+    // }
+
+    //     return 1;
+            
+    // }
+
+
     public function bovas_handle_file_upload($request)
     {   
         $this->current_user = JWTAuth::parseToken()->authenticate();
@@ -250,6 +294,7 @@ class DailyStockReadingsService
         }
         return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
     }
+
 
       public function get_by_params($params)
     {   
