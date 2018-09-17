@@ -44,7 +44,7 @@ class FromMail_PriceChangeController extends BaseController
                                 if($permission['UI_slug'] == "EPCR"){
                                     
                                         $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
-                                        event(new PriceChangeExecutionGenerated($mail_data));
+                                        //event(new PriceChangeExecutionGenerated($mail_data));
                                     }
                                 }
                             }    
@@ -81,7 +81,7 @@ class FromMail_PriceChangeController extends BaseController
                                            
 
                                            $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
-                                           event(new PriceChangeApprovalGenerated($mail_data));
+                                          // event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                   }
                               }    
@@ -99,7 +99,7 @@ class FromMail_PriceChangeController extends BaseController
                                   if($permission['UI_slug'] == "EPCR"){
                               
                                           $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
-                                          event(new PriceChangeExecutionGenerated($mail_data));
+                                          //event(new PriceChangeExecutionGenerated($mail_data));
                                       }
                                         }
                                     }    
@@ -136,7 +136,7 @@ class FromMail_PriceChangeController extends BaseController
                                          
                                             $is_email_sent = true;
                                            $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
-                                           event(new PriceChangeApprovalGenerated($mail_data));
+                                           //event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                   }
                               }    
@@ -155,7 +155,7 @@ class FromMail_PriceChangeController extends BaseController
                                          
                                             $is_email_sent = true;
                                            $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
-                                           event(new PriceChangeApprovalGenerated($mail_data));
+                                         //  event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                         }
                                     }    
@@ -174,7 +174,7 @@ class FromMail_PriceChangeController extends BaseController
                                   if($permission['UI_slug'] == "EPCR"){
                                           $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $approver['fullname'],'product_change_result' => $product_change_result];
                                           //return $mail_data;
-                                          event(new PriceChangeExecutionGenerated($mail_data));
+                                         // event(new PriceChangeExecutionGenerated($mail_data));
                                       }
                                         }
                                     }    
