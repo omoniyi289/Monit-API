@@ -103,7 +103,7 @@ class ProductPriceChangeLogService
                                       //  Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
 
                                         $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $new_data['creator_name'],'product_change_result' => $data];
-                                           event(new PriceChangeApprovalGenerated($mail_data));
+                                           //event(new PriceChangeApprovalGenerated($mail_data));
                                    }                            
                             }    
                             }                                       
@@ -124,7 +124,7 @@ class ProductPriceChangeLogService
                                            //Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
 
                                            $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $new_data['creator_name'],'product_change_result' => $data];
-                                           event(new PriceChangeApprovalGenerated($mail_data));
+                                          // event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                   }
                               }    
@@ -145,7 +145,7 @@ class ProductPriceChangeLogService
                                            //Mail::to($user['email'])->send(new PriceChangeMail($station,$user,$new_data['creator_name'], $data ));
 
                                             $mail_data = ['station'=> $station, 'user'=>$user, 'last_updated_by' => $new_data['creator_name'],'product_change_result' => $data];
-                                           event(new PriceChangeApprovalGenerated($mail_data));
+                                          // event(new PriceChangeApprovalGenerated($mail_data));
                                       }
                                         }
                                     }    

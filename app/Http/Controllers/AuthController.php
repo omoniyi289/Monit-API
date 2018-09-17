@@ -254,7 +254,7 @@ class AuthController extends BaseController
             'email' => $data['email'],
             'new_pass' =>$new_pass,
         ];
-        Mail::to($data['email'])->send(new ForgotPassMail($mail_data));
+        //Mail::to($data['email'])->send(new ForgotPassMail($mail_data));
         return $this->response(1, 8000, "password successfully reset", $data);
     }
 }

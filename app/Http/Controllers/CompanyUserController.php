@@ -51,7 +51,7 @@ class CompanyUserController extends BaseController
             'email' => $data['email'],
             'company_name' => $company[0]['name'],
         ];
-        Mail::to($company_user_req['email'])->send(new NewCompanyUserMail($mail_data));
+        //Mail::to($company_user_req['email'])->send(new NewCompanyUserMail($mail_data));
         return $this->response(1, 8000, "user successfully created", $data, 201);
     }
     public function update($station_id, Request $request)
