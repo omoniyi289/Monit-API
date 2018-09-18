@@ -37,7 +37,7 @@ class ROPSService
                    'receiver_data'=> $survey,
                     'date' => $data['survey_date']
                 ];
-               // event(new ROPSGenerated($mail_data));
+                event(new ROPSGenerated($mail_data));
               }
 
         catch (Exception $exception){

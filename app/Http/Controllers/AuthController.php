@@ -52,7 +52,7 @@ class AuthController extends BaseController
                     $data = $user;
                     if ($token){
                         $data['token'] = $token;
-                        UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'app'=> 'SM', 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version'), 'location_cordinate' => $request->get('location_cordinate') , 'location_address' => $request->get('location_address') ]);
+                        UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'app'=> 'SM', 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version'), 'location_cordinate' => $request->get('location_cordinate') , 'location_address' => $request->get('location_address')  , 'app' => 'SM' ]);
                         
                         return $this->response(1, 8000, "authentication successful", $data);
                     }elseif (!$token){
@@ -95,7 +95,7 @@ class AuthController extends BaseController
                     $data = $user;
                     if ($token){
                         $user['token'] = $token;
-                        UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'app'=> 'Analytics', 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version'), 'location_cordinate' => $request->get('location_cordinate') , 'location_address' => $request->get('location_address') ]);
+                        UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'app'=> 'Analytics', 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version'), 'location_cordinate' => $request->get('location_cordinate') , 'location_address' => $request->get('location_address') , 'app' => 'SA' ]);
 
                         $station_array = array();
                         $perm_array = array();

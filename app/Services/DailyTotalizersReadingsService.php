@@ -35,8 +35,11 @@ class DailyTotalizersReadingsService
     }
     public function create(array $data) {
         $this->database->beginTransaction();
+        $pump = '';
         try{
-          //return $data['created_at'];
+           if( count($data['readings'])  < 1 ){
+                return 'invalid_input';
+            }
             foreach ($data['readings'] as $value) {
                     //to avoid double entry
                   $present = DailyTotalizerReadings::where('pump_id', $value['pump_id'])->where('reading_date', 'LIKE', "%".date_format(date_create($data['reading_date']),"Y-m-d")."%")->get();

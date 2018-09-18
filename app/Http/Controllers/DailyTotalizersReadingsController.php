@@ -22,7 +22,11 @@ class DailyTotalizersReadingsController extends BaseController
 
         $totalizer_request = $request->get('pumps',[]);
         $data = $this->daily_totalizers_readings_service->create($totalizer_request);
+        if($data == 'invalid_input'){        
+            return $this->response(0, 8000, "no sales reading supplied", null, 400);
+            }else{
         return $this->response(1, 8000, "sales successfully created", $data);
+        }
     }
       public function update(Request $request)
     {

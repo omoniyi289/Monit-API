@@ -37,7 +37,11 @@ class DailyStockReadingsService
     }
     public function create(array $data) {
         $this->database->beginTransaction();
+        $stock = '';
         try{
+            if( count($data['readings']) < 1 ){
+                return 'invalid_input';
+            }
             foreach ($data['readings'] as $value) {
                 //to avoid double entry
                 $present = DailyStockReadings::where('tank_id', $value['tank_id'])->where('reading_date', 'LIKE', "%".date_format(date_create($data['reading_date']),"Y-m-d")."%")->get();

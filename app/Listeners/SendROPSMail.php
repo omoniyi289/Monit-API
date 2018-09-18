@@ -65,7 +65,7 @@ class SendROPSMail implements ShouldQueue
                if(isset($value[0]['email'])){
                     Mail::to([$value[0]['email'], "support@e360africa.com"])->send(new ROPSReportMail($mail_data, $value));
                 }
-             // Mail::to("omoniyi.o@e360africa.com")->send(new ROPSReportMail($mail_data, $value ));
+            //  Mail::to("omoniyi.o@e360africa.com")->send(new ROPSReportMail($mail_data, $value ));
               }
     }
 

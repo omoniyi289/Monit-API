@@ -21,7 +21,11 @@ class DailyStockReadingsController extends BaseController
 
         $stock_request = $request->get('stocks',[]);
         $data = $this->daily_stock_readings_service->create($stock_request);
-        return $this->response(1, 8000, "stock successfully created", $data);
+        if($data == 'invalid_input'){        
+            return $this->response(0, 8000, "no stock reading supplied", null, 400);
+            }else{
+            return $this->response(1, 8000, "stock successfully created", $data);
+        }
     }
       public function update(Request $request)
     {
