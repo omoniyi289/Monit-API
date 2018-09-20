@@ -39,6 +39,12 @@ class DailyTotalizersReadingsController extends BaseController
          //    $headers = array('Content-Type: application/pdf');
        //     return  response()->download(public_path('/stock.csv'), 'info.pdf', $headers);
     }
+     public function delete_by_params(Request $request)
+    {
+        $totalizer_update_request = $request->all();
+        $data = $this->daily_totalizers_readings_service->delete_by_params($totalizer_update_request);
+        return $this->response(1, 8000, "sales deleted", $data);
+    }
        public function file_upload(Request $request)
     {
         $totalizer_update_request = $request;

@@ -40,6 +40,13 @@ class DailyStockReadingsController extends BaseController
         $data = $this->daily_stock_readings_service->handle_file_upload($stock_update_request);
         return $this->response(1, 8000, "stock file loaded", $data);
     }
+        public function delete_by_params(Request $request)
+    {
+        $stock_update_request = $request->all();
+        $data = $this->daily_stock_readings_service->delete_by_params($stock_update_request);
+        return $this->response(1, 8000, "stock deleted", $data);
+    }
+
         public function bovas_file_upload(Request $request)
     {
         $stock_update_request = $request;

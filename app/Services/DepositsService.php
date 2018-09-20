@@ -94,6 +94,9 @@ class DepositsService
                     $created_by = $data['created_by'];
                     $pos_receipt_number = $value['pos_receipt_number'];
                     $payment_type = $value['payment_type'];
+                    if( strtoupper($payment_type) == 'CASH'){
+                      $payment_type = 'Cash Deposit';
+                    }
                     $account_number = $value['account_number'];
                     $bank = $value['bank'];
                     $amount = $value['amount'];

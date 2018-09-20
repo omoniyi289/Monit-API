@@ -317,10 +317,10 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('/v1/stock-readings', 'DailyStockReadingsController@create');
     Route::post('/v1/stock-readings/parsed_csv_data', 'DailyStockReadingsController@parsed_csv_data');
     Route::post('/v1/stock-readings/bovas_parsed_csv_data', 'DailyStockReadingsController@bovas_parsed_csv_data');
-    Route::post('/v1/stock-readings/file_upload', 'DailyStockReadingsController@file_upload');
-    
+    Route::post('/v1/stock-readings/file_upload', 'DailyStockReadingsController@file_upload');    
     Route::post('/v1/stock-readings/bovas_file_upload', 'DailyStockReadingsController@bovas_file_upload');
     Route::get('/v1/stock-readings/{params}', 'DailyStockReadingsController@get_by_params');
+    Route::delete('/v1/stock-readings', 'DailyStockReadingsController@delete_by_params');
     Route::patch('/v1/stock-readings', 'DailyStockReadingsController@update');
 
      /*
@@ -333,7 +333,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('/v1/pump-readings/bovas_file_upload', 'DailyTotalizersReadingsController@bovas_file_upload');
 
     Route::get('/v1/pump-readings/{params}', 'DailyTotalizersReadingsController@get_by_params');
-    //Route::get('/v1/pump-readings/by_station', 'DailyTotalizersReadingsController@get_by_station_id');
+    Route::delete('/v1/pump-readings', 'DailyTotalizersReadingsController@delete_by_params');
     Route::patch('/v1/pump-readings', 'DailyTotalizersReadingsController@update');
 
 

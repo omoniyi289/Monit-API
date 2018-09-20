@@ -96,6 +96,23 @@ class DailyStockReadingsService
         $this->database->commit();
         return $stock;
     }
+  public function delete_by_params(array $data) {
+        $this->database->beginTransaction();
+        //return $data;
+        try{
+            if( isset($data['station_id']) and isset($data['date']) ){    
+            $station_id = $data['station_id'];
+            $reading_date = $data['date'];  
+            $present = DailyStockReadings::where('station_id', $station_id)->whereDate('reading_date', date_format(date_create($reading_date),"Y-m-d") )->delete();
+                }
+                  
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $present;
+    }
     public function bovas_upload_parsed_csv_data(array $data) {
         $this->database->beginTransaction();
         //return $data;
