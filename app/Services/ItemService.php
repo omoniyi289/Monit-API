@@ -49,6 +49,10 @@ class ItemService
     private function get_requested_item($item_id, array $options = []){
         return Items::get('id', $item_id)->first();
     }
+
+    public function get_by_parentsku($raw_data){
+     return $item = Items::where('parentsku', $raw_data['parentsku'])->where('company_id', $raw_data['company_id'])->get()->first();
+    }
     
     public function update(array  $data){
         $this->database->beginTransaction();

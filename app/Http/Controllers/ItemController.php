@@ -17,12 +17,23 @@ class ItemController extends BaseController
     public function create(ApiItemRequest $request) {
 
         $item_request = $request->get('item',[]);
+        $data = $this->item_service->get_by_parentsku($item_request);
+
+        if( count($data) > 0 ){
+        return $this->response(0, 8000, "Oops! Parent SKU already exist", null, 400);
+        }
         $data = $this->item_service->create($item_request);
         return $this->response(1, 8000, "item successfully created", $data);
     }
       public function update(Request $request)
     {
         $item_request = $request->get('item', []);
+        $data = $this->item_service->get_by_parentsku($item_request);
+        
+        if( count($data) > 0 and $data['id'] != $item_request['id']){
+        return $this->response(0, 8000, "Oops! Parent SKU already exist", null, 400);
+        }
+
         $data = $this->item_service->update($item_request);
         return $this->response(1, 8000, "item successfully updated", $data);
     }
@@ -44,7 +55,7 @@ class ItemController extends BaseController
         $item_request = $request->all();
         $resource_options = $this->parse_resource_options();
         $data = $this->item_service->get_by_params($item_request);
-        return $this->response(1, 8000, "requestedd items", $data);
+        return $this->response(1, 8000, "requested items", $data);
     }
      public function delete($item_id) {
             try {

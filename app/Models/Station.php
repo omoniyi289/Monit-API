@@ -25,6 +25,9 @@ class Station extends Model
     public function tanks_groups(){
         return $this->hasMany(TankGroups::class);
     }
+    public function station_regions(){
+        return $this->hasMany(StationRegions::class);
+    }
     public function station_users(){
         return $this->hasMany(StationUsers::class);
     }

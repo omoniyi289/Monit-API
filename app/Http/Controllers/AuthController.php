@@ -52,6 +52,13 @@ class AuthController extends BaseController
                     $data = $user;
                     if ($token){
                         $data['token'] = $token;
+                        $var = $token;
+                        $encrypt_key = $user['id'];
+                        //custom cipher block chain
+                        $cbc = 'E360SMREDIRECTCH';
+                        $enc_token = openssl_encrypt($this->pk_pad($var, 16),'AES-256-CBC', $encrypt_key,0,$cbc);
+                        $data['token_h'] = $enc_token;
+
                         UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'app'=> 'SM', 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version'), 'location_cordinate' => $request->get('location_cordinate') , 'location_address' => $request->get('location_address')  , 'app' => 'SM' ]);
                         
                         return $this->response(1, 8000, "authentication successful", $data);
@@ -75,6 +82,15 @@ class AuthController extends BaseController
           }
     
     }
+       private function pk_pad($d,$s)
+      {
+          $len = $s-strlen($d)%$s;
+          return $d.str_repeat(chr($len),$len);
+      }
+      private function pk_unpad($d)
+      {
+          return substr($d,0,-ord($d[strlen($d)-1]));
+      }
 
         public function analytics_login(Request $request){
         $user =  $this->user_service->get_user_for_analytics($request->get('email'));
@@ -141,6 +157,80 @@ class AuthController extends BaseController
             }
         }
           else {
+      
+              return $this->response(0, 8000, "user does not exist",
+                     null, 400);
+          }
+    
+    }
+
+      public function sm_redirect_analytics_login(Request $request){
+        if( $request->get('UID') == null or $request->get('Slug') ==null ){
+             return $this->response(0, 8000, "missing necessary parameters",
+                    null, 400);
+        }
+         $cbc  = 'E360SMREDIRECTCH';
+         $encrypt_key = $request->get('UID');
+         $enc_token =  $request->get('Slug');
+         $decrypted_token = $this->pk_unpad(openssl_decrypt($enc_token,
+                                                         'AES-256-CBC',
+                                                         $encrypt_key,
+                                                         0,
+                                                         $cbc));
+        if(empty($decrypted_token)){
+          return $this->response(0, 8000, "invalid token or id",null,400);
+        }
+        else{
+        $user = JWTAuth::toUser($decrypted_token);
+        }
+
+        if(empty($user) || $user == null ){
+          return $this->response(0, 8000, "token not live",null,400);
+        }
+
+        $user =  $this->user_service->get_user_for_analytics($user['email']);
+
+        if (!empty($user) || $user != null){
+            if ($user['is_verified'] == 0){
+                return $this->response(0, 8000, "account yet to be verified",null,400);
+            }
+              
+              $data = $user;    
+              UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'app'=> 'Analytics', 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version'), 'location_cordinate' => $request->get('location_cordinate') , 'location_address' => $request->get('location_address') , 'app' => 'SA' ]);
+
+                        $station_array = array();
+                        $perm_array = array();
+                        foreach ($user->station_users as $key => $value) {
+                          array_push($station_array, $value->station);
+                        }
+                        foreach ($user->role->role_permissions as $key => $value) {
+                          array_push($perm_array, $value->permission['name']);
+                        }
+                        //return $perm_array;
+                        if($user->role == null){
+                            $user->role = (object)['name' => 'Nil'];
+                        }
+
+                        if($user->companies == null){
+                            $user->companies = (object)['name' => 'Nil','id' => 'Nil'];
+                        }
+
+                        $data =  (object)array(["companies"=> [
+                           $user->companies->id=> [
+                               "name"=> $user->companies->name,
+                               "stations"=> $station_array
+                           ]
+                       ],
+                       
+                       "username"=> $user['fullname'],
+                       "userRole"=> $user->role->name,
+                       "userPermissions"=> $perm_array,
+                   "userId"=> $user['id']]);
+
+                        return $this->response(1, 8000, "authentication successful", $data);
+               
+        }
+        else{
       
               return $this->response(0, 8000, "user does not exist",
                      null, 400);

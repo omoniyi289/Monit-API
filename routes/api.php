@@ -70,6 +70,7 @@ Route::get('/v1/unc_setter', '\App\Initializers\UserNotfCompanyIdSetter@unc_sett
 Route::get('/v1/uwp', 'UserController@users_with_default_password');
 Route::post('/v1/auth', 'AuthController@auth');
 Route::post('/v1/analytics_login', 'AuthController@analytics_login');
+Route::post('/v1/sm_redirect_login', 'AuthController@sm_redirect_analytics_login');
 Route::post('/v1/ecas_login', 'AuthController@ecas_login');
 Route::post('/v1/auth/forgotpass/verifyemail', 'AuthController@passwordreset');
 Route::get('/v1/users/verify/{verification_code}', 'UserController@verify_user');
@@ -355,6 +356,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('/v1/item-variants', 'ItemVariantController@create');
     Route::post('/v1/item-variants/stock-refill/', 'ItemVariantController@stock_refill');
     Route::post('/v1/item-variants/stock-count/', 'ItemVariantController@stock_count');
+    Route::post('/v1/item-variants/stock-sales/', 'ItemVariantController@stock_sales');
     Route::post('/v1/item-variants/stock-transfer/', 'ItemVariantController@post_stock_transfer');
 
     Route::patch('/v1/item-variants/stock-transfer/{param}', 'ItemVariantController@patch_stock_transfer');

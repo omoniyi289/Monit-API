@@ -16,6 +16,7 @@ use App\Models\ItemVariants;
 use App\Models\ItemVariantsByStation;
 use App\Models\ItemRestockHistory;
 use App\Models\StockCount;
+use App\Models\StockSales;
 use App\Models\StockTransfer;
 class ItemVariantService
 {
@@ -45,6 +46,9 @@ class ItemVariantService
             throw  $exception;
         }
     }
+    public function get_by_compositesku($raw_data){
+     return $variant = ItemVariants::where('compositesku', $raw_data['compositesku'])->where('company_id', $raw_data['company_id'])->get()->first();
+    }
     public function stock_refill($raw_data){
         try {
             $this->database->beginTransaction();
@@ -56,7 +60,7 @@ class ItemVariantService
                    $value['company_id'] = $raw_data['company_id'];
                    $value['station_id'] = $raw_data['station_id'];
                    $set_return_cred = $value;
-                   $value['last_restock_date'] = date('d m Y H:i:s');
+                   $value['last_restock_date'] = date('Y-m-d H:i:s');
                    $value['restock_id'] = uniqid(6);
                    $value['qty_before_restock']= $value['qty_in_stock'];
                    $value['qty_after_restock']= $value['restock_qty']+$value['qty_in_stock'];
@@ -76,7 +80,7 @@ class ItemVariantService
                         ItemRestockHistory::create([ 'item_id'=>$value['item_id'], 'company_id' =>$value['company_id'],'station_id'=>$value['station_id'], 'restock_id'=>$value['restock_id'],  'compositesku'=>$value['compositesku'], 'restock_qty'=>$value['restock_qty'],'qty_before_restock'=>$value['qty_before_restock'], 'qty_after_restock'=>$value['qty_after_restock'], 'created_by'=>$raw_data['created_by'], 'modified_by'=> $raw_data['created_by']]);}
 
                    }else{
-                    ////update qty_in_stock with new restockq ty
+                    ////update qty_in_stock with new restock  qty
                         $value['qty_in_stock'] = $variant['qty_in_stock'] + $value['restock_qty'];
                     ItemVariantsByStation::create($value);
                     //update history
@@ -112,7 +116,7 @@ public function stock_count($raw_data){
                    $value['company_id'] = $raw_data['company_id'];
                    $value['station_id'] = $raw_data['station_id'];
                    $set_return_cred = $value;
-                   $value['last_restock_date'] = date('d m Y H:i:s');
+                   $value['last_restock_date'] = date('Y-m-d H:i:s');
                    $value['restock_id'] = uniqid(6);
               
                     ///update if exist else create
@@ -157,6 +161,63 @@ public function stock_count($raw_data){
         }
     }
 
+
+    public function stock_sales($raw_data){
+        try {
+            $this->database->beginTransaction();
+            try {
+                $data =$raw_data['item_variants'];
+                $set_return_cred='';
+                foreach ($data as $key => $value) {
+                      //update history
+                   $value['company_id'] = $raw_data['company_id'];
+                   $value['station_id'] = $raw_data['station_id'];
+                   $set_return_cred = $value;
+                
+                    ///update if exist else create
+                    
+                   $variant = ItemVariantsByStation::where('compositesku', $value['compositesku'])->where('station_id', $raw_data['station_id'])->get()->first();
+                   if(count($variant) > 0){
+                             ////create stock sales if qty_sold > 0 
+                  if($value['qty_sold'] > 0){
+                   StockSales::create( ['item_id'=>$value['item_id'], 'company_id' =>$value['company_id'],'station_id'=>$value['station_id'],  'compositesku'=>$value['compositesku'], 'qty_sold'=>$value['qty_sold'], 'cash_collected'=>$value['cash_collected'], 'retail_price'=>$value['retail_price'], 'supply_price'=>$value['supply_price'], 'qty_in_stock'=>$value['qty_in_stock'], 'sold_by'=>$raw_data['created_by']] );
+                        }
+
+                        //update qty in stock by deducting sales
+                        $value['qty_in_stock']= $value['qty_in_stock'] - $value['qty_sold'] ;
+
+                         ItemVariantsByStation::where('compositesku', $value['compositesku'])->where('station_id', $raw_data['station_id'])->update([ 'supply_price' => $value['supply_price'], 'qty_in_stock'=>$value['qty_in_stock'], 'modified_by'=> $raw_data['modified_by']]);
+                     
+                      }
+
+                   else{
+                                ////create stock sales if qty_sold > 0 
+                  if($value['qty_sold'] > 0){
+                     StockSales::create( ['item_id'=>$value['item_id'], 'company_id' =>$value['company_id'],'station_id'=>$value['station_id'],  'compositesku'=>$value['compositesku'], 'qty_sold'=>$value['qty_sold'], 'cash_collected'=>$value['cash_collected'], 'retail_price'=>$value['retail_price'], 'supply_price'=>$value['supply_price'], 'qty_in_stock'=>$value['qty_in_stock'], 'sold_by'=>$raw_data['created_by']] );
+
+                        }
+
+                    $value['qty_in_stock']= $value['qty_in_stock'] - $value['qty_sold'];
+                    ItemVariantsByStation::create($value);
+                    //update history
+                   
+                }
+            }}
+                //$item = ItemVariantsByStation::create($data);
+                
+             catch (Exception $exception) {
+                $this->database->rollBack();
+                throw $exception;
+            }
+            $this->database->commit();
+             $item_varaints = ItemVariants::where("item_id",$set_return_cred['item_id'])->with('item')->get();
+             $item_varaints_by_station = ItemVariantsByStation::where("item_id",$set_return_cred['item_id'])->where("station_id",$set_return_cred['station_id'])->with('item')->get();
+             return array('item_variants' => $item_varaints ,'item_variants_by_station' => $item_varaints_by_station);
+        }catch (\Exception $exception){
+            throw  $exception;
+        }
+    }
+
 public function post_stock_transfer($raw_data){
         try {
             $this->database->beginTransaction();
@@ -167,7 +228,7 @@ public function post_stock_transfer($raw_data){
                       //update history
                    
                    $set_return_cred = $value;
-                   $value['date_transfered'] = date('d m Y H:i:s');
+                   $value['date_transfered'] = date('Y-m-d H:i:s');
                    $value['restock_id'] = uniqid(6);
               
                     ///update if exist on receiving station else create
@@ -225,7 +286,7 @@ public function post_stock_transfer($raw_data){
                 $set_return_cred='';
                  
                    $set_return_cred = $value;
-                   $value['date_received'] = date('d m Y H:i:s');
+                   $value['date_received'] = date('Y-m-d H:i:s');
 
                    $tx_variant = ItemVariantsByStation::where('compositesku', $value['compositesku'])->where('station_id', $value['tx_station_id'])->get()->first();
 

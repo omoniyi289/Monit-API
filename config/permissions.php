@@ -218,19 +218,24 @@ return [
                     "UI_slug" => "FRSk20"
                 ],
                  "count_items" => [
-                    "name" => "Store- Count Stock",
+                    "name" => "Store- Perform Stock Count",
                     "description" => "permission to count Stock",
                     "UI_slug" => "CStk20"
                 ],
                 "transfer_items" => [
-                    "name" => "Store- Transfer Stock",
+                    "name" => "Store- Transfer Stocks",
                     "description" => "permission to Transfer Stock",
                     "UI_slug" => "TStk20"
                 ],
                 "recieve_items" => [
-                    "name" => "Store- Receive Stock",
+                    "name" => "Store- Receive Stocks",
                     "description" => "permission to Receive Stock at Stations",
                     "UI_slug" => "RStk20"
+                ],
+                "sell_items" => [
+                    "name" => "Store- Manage Stock Sales",
+                    "description" => "permission to Manage Stock Sales at Stations",
+                    "UI_slug" => "SStk20"
                 ],
         ]
     ];

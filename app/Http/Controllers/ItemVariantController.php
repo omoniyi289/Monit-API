@@ -17,6 +17,13 @@ class ItemVariantController extends BaseController
     public function create(ApiItemVariantRequest $request) {
 
         $item_request = $request->get('item_variant',[]);
+
+        $data = $this->item_service->get_by_compositesku($item_request);
+
+        if( count($data) > 0 ){
+        return $this->response(0, 8000, "Oops! Composite SKU already exist", null, 400);
+        }
+
         $data = $this->item_service->create($item_request);
         return $this->response(1, 8000, "variant successfully created", $data);
     }
@@ -31,6 +38,12 @@ class ItemVariantController extends BaseController
         $item_request = $request->all();
         $data = $this->item_service->stock_count($item_request);
         return $this->response(1, 8000, "variant successfully counted", $data);
+    }
+    public function stock_sales(Request $request) {
+
+        $item_request = $request->all();
+        $data = $this->item_service->stock_sales($item_request);
+        return $this->response(1, 8000, "sales successfully stored", $data);
     }
     public function post_stock_transfer(Request $request) {
         $item_request = $request->all();
@@ -48,8 +61,13 @@ class ItemVariantController extends BaseController
         return $this->response(1, 8000, "transfers", $data);
     }
       public function update(Request $request)
-    {
+    {   
         $item_request = $request->get('item_variant', []);
+         $data = $this->item_service->get_by_compositesku($item_request);
+
+        if( count($data) > 0 and $data['id'] != $item_request['id']){
+        return $this->response(0, 8000, "Oops! Composite SKU already exist", null, 400);
+        }
         $data = $this->item_service->update($item_request);
         return $this->response(1, 8000, "variant successfully updated", $data);
     }
