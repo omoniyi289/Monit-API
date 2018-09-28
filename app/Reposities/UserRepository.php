@@ -12,6 +12,7 @@ use App\User;
 use Core\Repository\BaseRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 
 class UserRepository extends BaseRepository
@@ -20,6 +21,10 @@ class UserRepository extends BaseRepository
     {
         return new User();
     }
+
+    // public function get_user_for_analytics($email){
+    //     DB::select("select user.email as email, station.id as id, station", $email);
+    // }
 
     public function create(array $data){
         $user = $this->get_model();

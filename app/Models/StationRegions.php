@@ -20,9 +20,11 @@ class StationRegions extends Model
     }
 
 public function region() {
-        return $this->belongsTo(Region::class, 'region_id');
+        return $this->belongsTo(Region::class);
     }
-        public function station() {
+        
+public function station() {
         return $this->belongsTo(Station::class, 'station_id');
     }
+
 }

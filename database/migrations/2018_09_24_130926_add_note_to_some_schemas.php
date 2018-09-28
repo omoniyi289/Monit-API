@@ -41,7 +41,7 @@ class AddNoteToSomeSchemas extends Migration
             $table->string('note')->nullable();              
         });  
 
-         Schema::table('stock_sales', function (Blueprint $table) {
+         Schema::table('stock_sales_history', function (Blueprint $table) {
             $table->string('note')->nullable();              
         });  
 

@@ -116,8 +116,19 @@ class AuthController extends BaseController
                         $station_array = array();
                         $perm_array = array();
                         foreach ($user->station_users as $key => $value) {
-                          array_push($station_array, $value->station);
+                          //station belongs to a region
+                          if(isset($value->station) and isset( $value->station->station_region->region)
+                          )
+                          {
+                              array_push($station_array, array('id' => $value->station->id,  'name' => $value->station->name, 'region_id'=> $value->station->station_region->region->id, 'region_name'=> $value->station->station_region->region->name   ) );
+                          }
+                          //just station, no region
+                          else if( isset($value->station) and !isset($value->station_region->region) ){
+                              array_push($station_array, array('id' => $value->station->id,  'name' => $value->station->name, 'region_id'=> null, 'region_name'=> null) );
+                          }
+                          
                         }
+
                         foreach ($user->role->role_permissions as $key => $value) {
                           array_push($perm_array, $value->permission['name']);
                         }
