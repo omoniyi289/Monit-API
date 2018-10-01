@@ -358,13 +358,13 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('/v1/item-variants/stock-count/', 'ItemVariantController@stock_count');
     Route::post('/v1/item-variants/stock-sales/', 'ItemVariantController@stock_sales');
     Route::post('/v1/item-variants/stock-transfer/', 'ItemVariantController@post_stock_transfer');
-
     Route::patch('/v1/item-variants/stock-transfer/{param}', 'ItemVariantController@patch_stock_transfer');
-
     Route::get('/v1/item-variants/stock-transfer/{param}', 'ItemVariantController@get_stock_transfer');
-
     Route::get('/v1/item-variants/by_item/{item_id}', 'ItemVariantController@get_by_item_id');
     Route::get('/v1/item-variants/by_station/{params}', 'ItemVariantController@get_by_params');
+    Route::get('/v1/item-variants/stock-sales/{params}', 'ItemVariantController@get_stock_sales');
+    Route::get('/v1/item-variants/stock-count/{params}', 'ItemVariantController@get_stock_count');
+    Route::get('/v1/item-variants/stock-refill/{params}', 'ItemVariantController@get_stock_fills');
     Route::patch('/v1/item-variants', 'ItemVariantController@update');
     Route::delete('/v1/item-variants/{item_id}', 'ItemVariantController@delete');
      /*

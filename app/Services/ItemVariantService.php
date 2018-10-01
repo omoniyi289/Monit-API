@@ -384,6 +384,21 @@ public function post_stock_transfer($raw_data){
        // return $data;
       return $transfers = StockTransfer::where("rx_station_id",$station_id)->with('item')->with('item_variant')->get();
     }
+     public function get_stock_sales($station_id)
+    {
+       // return $data;
+      return $sales = StockSales::where("station_id",$station_id)->with('item:id,name')->with('item_variant')->get();
+    }
+      public function get_stock_fills($station_id)
+    {
+       // return $data;
+      return $fills = ItemRestockHistory::where("station_id",$station_id)->with('item:id,name')->with('item_variant')->get();
+    }
+      public function get_stock_count($station_id)
+    {
+       // return $data;
+      return $count = StockCount::where("station_id",$station_id)->with('item:id,name')->with('item_variant')->get();
+    }
     public function delete($item_id, array $options = [])
     {   
        // ItemVariants::where('item_id',$item_id)->delete();

@@ -60,6 +60,22 @@ class ItemVariantController extends BaseController
         $data = $this->item_service->get_stock_transfer($station_id);
         return $this->response(1, 8000, "transfers", $data);
     }
+    public function get_stock_count($station_id) {
+        //$item_request = $request->all();
+        $data = $this->item_service->get_stock_count($station_id);
+        return $this->response(1, 8000, "count", $data);
+    }
+    public function get_stock_sales($station_id) {
+        //$item_request = $request->all();
+        $data = $this->item_service->get_stock_sales($station_id);
+        return $this->response(1, 8000, "sales", $data);
+    }
+    public function get_stock_fills($station_id) {
+        //$item_request = $request->all();
+        $data = $this->item_service->get_stock_fills($station_id);
+        return $this->response(1, 8000, "fills", $data);
+    }
+
       public function update(Request $request)
     {   
         $item_request = $request->get('item_variant', []);

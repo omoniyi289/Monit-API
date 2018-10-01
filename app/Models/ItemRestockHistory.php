@@ -15,5 +15,12 @@ class ItemRestockHistory extends Model
         return $this->belongsTo(Station::class, 'station_id');
     }
     
+    public function item(){
+        return $this->belongsTo(Items::class, 'item_id');
+    }
+    public function item_variant(){
+        return $this->belongsTo(ItemVariantsByStation::class, 'compositesku','compositesku');
+    }
+
 
 }
