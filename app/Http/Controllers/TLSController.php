@@ -16,11 +16,11 @@ class TLSController extends BaseController
  
    
     public function get_raw() {
-    return DB::select('select read_at, db_fill_time, log from atg_readings');
+    return DB::select('select read_at, db_fill_time, log from atg_readings order by id desc');
 
     }
     public function get_today() {
         
-    return DB::select('select read_at, db_fill_time, log from atg_readings where (DATE(db_fill_time) = ? )',  [date("Y-m-d") ]);
+    return DB::select('select read_at, db_fill_time, log from atg_readings where (DATE(db_fill_time) = ?  order by id desc )',  [date("Y-m-d") ]);
     }   
 }
