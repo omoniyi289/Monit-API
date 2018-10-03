@@ -5,8 +5,8 @@ use Illuminate\Http\Request;
 /*
      *SM ENDPOINT EXPOSED TO VELOX
      * */
-    Route::get('/v1/velox_product_prices', 'VeloxProductPriceController@get_by_params');
-    Route::get('/v1/velox_pumps', 'VeloxPumpController@get_by_params');
+Route::get('/v1/velox_product_prices', 'VeloxProductPriceController@get_by_params');
+Route::get('/v1/velox_pumps', 'VeloxPumpController@get_by_params');
 
 
 
@@ -19,7 +19,8 @@ Route::get('/v1/company_mg', 'MigrationController@company_migrate');
 Route::get('/v1/user_mg', 'MigrationController@user_migrate');
 Route::get('/v1/station_mg', 'MigrationController@station_migrate');
 Route::get('/v1/role_mg', 'MigrationController@role_migrate');
-
+Route::get('/v1/raw_tls_all', 'TLSController@get_raw');
+Route::get('/v1/raw_tls_today', 'TLSController@get_today');
 Route::get('/v1/user_role_mg', 'MigrationController@user_role_migrate');
 Route::get('/v1/role_perm_mg', 'MigrationController@role_perm_migrate');
 Route::get('/v1/user_station_mg', 'MigrationController@user_station_migrate');

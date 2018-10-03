@@ -5,6 +5,7 @@ use App\Requests\ApiItemVariantRequest;
 use Core\Controllers\BaseController;
 use Illuminate\Http\Request;
 use App\Services\MigrationService;
+use Illuminate\Support\Facades\DB;
 
 class MigrationController extends BaseController
 {
@@ -144,5 +145,6 @@ class MigrationController extends BaseController
     public function get_up_to_date_readings_of_a_reliable_station_for_demo(Request $request) {
         $data = $this->migration_service->get_up_to_date_readings_of_a_reliable_station_for_demo();
         return $this->response(1, 8000, "transfers", $data);
-    }    
+    } 
+   
 }
