@@ -124,7 +124,7 @@ class CompanyService
         return Company::with('company_permissions.permission:id,name')->with('company_notifications.notification')->get();
     }
      public function get_active(array $options = []){
-        return Company::with('company_permissions.permission')->with('company_notifications.notification')->where('active', 1)->get();
+        return Company::with('company_permissions.permission:id,name')->with('company_notifications.notification:id,name')->where('active', 1)->get();
     }
     public function get_by_id($user_id, array $options = [])
     {

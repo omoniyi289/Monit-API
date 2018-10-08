@@ -80,7 +80,7 @@ class DailyStockReadingsController extends BaseController
         $stock_update_request = $request->all();
         $resource_options = $this->parse_resource_options();
         $data = $this->daily_stock_readings_service->get_by_params($stock_update_request);
-        return $this->response(1, 8000, "requestedd stocks", $data);
+        return $this->response(1, 8000, "requested stocks", $data);
     }
 
 }

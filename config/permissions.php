@@ -183,6 +183,21 @@ return [
                 ],             
         ],
 
+        "facility_maintenance" => [
+                "emp" => [
+                    "name" => "Facility Maintenance-View Pump Readings",
+                    "description" => "permission to view pumps",
+                    "UI_slug" => "PMM60"
+                ],
+
+                "emp2" => [
+                    "name" => "Facility Maintenance- Manage Pump Maintenance Log",
+                    "description" => "permission to manage Pump Maintenance log",
+                    "UI_slug" => "MML60"
+                ] 
+                          
+        ],
+
         "fuel_supply" => [
                 "request_supply" => [
                     "name" => "Request Fuel Supply",

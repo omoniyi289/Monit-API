@@ -42,12 +42,12 @@ class DailyTotalizersReadingsService
             }
             foreach ($data['readings'] as $value) {
                     //to avoid double entry
-                  $present = DailyTotalizerReadings::where('pump_id', $value['pump_id'])->where('reading_date', 'LIKE', "%".date_format(date_create($data['reading_date']),"Y-m-d")."%")->get();
+                  $present = DailyTotalizerReadings::where('pump_id', $value['pump_id'])->where('upload_type','!=', 'Maintenance')->whereDate('reading_date', date_format(date_create($data['reading_date']),"Y-m-d"))->get();
                   if(count($present) > 0){
                           continue;
                       }
                   //else continue insert
-                    $pump = DailyTotalizerReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['pump_nozzle_code'], 'open_shift_totalizer_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened', 'reading_date'=> date_format(date_create($data['reading_date']),"Y-m-d").' 00:00:00', 'product'=> $value['product']]);
+                    $pump = DailyTotalizerReadings::create(['company_id' => $data['company_id'], 'station_id' => $data['station_id'], 'pump_id' => $value['pump_id'], 'nozzle_code' => $value['pump_nozzle_code'], 'open_shift_totalizer_reading' => $value['opening_reading'],'created_by' => $data['created_by'], 'status' =>'Opened', 'reading_date'=> date_format(date_create($data['reading_date']),"Y-m-d").' 00:00:00', 'product'=> $value['product'], 'upload_type'=> 'Single']);
                 }
             
         }catch (Exception $exception){
@@ -58,6 +58,7 @@ class DailyTotalizersReadingsService
         return $pump;
     }
 
+
       public function delete_by_params(array $data) {
         $this->database->beginTransaction();
         //return $data;
@@ -65,7 +66,7 @@ class DailyTotalizersReadingsService
             if( isset($data['station_id']) and isset($data['date']) ){    
             $station_id = $data['station_id'];
             $reading_date = $data['date'];  
-            $present = DailyTotalizerReadings::where('station_id', $station_id)->whereDate('reading_date', date_format(date_create($reading_date),"Y-m-d") )->delete();
+            $present = DailyTotalizerReadings::where('station_id', $station_id)->where('upload_type','!=', 'Maintenance')->whereDate('reading_date', date_format(date_create($reading_date),"Y-m-d") )->delete();
                 }
                   
         }catch (Exception $exception){
@@ -96,13 +97,13 @@ class DailyTotalizersReadingsService
                     $last_modified_by = $data['last_modified_by'];
 
                     //to avoid double entry
-                    $present = DailyTotalizerReadings::where('pump_id', $pump_id)->where('reading_date', 'LIKE', "%".date_format(date_create($reading_date),"Y-m-d")."%")->get();
+                    $present = DailyTotalizerReadings::where('pump_id', $pump_id)->where('upload_type','!=', 'Maintenance')->whereDate('reading_date',date_format(date_create($reading_date),"Y-m-d"))->get();
                     if(count($present) > 0){
                             continue;
                         }
                     //else continue insert
                         $stock = DailyTotalizerReadings::create(['company_id' => $company_id, 'station_id' => $station_id, 'pump_id' => $pump_id,'nozzle_code' => $nozzle_code, 'open_shift_totalizer_reading' => $opening_totalizer, 'close_shift_totalizer_reading' => $closing_totalizer,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'status' =>$status, 'product'=> $product,'ppv'=>$ppv,
-                            'cash_collected'=>$cash_collected,'last_modified_by'=>$last_modified_by ]);
+                            'cash_collected'=>$cash_collected,'last_modified_by'=>$last_modified_by , 'upload_type'=> 'Bulk']);
                     }
             
         }catch (Exception $exception){
@@ -241,25 +242,35 @@ class DailyTotalizersReadingsService
 
        $result = DailyTotalizerReadings::where('station_id',$params['station_id']);
        if(isset($params['date'])){
-            $result->where('reading_date', 'LIKE', date_format(date_create($params['date']),"Y-m-d").'%');
+            $result->whereDate('reading_date', date_format(date_create($params['date']),"Y-m-d"));
              return $result->get();
-       }else if(isset($params['opening_station'])){
-            $pumps = Pumps::where('station_id',$params['station_id'])->with('product')->orderBy('pump_nozzle_code', 'ASC')->get();
-            foreach ($pumps as $key => $value) {
-            ////get the last input date
-            $last_reading = DailyTotalizerReadings::select('id','close_shift_totalizer_reading')->where('pump_id',$value['id'])->orderBy('reading_date', 'desc')->get()->first();
-              $pumps[$key]['last_closing_reading'] = $last_reading['close_shift_totalizer_reading'];
-        }
-     
-            return $pumps;
        }
-       else{
+       
+       else if(isset($params['get_open_station_info'])){
+          ////get pumps and their last inputs
+            $pumps = Pumps::where('station_id',$params['station_id'])->with('product')->orderBy('pump_nozzle_code', 'ASC')->get(['id', 'pump_nozzle_code', 'product_id']);
+            foreach ($pumps as $key => $value) {
+          
+            $last_reading = DailyTotalizerReadings::select('id','close_shift_totalizer_reading', 'open_shift_totalizer_reading')->where('pump_id',$value['id'])->orderBy('reading_date', 'desc')->get()->first();
+              $pumps[$key]['last_closing_reading'] = $last_reading['close_shift_totalizer_reading'];
+              $pumps[$key]['last_opening_reading'] = $last_reading['open_shift_totalizer_reading'];
+                }
+           return $pumps;
+       }
+
+       else if(isset($params['get_station_last_readings'])){
+       
         $timecheck = DailyTotalizerReadings::where('station_id',$params['station_id'])->orderBy('id', 'desc')->get()->first();
-        $result->where('reading_date', 'LIKE',"%".date_format(date_create($timecheck['reading_date']),"Y-m-d")."%");
+        $result->whereDate('reading_date', date_format(date_create($timecheck['reading_date']),"Y-m-d"));
         $result->orderBy('id', 'desc');
          return $result->get();
        }
-       
+
+        else if(isset($params['get_pump_maintenance_log'])){
+            $result->whereDate('upload_type', 'Maintenance');
+            $result->orderBy('id', 'desc');
+             return $result->get();
+       }       
     }
     private function get_requested_stock($stock_id, array $options = [])
     {
@@ -286,8 +297,8 @@ class DailyTotalizersReadingsService
             }else{
                 $row['pump_id'] = $pump_details['id'];
                 $row['product'] = $pump_details->product['code'];
-                $date = "%".date_format(date_create($row['date']),"Y-m-d")."%";
-                $readings_details  = DailyTotalizerReadings::where('nozzle_code', $row['pump_nozzle_code'])->where('station_id', $station_details['id'])->where('reading_date','LIKE', $date)->get(['id'])->first();
+                $date = date_format(date_create($row['date']),"Y-m-d");
+                $readings_details  = DailyTotalizerReadings::where('nozzle_code', $row['pump_nozzle_code'])->where('station_id', $station_details['id'])->whereDate('reading_date', $date)->get(['id'])->first();
                 if(count($readings_details) > 0){
                     array_push($this->csv_error_log , ["message" => "Reading already exist for ". $row['pump_nozzle_code']. " on row ".$real_key." please contact admin to modify, delete the row for now"]);
                 }else{
@@ -325,8 +336,8 @@ class DailyTotalizersReadingsService
             // }else{
                 //$row['pump_id'] = $pump_details['id'];
                 //$row['product'] = $pump_details->product['code'];
-                $date = "%".date_format(date_create($row['date']),"Y-m-d")."%";
-                $readings_details  = DailyTotalizerReadings::where('nozzle_code', $row['product'])->where('station_id', $station_details['id'])->where('reading_date','LIKE', $date)->get(['id'])->first();
+                $date = date_format(date_create($row['date']),"Y-m-d");
+                $readings_details  = DailyTotalizerReadings::where('nozzle_code', $row['product'])->where('station_id', $station_details['id'])->whereDate('reading_date', $date)->get(['id'])->first();
                 if(count($readings_details) > 0){
                     array_push($this->csv_error_log , ["message" => "Reading already exist for ". $row['product']. " on row ".$real_key." please contact admin to modify, delete the row for now"]);
                 }else{
