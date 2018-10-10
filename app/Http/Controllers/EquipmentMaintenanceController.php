@@ -42,6 +42,13 @@ class EquipmentMaintenanceController extends BaseController
         return $this->response(1, 8000, "requested", $data);
     }
 
+public function get_pump_maintenance_and_current_readings(Request $request) {
+        //return $request;
+        $_request = $request->all();
+        $resource_options = $this->parse_resource_options();
+        $data = $this->equipment_maintenance_service->get_pump_maintenance_and_current_readings($_request);
+        return $this->response(1, 8000, "requested", $data);
+    }
     public function get_pump_readings(Request $request)
     {
         $equipment_maintenance_update_request = $request->all();

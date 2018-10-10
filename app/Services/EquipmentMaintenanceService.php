@@ -10,6 +10,7 @@ use App\Reposities\CompanyRepository;
 use App\Reposities\EquipmentMaintenanceRepository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
+use App\Pumps;
 use App\Models\PumpMaintenanceLog;
 use App\Models\DailyTotalizerReadings;
 
@@ -59,8 +60,50 @@ class EquipmentMaintenanceService
         $start_date = $options['start_date'];
         $end_date = $options['end_date'];
         
-        return $this->equipment_maintenance_repository->get_pump_readings($station_id, $start_date, $end_date);
+        return $this->equipment_maintenance_repository->get_station_pumps_readings($station_id, $start_date, $end_date);
     }
+
+     public function get_pump_maintenance_and_current_readings($params)
+    {   
+
+    
+    //if(isset($params['get_open_station_info'])){
+          ////get pumps and their last inputs
+            $pumps = Pumps::where('station_id',$params['station_id'])->with('product')->orderBy('pump_nozzle_code', 'ASC')->get(['id', 'pump_nozzle_code', 'product_id']);
+            foreach ($pumps as $key => $value) {
+          
+                $last_reading = DailyTotalizerReadings::select('id','close_shift_totalizer_reading', 'open_shift_totalizer_reading')->where('pump_id',$value['id'])->orderBy('reading_date', 'desc')->get()->first();
+
+                  $pumps[$key]['last_closing_reading'] = $last_reading['close_shift_totalizer_reading'];
+                  $pumps[$key]['last_opening_reading'] = $last_reading['open_shift_totalizer_reading'];
+                  $pumps[$key]['sales_since_last_maintenance']='';
+                  $pumps[$key]['last_maintenance_date']='';
+                  $pump_id = $value['id'];
+                  $last_maintenance_date = '';
+
+                $last_pump_maintenance = PumpMaintenanceLog::where('pump_id',$pump_id)->orderBy('maintenance_date', 'desc')->get(['id', 'maintenance_date'])->first();
+
+                if(count($last_pump_maintenance) > 0){
+                    $start_date = $last_pump_maintenance['maintenance_date'];
+                    $end_date = date('Y-m-d H:i:s');
+                     $pump_maintenance =  $this->equipment_maintenance_repository->get_pump_readings($pump_id, $start_date, $end_date);
+
+                    $pumps[$key]['last_maintenance_date']= $last_pump_maintenance['maintenance_date'];
+                    $pumps[$key]['sales_since_last_maintenance']= $pump_maintenance[0]->total_sales;
+                    
+                    }
+                else{
+                   $pump_maintenance =  $this->equipment_maintenance_repository->get_pump_readings_from_inception($pump_id);  
+                           
+                        if( count($pump_maintenance) > 0){
+                             $pumps[$key]['sales_since_last_maintenance']= $pump_maintenance[0]->total_sales;
+                             $pumps[$key]['last_maintenance_date']= $pump_maintenance[0]->min_date;   
+                         }
+                    }
+                }
+           return $pumps;
+       
+   }
 
           public function get_pump_maintenance_log($params)
     {   

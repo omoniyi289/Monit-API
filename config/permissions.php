@@ -194,6 +194,17 @@ return [
                     "name" => "Facility Maintenance- Manage Pump Maintenance Log",
                     "description" => "permission to manage Pump Maintenance log",
                     "UI_slug" => "MML60"
+                ],
+                "emp3" => [
+                    "name" => "Facility Maintenance-View Pump Readings (Engineering Company)",
+                    "description" => "permission to view pumps",
+                    "UI_slug" => "EN-PMM60"
+                ],
+
+                "emp4" => [
+                    "name" => "Facility Maintenance- Manage Pump Maintenance Log (Engineering Company)",
+                    "description" => "permission to manage Pump Maintenance log",
+                    "UI_slug" => "EN-MML60"
                 ] 
                           
         ],

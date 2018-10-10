@@ -432,6 +432,9 @@ Route::group(['middleware' => ['jwt.auth']], function () {
      *Facility Maintenance ENDPOINT
      * */
     Route::get('/v1/equipment_maintenance/pump_readings', 'EquipmentMaintenanceController@get_pump_readings');
+    
+    Route::get('/v1/equipment_maintenance/get_pump_maintenance_and_current_readings', 'EquipmentMaintenanceController@get_pump_maintenance_and_current_readings');
+
     Route::post('/v1/equipment_maintenance/create_pump_maintenance_log', 'EquipmentMaintenanceController@create_pump_maintenance_log');
      Route::get('/v1/equipment_maintenance/get_pump_maintenance_log', 'EquipmentMaintenanceController@get_pump_maintenance_log');
    // Route::get('/v1/equipment_maintenance/{id}', 'EquipmentMaintenanceController@get_by_id');
