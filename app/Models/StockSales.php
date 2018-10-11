@@ -10,7 +10,7 @@ class StockSales extends Model
     //
     protected $table = 'stock_sales_history';
 
-    protected $fillable = ['id','company_id','station_id','item_id','compositesku','qty_sold','supply_price','qty_in_stock','retail_price','cash_collected','sold_by', 'note' ];
+    protected $fillable = ['id','company_id','station_id','item_id','compositesku','qty_sold','supply_price','qty_in_stock','retail_price','cash_collected','sold_by', 'note', 'sales_date' ];
 
     public function station(){
         return $this->belongsTo(Station::class, 'station_id');

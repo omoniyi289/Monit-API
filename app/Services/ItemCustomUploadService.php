@@ -7,7 +7,8 @@
  */
 
 namespace App\Services;
-
+ini_set('memory_limit', '1700M');
+ini_set('max_execution_time', 19000);        
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
 use Exception;
@@ -16,8 +17,13 @@ use App\Models\ItemVariants;
 use App\Models\ItemVariantsByStation;
 use App\Models\ItemRestockHistory;
 use App\Models\StockCount;
+use App\Station;
 use App\Models\StockSales;
 use App\Models\StockTransfer;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Maatwebsite\Excel\Facades\Excel;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
 class ItemCustomUploadService
 {
     private $database;
@@ -28,42 +34,143 @@ class ItemCustomUploadService
     {
         $this->database = $database;
         $this->dispatcher = $dispatcher;
+        $this->csv_success_rows = array();
+
     }
 
-    public function upload_parsed_csv_data(array $data) {
-        $this->database->beginTransaction();
-    //    return $data;
-        try{
-                foreach ($data['readings'] as $value) {
-                    $company_id = $value['company_id'];
-                    $station_id = $value['station_id'];
-                    $created_by = $data['created_by'];
-                    $pos_receipt_number = $value['pos_receipt_number'];
-                    $payment_type = $value['payment_type'];
-                    if( strtoupper($payment_type) == 'CASH'){
-                      $payment_type = 'Cash Deposit';
-                    }
-                    $account_number = $value['account_number'];
-                    $bank = $value['bank'];
-                    $amount = $value['amount'];
-                    $teller_number = $value['teller_number'];
-                    $pos_receipt_range = $value['pos_receipt_range'];
 
-                    $reading_date = $value['actual_transaction_date'];
-                    $teller_date = $value['teller_date'];
-                    //else continue insert
-                   
+    public function handle_file_upload($request)
+    {   
+      // return $this->update_item_variant_per_station_from_sales();
 
-                        $stock = Deposits::create(['company_id' => $company_id,'station_id' => $station_id, 'account_number' => $account_number, 'payment_type' => $payment_type,'pos_receipt_number' => $pos_receipt_number, 'bank' => $bank, 'amount' => $amount,'created_by' => $created_by,'reading_date' => date_format(date_create($reading_date),"Y-m-d").' 00:00:00', 'pos_receipt_range' =>$pos_receipt_range, 'teller_date'=> $teller_date,'teller_number'=>$teller_number, 'upload_type'=>'Bulk']);
-                    }
-            
-        }catch (Exception $exception){
-            $this->database->rollBack();
-            throw $exception;
-        }
-        $this->database->commit();
-        return $stock;
+        $this->current_user = JWTAuth::parseToken()->authenticate();
+        $user_id = $this->current_user->id;
+        $company_id = $this->current_user->company_id;
+        if($request->hasFile('file')) {
+            $fileItself = $request->file('file');
+            $rows = array();
+            $load = Excel::load($fileItself, function($reader) {})->get();
+          
+           //return $this->get_item_names($load);
+          // return $this->get_item_variants($load);
+           //return $this->upload_stock_sales($load);
+
+          }
+           
     }
+
+
+   public function get_item_names($data){
+      $item_names = array();
+      $counter = 10;
+      foreach($data as $key2 => $row2) {
+         foreach($row2 as $key => $row) {
+              if($row['item_name']!= null and !in_array($row['item_name'], $item_names)){
+                $counter++;
+                array_push($item_names, $row['item_name']);
+                 $item = Items::where('company_id', 8)->where('name', $row['item_name'] )->get()->first();
+
+                 if( count($item) == 0){
+                    Items::create(['company_id'=> 8, 'name'=> $row['item_name'], 'parentsku'=> 'PSKU'.date('YmdHis').$counter, 'category'=> 'Lubricants', 'uom'=>'Litres']);
+                 }
+              }
+
+
+      }
+    }
+      return $item_names;
+   }
+
+public function get_item_variants($data){
+      $item_names = array();
+      $counter = 10;
+      foreach($data as $key2 => $row2) {
+         foreach($row2 as $key => $row) {
+              if( $row['item_name']!= null  ){
+                $counter++;
+               // array_push($item_names, $row['packsize_value']);
+            $item = Items::where('company_id', 8)->where('name', $row['item_name'] )->get()->first();
+
+            $item_variant = ItemVariants::where('company_id', 8)->where('variant_value', $row['packsize_value'])->where('item_id', $item['id'] )->get()->first();
+
+                 if( count($item_variant) == 0){
+                    ItemVariants::create( [ 'company_id'=> 8, 'item_id'=> $item['id'], 'compositesku'=> 'CSKU'.date('YmdHis').$counter, 'variant_option' => 'Pack Size', 'variant_value'=> $row['packsize_value'], 'reorder_level'=> 2, 'qty_in_stock'=> 0, 'supply_price' => $row['unit_price'], 'retail_price' => $row['unit_price'], 'last_restock_date' => date('Y-m-d H:i:s') ]);
+                 }
+              }
+
+      }
+    }
+      return $item_names;
+   }
+
+
+   public function upload_stock_sales($data){
+    //  ini_set('memory_limit', '512M');
+      $item_names = array();
+      $counter = 10;
+       $this->database->beginTransaction();
+           try {
+      foreach($data as $key2 => $row2) {
+         foreach($row2 as $key => $row) {
+              if( $row['item_name']!= null and $row['sales_date']!= null and isset($row['station_id']) and !empty($row['station_id'])){
+                $counter++;
+               // array_push($item_names, $row['packsize_value']);
+          $item = Items::where('company_id', 8)->where('name', $row['item_name'] )->get()->first();
+      
+            $item_variant = ItemVariants::where('company_id', 8)->where('variant_value', $row['packsize_value'])->where('item_id', $item['id'] )->get()->first();
+
+                 if( count($item_variant) > 0 ){
+                    StockSales::create( [ 'company_id'=> 8, 'station_id'=>  $row['station_id'], 'item_id'=> $item_variant['item_id'], 'compositesku'=> $item_variant['compositesku'], 'cash_collected'=> $row['cash_collected'], 'qty_in_stock'=> $row['quantity_in_stock'], 'qty_sold' => $row['quantity_sold'], 'supply_price' => $row['unit_price'],  'retail_price' => $row['unit_price'], 'sales_date' => date_format(date_create($row['sales_date']->toDateTimeString()),"Y-m-d")." 00:00:00" ]);
+                 }
+              }
+
+      }
+    }
+     }
+       catch (Exception $exception) {
+                $this->database->rollBack();
+                throw $exception;
+            }
+            $this->database->commit();
+             return $item_names;
+     
+   }
+
+public function update_item_variant_per_station_from_sales(){
+      $item_names = array();
+      $counter = 10;
+      $this->database->beginTransaction();
+           try {
+               // array_push($item_names, $row['packsize_value']);
+            $stations = Station::where('company_id', 8)->get(['id']);
+            foreach ($stations as $key => $value) {
+               $item_variant = ItemVariants::where('company_id', 8)->get();
+               
+               foreach ($item_variant as $key2 => $value2) {
+               
+                $sales = StockSales::where('station_id', $value['id'])->where('compositesku', $value2['compositesku'] )->orderBy('sales_date', 'desc' )->get()->first();
+
+                     if( count($sales) == 1){
+                        $station_item=ItemVariantsByStation::where('station_id', $value['id'])->where('compositesku', $value2['compositesku'])->get(['id'])->first();
+
+                       if( count($station_item) == 0 ){
+
+                        ItemVariantsByStation::create( [ 'company_id'=> 8, 'item_id'=> $value2['item_id'], 'station_id'=> $value['id'], 'compositesku'=> $value2['compositesku'], 'variant_option' => $value2['variant_option'], 'variant_value'=>  $value2['variant_value'], 'reorder_level'=> 2, 'qty_in_stock'=> $sales['qty_in_stock'], 'supply_price' => $sales['supply_price'], 'retail_price' => $sales['unit_price'], 'last_restock_date' => $sales['sales_date'] ]);
+                      }
+                  
+                    }
+
+                }
+              }
+          }
+       catch (Exception $exception) {
+                $this->database->rollBack();
+                throw $exception;
+            }
+            $this->database->commit();
+             
+      return $item_names;
+   }
 
     public function create(array $data){
         try {

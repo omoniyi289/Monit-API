@@ -401,7 +401,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/v1/deposits/by_station/{param}', 'DepositsController@get_by_station_id');
     Route::get('/v1/deposits/validate_amount/{param}', 'DepositsController@validate_amount');
     Route::patch('/v1/deposits', 'DepositsController@update');
-     Route::post('/v1/deposits/parsed_csv_data', 'DepositsController@parsed_csv_data');
+    Route::post('/v1/deposits/parsed_csv_data', 'DepositsController@parsed_csv_data');
     Route::post('/v1/deposits/file_upload', 'DepositsController@file_upload');
     
 

@@ -180,7 +180,9 @@ public function stock_count($raw_data){
                    if(count($variant) > 0){
                              ////create stock sales if qty_sold > 0 
                   if($value['qty_sold'] > 0){
-                   StockSales::create( ['item_id'=>$value['item_id'], 'company_id' =>$value['company_id'],'station_id'=>$value['station_id'],  'compositesku'=>$value['compositesku'], 'qty_sold'=>$value['qty_sold'], 'cash_collected'=>$value['cash_collected'], 'retail_price'=>$value['retail_price'], 'supply_price'=>$value['supply_price'], 'qty_in_stock'=>$value['qty_in_stock'], 'sold_by'=>$raw_data['created_by']] );
+                  $sales_date= date_format(date_create($value['sales_date']),"Y-m-d")." 00:00:00";
+
+                   StockSales::create( ['item_id'=>$value['item_id'], 'company_id' =>$value['company_id'],'station_id'=>$value['station_id'],  'compositesku'=>$value['compositesku'], 'qty_sold'=>$value['qty_sold'], 'cash_collected'=>$value['cash_collected'], 'retail_price'=>$value['retail_price'], 'supply_price'=>$value['supply_price'], 'qty_in_stock'=>$value['qty_in_stock'], 'sales_date'=> $sales_date, 'sold_by'=>$raw_data['created_by']] );
                         }
 
                         //update qty in stock by deducting sales
