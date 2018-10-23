@@ -69,7 +69,7 @@ class EquipmentMaintenanceService
     
     //if(isset($params['get_open_station_info'])){
           ////get pumps and their last inputs
-            $pumps = Pumps::where('station_id',$params['station_id'])->with('product')->orderBy('pump_nozzle_code', 'ASC')->get(['id', 'pump_nozzle_code', 'product_id']);
+            $pumps = Pumps::where('station_id',$params['station_id'])->with('product')->with('station:id,name,company_id')->orderBy('pump_nozzle_code', 'ASC')->get(['id', 'pump_nozzle_code', 'product_id']);
             foreach ($pumps as $key => $value) {
           
                 $last_reading = DailyTotalizerReadings::select('id','close_shift_totalizer_reading', 'open_shift_totalizer_reading')->where('pump_id',$value['id'])->orderBy('reading_date', 'desc')->get()->first();
@@ -108,7 +108,7 @@ class EquipmentMaintenanceService
           public function get_pump_maintenance_log($params)
     {   
 
-       $result = PumpMaintenanceLog::where('station_id',$params['station_id']);
+       $result = PumpMaintenanceLog::with('station:id,name,company_id')->where('station_id',$params['station_id']);
         $result->orderBy('id', 'desc');
         return $result->get();      
     }

@@ -160,6 +160,52 @@ class DepositsService
         return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
     }
 
+        public function handle_enyo_file_upload($request)
+    {   
+        $this->current_user = JWTAuth::parseToken()->authenticate();
+        $user_id = $this->current_user->id;
+        $company_id = $this->current_user->company_id;
+        if($request->hasFile('file')) {
+            $fileItself = $request->file('file');
+            $rows = array();
+            $load = Excel::load($fileItself, function($reader) {})->get();
+          // foreach ($load as $key => $value) {
+          //   $row = $value;
+          // //  return $load[0];
+          //  if(!isset($row->pos_gtb_smors)){
+          //       array_push($this->csv_error_log , ["message" => "Station Code column not specified"]);
+          //   }
+          //   else if(!isset($row->pos_access_smors)){
+          //       array_push($this->csv_error_log , ["message" => "Bank column not specified"]);
+            
+          
+          //   }else{
+
+          //   }
+          // }
+                //to verify if user has access to upload for that company
+              // $this->company_details = Company::where('id', $company_id)->get()->first();
+                //to verify if user has access to upload for that station
+               // $user_stations_details = $this->station_service->get_stations_by_user_id($user_id);
+              
+              
+                foreach($load as $key => $row2) {
+                  foreach($row2 as $key => $row) {
+                //$this->validate_company_and_bank($key, $row, $company_id);
+                    $new = array();
+            if( isset( $row['pos_access_smors']) and isset( $row['date']) and $row['pos_access_smors'] > 0 and $row['date'] != null ){
+                array_push($this->csv_success_rows, array('bank_name' => 'Access', 'amount' => $row['pos_access_smors'], 'teller_date' => date_format(date_create($row['date']->toDateTimeString()),"Y-m-d")." 00:00:00" ));
+            }
+            else if( isset( $row['pos_gtb_smors']) and isset( $row['date']) and $row['pos_gtb_smors'] > 0  and $row['date'] != null ){
+                array_push($this->csv_success_rows, array('bank_name' => 'GTB', 'amount' => $row['pos_access_smors'] , 'teller_date' => date_format(date_create($row['date']->toDateTimeString()),"Y-m-d")." 00:00:00") );
+            }
+                }
+        
+            }
+          }
+        return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
+    }
+
      public function validate_amount($params)
     {   
 

@@ -15,10 +15,10 @@ class DailyTotalizerReadings extends Model
 	  public function pump() {
         return $this->belongsTo(Pumps::class,'pump_id');
     }
-      public function station() {
+    public function station() {
         return $this->belongsTo(Station::class,'station_id');
     }
-       public function company() {
+    public function company() {
         return $this->belongsTo(Company::class,'company_id');
     }
 }

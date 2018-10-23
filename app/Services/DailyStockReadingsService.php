@@ -7,7 +7,8 @@
  */
 
 namespace App\Services;
-
+ini_set('memory_limit', '1700M');
+ini_set('max_execution_time', 19000);   
 
 use App\Reposities\CompanyRepository;
 use Illuminate\Database\DatabaseManager;

@@ -15,7 +15,7 @@ class ProductChangeLogs extends Model
     ];
 
     public function station(){
-        return $this->belongsTo(Station::class, 'id');
+        return $this->belongsTo(Station::class, 'station_id');
     }
     public function product(){
         return $this->belongsTo(Products::class ,'product_id');

@@ -48,10 +48,10 @@ class ProductPriceChangeLogService
             if (count($exist) > 0) {
                 return 'ERROR 400';
             }else{   
-             $data['new_price_tag'] = $data['requested_price_tag'];  
-             $product= Products::where('id', $data['product_id'])->first();
-             $data['product'] = $product['code'];    
-             $product_price = ProductPrices::create($data);
+                 $data['new_price_tag'] = $data['requested_price_tag'];  
+                 $product= Products::where('id', $data['product_id'])->first();
+                 $data['product'] = $product['code'];    
+                 $product_price = ProductPrices::create($data);
                 }
             }
         }catch (Exception $exception){
@@ -59,7 +59,7 @@ class ProductPriceChangeLogService
             throw $exception;
         }
         $this->database->commit();
-        return $product_price;
+        return ProductPrices::where('id', $product_price['id'])->with('station:id,name,company_id')->with('product:id,code')->get()->first();
     }
 
     public function get_company_by_name($name){
@@ -155,11 +155,13 @@ class ProductPriceChangeLogService
 
 
 
-return  ProductChangeLogs::where("id", $data['id'])->with('product')->with('approver')->get()->first();
+return  ProductChangeLogs::where("id", $data['id'])->with('product:id,code')->with('approver:id,fullname,email')->with('station:id,name,company_id')->get()->first();
     }
-    public function get_by_station_id($station_id, array $options = [])
+    public function get_by_station_id($station_ids, array $options = [])
     {
-        return ProductChangeLogs::where("station_id", $station_id)->with('product')->with('approver')->get();
+        $station_ids = explode(",", $station_ids);
+
+        return ProductChangeLogs::whereIn("station_id", $station_ids)->with('product:id,code')->with('approver:id,email,fullname')->with('station:id,name,company_id')->get();
     }
   public function verify_approval($data)
     {

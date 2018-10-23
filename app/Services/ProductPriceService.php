@@ -62,9 +62,10 @@ class ProductPriceService
     {
         return $this->get_requested_product_price_change($user_id);
     }
-    public function get_by_station_id($station_id, array $options = [])
-    {
-        return ProductPrices::where("station_id", $station_id)->with('product')->get();
+    public function get_by_station_id($station_ids, array $options = [])
+    {   
+        $station_ids = explode(",", $station_ids);
+        return ProductPrices::whereIn("station_id", $station_ids)->with('product:id,code')->with('station:id,name,company_id')->get();
     }
     public static function log_price_change($data, array $options = [])
     {
