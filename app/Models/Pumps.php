@@ -18,4 +18,7 @@ class Pumps extends Model
     public function product(){
         return $this->belongsTo(Products::class, 'product_id');
     }
+    public function station() {
+        return $this->belongsTo(Station::class,'station_id');
+    }
 }

@@ -7,6 +7,8 @@
  */
 
 namespace App\Services;
+ini_set('memory_limit', '3000M');
+ini_set('max_execution_time', 190000);   
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Events\Dispatcher;
@@ -189,20 +191,95 @@ class DepositsService
                // $user_stations_details = $this->station_service->get_stations_by_user_id($user_id);
               
               
-                foreach($load as $key => $row2) {
-                  foreach($row2 as $key => $row) {
-                //$this->validate_company_and_bank($key, $row, $company_id);
-                    $new = array();
-            if( isset( $row['pos_access_smors']) and isset( $row['date']) and $row['pos_access_smors'] > 0 and $row['date'] != null ){
-                array_push($this->csv_success_rows, array('bank_name' => 'Access', 'amount' => $row['pos_access_smors'], 'teller_date' => date_format(date_create($row['date']->toDateTimeString()),"Y-m-d")." 00:00:00" ));
+          foreach($load as $key => $row2) {
+
+            $station_name =  $row2->getTitle();
+
+            if($station_name == 'Zuba'){
+                $station_id = 25;
             }
-            else if( isset( $row['pos_gtb_smors']) and isset( $row['date']) and $row['pos_gtb_smors'] > 0  and $row['date'] != null ){
-                array_push($this->csv_success_rows, array('bank_name' => 'GTB', 'amount' => $row['pos_access_smors'] , 'teller_date' => date_format(date_create($row['date']->toDateTimeString()),"Y-m-d")." 00:00:00") );
+            else if($station_name == 'Command'){
+                $station_id = 24;
             }
+            else if($station_name == 'Oshodi'){
+                $station_id = 1;
+            }
+            else if($station_name == 'Madalla'){
+                $station_id = 5;
+            } 
+            else if($station_name == 'OO'){
+                $station_id = 21;
+            }
+            else if($station_name == 'Mararaba'){
+                $station_id = 30;
+            }
+            else if($station_name == 'Dei-Dei'){
+                $station_id = 29;
+            }
+            else if($station_name == 'Bariga'){
+                $station_id = 26;
+            }
+            else if($station_name == 'Igando'){
+                $station_id = 27;
+            }
+            else if($station_name == 'Sharada'){
+                $station_id = 32;
+            }
+            else if($station_name == 'Sangotedo'){
+                $station_id = 34;
+            }
+            else if($station_name == 'Ankpa'){
+                $station_id = 84;
+            }
+            else if($station_name == 'Kachia'){
+                $station_id = 86;
+            }
+            else if($station_name == 'Ipaja'){
+                $station_id = 87;
+            }
+            else if($station_name == 'Suleja Junction'){
+                $station_id = 89;
+            }
+            else if($station_name == 'Gboko'){
+                $station_id = 91;
+            }
+            else if($station_name == 'Northbank'){
+                $station_id = 178;
+            }
+            else if($station_name == 'Eastern Bypass'){
+                $station_id = 182;
+            }
+            else if($station_name == 'SkyTeam'){
+                $station_id = 181;
+            }
+            else if($station_name == 'Ganaja'){
+                $station_id = 188;
+            }
+            else if($station_name == 'Owode'){
+                $station_id = 186;
+            }
+
+
+
+
+
+            foreach($row2 as $key => $row) {
+            $new = array();
+              if( isset( $row['pos_access_smors']) and isset( $row['date']) and $row['pos_access_smors'] > 0 and $row['date'] != null  ){
+                  //array_push($this->csv_success_rows, array('bank_name' => 'Access Bank','station_id' =>  $station_id, 'amount' => round($row['pos_access_smors'], 2), 'teller_date' => date_format(date_create($row['date']->toDateTimeString()),"Y-m-d")." 00:00:00" ));
+
+                  Deposits::create(['company_id' => 8,'station_id' => $station_id, 'payment_type' => 'POS','pos_receipt_number' => '', 'bank' => 'Access Bank', 'amount' => round($row['pos_access_smors'], 2),'reading_date' => date_format(date_create($row['date']->toDateTimeString()),"Y-m-d").' 00:00:00',  'teller_date'=> date_format(date_create($row['date']->toDateTimeString()),"Y-m-d").' 00:00:00', 'upload_type'=>'Replace']);
+              }
+
+              if( isset( $row['pos_gtb_smors']) and isset( $row['date']) and $row['pos_gtb_smors'] > 0  and $row['date'] != null ){
+                  //array_push($this->csv_success_rows, array('bank_name' => 'GTB','station_id' =>  $station_id, 'amount' => round($row['pos_gtb_smors'], 2) , 'teller_date' => date_format(date_create($row['date']->toDateTimeString()),"Y-m-d")." 00:00:00") );
+
+                  Deposits::create(['company_id' => 8,'station_id' => $station_id, 'payment_type' => 'POS','pos_receipt_number' => '', 'bank' => 'Guaranty Trust Bank', 'amount' => round($row['pos_gtb_smors'], 2),'reading_date' => date_format(date_create($row['date']->toDateTimeString()),"Y-m-d").' 00:00:00',  'teller_date'=> date_format(date_create($row['date']->toDateTimeString()),"Y-m-d").' 00:00:00', 'upload_type'=>'Replace']);
                 }
-        
             }
+
           }
+        }
         return  array(['error' => $this->csv_error_log, 'success' => $this->csv_success_rows]);
     }
 
