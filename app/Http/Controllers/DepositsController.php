@@ -64,7 +64,7 @@ class DepositsController extends BaseController
           public function file_upload(Request $request)
     {
         $deposit_request = $request;
-        $data = $this->deposits_service->handle_enyo_file_upload($deposit_request);
+        $data = $this->deposits_service->handle_file_upload($deposit_request);
         return $this->response(1, 8000, "stock file loaded", $data);
     }
    

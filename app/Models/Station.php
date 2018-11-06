@@ -40,4 +40,7 @@ class Station extends Model
     public function product_prices(){
         return $this->hasMany(ProductPrices::class);
     }
+    public function company(){
+        return $this->belongsTo(Company::class,"company_id");
+    }  
 }

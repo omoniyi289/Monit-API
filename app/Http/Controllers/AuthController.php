@@ -17,6 +17,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Mail\ForgotPassMail;
 use Mail;
 use App\Models\UserLoginActivityLog;
+use App\Company;
+
 
 class AuthController extends BaseController
 {
@@ -112,9 +114,32 @@ class AuthController extends BaseController
                     if ($token){
                         $user['token'] = $token;
                         UserLoginActivityLog::create([ 'email'=> $data['email'], 'user_id'=> $data['id'], 'app'=> 'Analytics', 'login_time'=> date('Y-m-d H:i:s'), 'browser_name' => $request->get('browser_name'), 'browser_version'=> $request->get('browser_version'), 'os_version' => $request->get('os_version'), 'location_cordinate' => $request->get('location_cordinate') , 'location_address' => $request->get('location_address') , 'app' => 'SA' ]);
-
+                        $companies = Company::with(['stations' => function($subquery){
+                            $subquery->select('id','name','company_id');
+                        }])->get(['id', 'name']);
                         $station_array = array();
                         $perm_array = array();
+                        // $companies_array =array();
+                        // foreach ($companies as $key => $value) {
+                        //   array_push($companies_array[$value->id] = 
+                        //          array("name"=> $value->name,
+                        //          "stations"=> $value->stations)
+                        //       );
+                        // }
+                        //super admin
+                      if( $user['company_id'] == 'master' and $user['role_id'] == 'master'){
+                          $data =  ( object)array( 
+                            [  
+                               "companies" => $companies,
+                               "username"=> $user['fullname'],
+                               "isSuperAdmin" => true,
+                               
+                               "userId"=> $user['id']
+                            ]);
+                      }
+                      else
+                      {
+
                         foreach ($user->station_users as $key => $value) {
                           //station belongs to a region
                           if(isset($value->station) and isset( $value->station->station_region->region)
@@ -141,17 +166,21 @@ class AuthController extends BaseController
                             $user->companies = (object)['name' => 'Nil','id' => 'Nil'];
                         }
 
-                        $data =  (object)array(["companies"=> [
-                           $user->companies->id=> [
-                               "name"=> $user->companies->name,
-                               "stations"=> $station_array
-                           ]
-                       ],
-                       
-                       "username"=> $user['fullname'],
-                       "userRole"=> $user->role->name,
-                       "userPermissions"=> $perm_array,
-                   "userId"=> $user['id']]);
+                        $data =  (object)array(
+                          ["companies"=> [
+                            $user->companies->id => [
+                                 "name"=> $user->companies->name,
+                                 "stations"=> $station_array
+                             ]
+                         ],      
+                           "isSuperAdmin" => false,              
+                           "username"=> $user['fullname'],
+                           "userRole"=> $user->role->name,
+                           "userPermissions"=> $perm_array,
+                           "userId"=> $user['id']]);
+
+                      }
+
 
                         return $this->response(1, 8000, "authentication successful", $data);
                     }elseif (!$token){

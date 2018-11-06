@@ -146,5 +146,11 @@ class MigrationController extends BaseController
         $data = $this->migration_service->get_up_to_date_readings_of_a_reliable_station_for_demo();
         return $this->response(1, 8000, "transfers", $data);
     } 
+    public function get_up_to_sales_stock_for_demo_station(Request $request) {
+        $data = $this->migration_service->get_up_to_sales_stock_for_demo_station();
+        return $this->response(1, 8000, "transfers", $data);
+    } 
+
+    
    
 }

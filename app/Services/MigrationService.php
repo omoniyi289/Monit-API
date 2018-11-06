@@ -41,7 +41,7 @@ class MigrationService
     private $servername = "185.130.207.215";
     private $username = "samuel.j";
     private $password = "Tr-3re@Aza4r";
-    private $dbname = "station_manager_1";
+    private $dbname = "station_manager";
     private $conn ='';
 
     private $local_servername = "127.0.0.1";
@@ -53,7 +53,7 @@ class MigrationService
     private $staging_servername = "185.130.207.215";
     private $staging_username = "samuel.j";
     private $staging_password = "Tr-3re@Aza4r";
-    private $staging_dbname = "station_manager_test";
+    private $staging_dbname = "station_manager_demo";
     private $staging_conn ='';
 
     private $prod_servername = "34.246.63.12";
@@ -68,7 +68,7 @@ class MigrationService
     private $ms_servername = "185.173.25.163";
     private $ms_username = "samuel.j";
     private $ms_password = "P@ssw0rd%%";
-    private $ms_dbname = "station_manager_1";
+    private $ms_dbname = "station_manager";
     private $ms_conn ='';
     
     //$sql = "SELECT id, firstname, lastname FROM MyGuests";
@@ -1299,5 +1299,38 @@ public function get_up_to_date_readings_of_a_reliable_station_for_demo(){
     }
    
  
+
+
+   
+public function get_up_to_sales_stock_for_demo_station(){
+        $this->database->beginTransaction();
+        $arr=array();
+        $counter = 0;
+        try{
+        $sql = "SELECT * FROM physical_ee_sales_stock where stationid = 188 and transactiondate > '2018-09-01'";    
+        $result = mysqli_query($this->prod_conn,$sql);
+            if (mysqli_num_rows($result) > 0 and $result !=false ) {
+                // output data of each row
+                while($row =mysqli_fetch_assoc($result) ){    
+                      if(true){
+                     $counter++;         
+                // $insert = "INSERT INTO daily_stock_readings ('company_id', 'station_id', 'tank_id', 'status', 'tank_code', 'created_at', 'reading_date', 'phy_shift_end_volume_reading' ,
+                //                  'phy_shift_start_volume_reading', 'product', 'return_to_tank', 'end_delivery' ) VALUES ( 1, 1, '".$row['tank_id']."', '".$row['status']."', '".$row['tank_code']."', '".$row['created_at']."', '".$row['reading_date']."', '".$row['phy_shift_end_volume_reading']."', '".$row['phy_shift_start_volume_reading']."', '".$row['product']."', '".$row['return_to_tank']."', '".$row['end_delivery']."' ) ";
+
+                //   $result2 = mysqli_query($this->prod_conn,$insert);
+                }
+            }
+           }
+
+      
+            
+        }catch (Exception $exception){
+            $this->database->rollBack();
+            throw $exception;
+        }
+        $this->database->commit();
+        return $counter;
+    }
+   
        
 }

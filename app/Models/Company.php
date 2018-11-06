@@ -29,7 +29,7 @@ class Company extends Model
     }
 
     public function stations() {
-        return $this->hasMany(Station::class);
+        return $this->hasMany(Station::class, 'company_id', 'id');
     }
 
     public function tank_groups() {

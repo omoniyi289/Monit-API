@@ -10,6 +10,8 @@ namespace App\Reposities;
 
 use App\Company;
 use Core\Repository\BaseRepository;
+use Illuminate\Support\Facades\DB;
+
 
 class CompanyRepository extends BaseRepository
 {
@@ -24,10 +26,17 @@ class CompanyRepository extends BaseRepository
         $company->save();
         return $company;
     }
-public function update(Company $pump, array $data){
+
+    public function update(Company $pump, array $data){
         $pump->fill($data);
         $pump->save();
         return $pump;
     }
+
+    // public function get_stations_all(){
+    //     DB::select(
+    //         "select id,name from companies "
+    //     );
+    // }
 
 }
