@@ -39,7 +39,7 @@ class NewCompanyUserMail extends Mailable
             ->with([
                 'fullname' => $this->data["fullname"],
                 'company_name' => $this->data['company_name'],
-                'email'=>$this->data['email']
+                'email'=>$this->data['email'],
                 'password'=>$this->data['password']
             ]);
     }
