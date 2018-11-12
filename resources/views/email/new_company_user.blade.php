@@ -144,10 +144,10 @@
                             Click the button below and login with the following details<br><br>
                             <b> 
                             Email : {{$email}}<br>
-                            Password: 123456
-                            </b>  (default)
+                            Password: {{$password}}
+                            </b> 
                             <br><br>
-                            Please you are advised to change your password after login for better security
+                            Please you can change your password after login to your choice password
                         </p>
                     </td>
                 </tr>

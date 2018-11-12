@@ -32,7 +32,9 @@ class CompanyUserController extends BaseController
 
     public function create(ApiCompanyUserRequest $request){
         $company_user_req = $request->get('user',[]);
-        $company_user_req['password'] = bcrypt("123456");
+        $new_pass= 'NP'.substr(uniqid(), 8);
+        $company_user_req['password'] = bcrypt($new_pass);
+        //$company_user_req['password'] = bcrypt("123456");
         $exist_email = $this->company_user_service->get_user_by_email($company_user_req['email']);
         $exist_username = $this->company_user_service->get_user_by_username($company_user_req['username']);
         $exist_email2 = $this->user_service->get_user_by_email($company_user_req['email']);
@@ -48,6 +50,7 @@ class CompanyUserController extends BaseController
         $company= $this->company_service->get_by_id($company_user_req['company_id']);
         $mail_data = [
             'fullname' => $data['fullname'],
+            'password' => $company_user_req['password'],
             'email' => $data['email'],
             'company_name' => $company[0]['name'],
         ];

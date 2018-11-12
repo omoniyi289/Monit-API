@@ -40,6 +40,7 @@ class NewCompanyUserMail extends Mailable
                 'fullname' => $this->data["fullname"],
                 'company_name' => $this->data['company_name'],
                 'email'=>$this->data['email']
+                'password'=>$this->data['password']
             ]);
     }
 }
