@@ -50,7 +50,7 @@ class CompanyUserController extends BaseController
         $company= $this->company_service->get_by_id($company_user_req['company_id']);
         $mail_data = [
             'fullname' => $data['fullname'],
-            'password' => $company_user_req['password'],
+            'password' => $new_pass,
             'email' => $data['email'],
             'company_name' => $company[0]['name'],
         ];
