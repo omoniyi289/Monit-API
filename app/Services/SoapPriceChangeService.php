@@ -33,7 +33,7 @@ class SoapPriceChangeService
                'verify_peer_name' => false,
                'allow_self_signed' => true
            ]
-       ]);        $wsdlPath = "http://imc.energy360africa.com:98/backend/e360prime_services.asmx?wsdl"; 
+       ]);        $wsdlPath = "http://prime.energy360africa.com/backend/e360prime_services.asmx?op=change_price"; 
               return new \SoapClient($wsdlPath, [
            'stream_context' => $context,
            'trace' => true
