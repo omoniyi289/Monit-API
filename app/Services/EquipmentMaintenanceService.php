@@ -70,9 +70,23 @@ class EquipmentMaintenanceService
         $station_ids = explode(",", $options['station_id']);
         $all_pumps = array();
         foreach ($station_ids as $key => $value) {
-          $station_pumps = $this->equipment_maintenance_repository->get_station_pumps_readings($value, $start_date, $end_date);
-          $this->combine_pump_totalizer_readings_for_pump_readings_log($station_pumps, $volume_category);
-          //array_push($all_pumps,  $station_pumps);
+          //$station_pumps = $this->equipment_maintenance_repository->get_station_pumps_readings($value, $start_date, $end_date);
+           $station_pumps_at_start_date = $this->equipment_maintenance_repository->get_station_pumps_readings_at_date($value, $start_date);
+          // return $station_pumps_start;
+           $station_pumps_at_end_date = $this->equipment_maintenance_repository->get_station_pumps_readings_at_date($value, $end_date);
+           $new_pump_aggregate  = array();
+           $station_pumps_at_start_date = json_decode(json_encode($station_pumps_at_start_date), true);
+           $station_pumps_at_end_date = json_decode(json_encode($station_pumps_at_end_date), true);
+           foreach ($station_pumps_at_start_date as $key => $value) {
+
+            $key = array_search( $value['nozzle_code'], array_column($station_pumps_at_end_date, 'nozzle_code') );
+
+            $max_reading = $station_pumps_at_end_date[$key]['totalizer_reading'];
+
+            array_push($new_pump_aggregate, array( 'company_id'=> $value['company_id'], 'station_id'=> $value['station_id'],'station_name' => $value['station_name'],'nozzle_code' => $value['nozzle_code'], 'min_reading'=> $value['totalizer_reading'], 'max_reading'=> $max_reading ) );
+           }
+          $this->combine_pump_totalizer_readings_for_pump_readings_log_array($new_pump_aggregate, $volume_category);
+         
         }
         return $this->grouped_pump_array_for_pump_readings_query;
     }
@@ -319,6 +333,96 @@ class EquipmentMaintenanceService
        
     }
    
+          public function combine_pump_totalizer_readings_for_pump_readings_log_array($pumps, $volume_category)
+    {   
+        //$pumps = json_decode(json_encode($pumps), true); //from obj to array
+        foreach ($pumps as $key => $value) {
+               $combined_pump = array();
+               $combined_pump['station_id']  = $value['station_id'];
+               $combined_pump['station_name']  = $value['station_name'];
+               $combined_pump['past_log']['D_issue_date']  = '';
+               $combined_pump['past_log']['MD_issue_date']  = '';
+               $combined_pump['past_log']['MMD_issue_date']  = '';
+               $combined_pump['past_log']['D_invoice_number']  = '';
+               $combined_pump['past_log']['MD_invoice_number']  = '';
+               $combined_pump['past_log']['MMD_invoice_number']  = '';
+               $combined_pump['past_log']['D_maintenenance_date']  = '';
+               $combined_pump['past_log']['MD_maintenenance_date']  = '';
+               $combined_pump['past_log']['MMD_maintenenance_date']  = '';
+               
+               $pump_split_array =  explode(" ",  $value['nozzle_code']);
+
+               $actual_number = $pump_split_array[ count($pump_split_array) -1]; //e.g 02 or 2
+               $number_as_int = intval($actual_number); //cast to int
+
+               if( $number_as_int > 0  and $number_as_int%2 == 1 ){// if pump number is odd
+                $odd_pump = $value;
+                $even_pump_code = $pump_split_array[0]." ".$pump_split_array[1]." ".($number_as_int+1); //this is to guess the (even) code of other nozzle of the pump nozzle
+                $key = array_search($even_pump_code, array_column($pumps, 'nozzle_code')); //use the formed code to get the nozzle details in the station's pumps
+
+                if( is_numeric($key) and $key > 0){
+                  $even_pump =  $pumps[$key];
+                  $combined_pump_number = ($number_as_int + 1)/2; //e.g (11+1)/2 = 6, joint code of pms pump 11 and pms pump 12 should be pms pump 6
+                  $combined_pump_nozzle_code = $pump_split_array[0]." ".$pump_split_array[1]." ".$combined_pump_number;
+                  $combined_pump['combined_pump_nozzle_code'] = $combined_pump_nozzle_code;
+                  $combined_pump['combined_min_reading'] = $even_pump['min_reading'] + $odd_pump['min_reading'];
+                  $combined_pump['combined_max_reading'] = $even_pump['max_reading'] + $odd_pump['max_reading'];
+                  
+                  //get past log
+                  $past_log = PumpMaintenanceLog::where('combined_pump_nozzle_code', $combined_pump_nozzle_code)->where('station_id', $odd_pump['station_id'])->get()->first();
+                  if(count($past_log) == 1){
+                    $combined_pump['past_log'] = $past_log;
+                    }
+                  if($combined_pump['combined_max_reading'] >= $volume_category){
+                          array_push($this->grouped_pump_array_for_pump_readings_query, $combined_pump);
+                        }
+                }
+                else{
+                    //try by adding '0' to prefix the pump number and check if that exist
+                    $even_pump_code = $pump_split_array[0]." ".$pump_split_array[1]." 0".($number_as_int+1);
+                    $key = array_search($even_pump_code, array_column($pumps, 'nozzle_code'));
+
+                    if( is_numeric($key) and $key > 0){
+                      $even_pump =  $pumps[$key];
+                      $combined_pump_number = ($number_as_int + 1)/2;
+                      $combined_pump_nozzle_code = $pump_split_array[0]." ".$pump_split_array[1]." ".$combined_pump_number;
+                      $combined_pump['combined_pump_nozzle_code'] = $combined_pump_nozzle_code;
+                      $combined_pump['combined_min_reading'] = $even_pump['min_reading'] + $odd_pump['min_reading'];
+                      $combined_pump['combined_max_reading'] = $even_pump['max_reading'] + $odd_pump['max_reading'];
+                      //get past log
+                      $past_log = PumpMaintenanceLog::where('combined_pump_nozzle_code', $combined_pump_nozzle_code)->where('station_id', $odd_pump['station_id'])->get()->first();
+                      if(count($past_log) == 1){
+                          $combined_pump['past_log'] = $past_log;
+                        }
+                      if($combined_pump['combined_max_reading'] >= $volume_category){
+                          array_push($this->grouped_pump_array_for_pump_readings_query, $combined_pump);
+                        }
+                    }
+                    else{
+                        //pump does not have a  pair, just the odd
+                          $combined_pump_nozzle_code = $odd_pump['nozzle_code'];
+                          $combined_pump['combined_pump_nozzle_code'] = $combined_pump_nozzle_code;
+                          $combined_pump['combined_min_reading'] = $odd_pump['min_reading'];
+                          $combined_pump['combined_max_reading'] = $odd_pump['max_reading'];
+                          //get past log
+                          $past_log = PumpMaintenanceLog::where('combined_pump_nozzle_code', $combined_pump_nozzle_code)->where('station_id', $odd_pump['station_id'])->get()->first();
+                          if(count($past_log) == 1){
+                              $combined_pump['past_log'] = $past_log;
+                            }
+                          if($combined_pump['combined_max_reading'] >= $volume_category){
+                          array_push($this->grouped_pump_array_for_pump_readings_query, $combined_pump);
+                        }
+                    }
+
+
+                }
+
+
+
+               }
+        }
+       
+    }
 
     public function create_pump_maintenance_log(array $data) {
         $this->database->beginTransaction();

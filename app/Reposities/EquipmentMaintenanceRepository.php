@@ -27,6 +27,12 @@ where daily_totalizer_readings.station_id = ? and  daily_totalizer_readings.read
      return $result;
     }
 
+   public function get_station_pumps_readings_at_date($station_id, $date){
+//added NOT EQUAL TO 0 to avoid situations where 0 was entered for both opening and closing of totalizer readings
+    $result = DB::select('select daily_totalizer_readings.company_id, pumps.station_id, stations.name as station_name, pumps.pump_nozzle_code as nozzle_code, close_shift_totalizer_reading as totalizer_reading from station_manager.pumps left join station_manager.daily_totalizer_readings on pumps.id = daily_totalizer_readings.pump_id left join stations on stations.id = daily_totalizer_readings.station_id where daily_totalizer_readings.station_id = ? and  DATE(daily_totalizer_readings.reading_date) = ?  ', [$station_id, $date]);
+     return $result;
+    }
+
 public function get_pump_readings($pump_id, $start_date, $end_date){
 //added NOT EQUAL TO 0 to avoid situations where 0 was entered for both opening and closing of totalizer readings
     $result = DB::select('select daily_totalizer_readings.company_id, station_id, stations.name as station_name, daily_totalizer_readings.nozzle_code, min(close_shift_totalizer_reading) as min_reading, 
