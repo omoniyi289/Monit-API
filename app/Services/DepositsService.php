@@ -47,14 +47,43 @@ class DepositsService
             $data['teller_date']= date_format(date_create($data['payment_date']),"Y-m-d");
             $data['reading_date']= date_format(date_create($data['reading_date']),"Y-m-d");
             //date_format(date_create($params['selected_date']),"Y-m-d")
-             $data['upload_type'] = 'Single';
-            $deposits = Deposits::create($data);
+            $data['upload_type'] = 'Single';
+            $station_id = $data['station_id'];
+            $company_id = $data['company_id'];
+            $teller_date = $data['teller_date'];
+            $reading_date = $data['reading_date'];
+            $created_by = $data['created_by'];
+            $note = $data['note'];
+
+           
+             for($i= 0; $i < $data['pos_frequency']; $i++) {
+               isset($data['pos_amount'][$i]) ? $pos_amount = $data['pos_amount'][$i] : $pos_amount = 0;
+               isset($data['pos_bank'][$i]) ? $pos_bank = $data['pos_bank'][$i] : $pos_bank = '';
+               isset($data['pos_receipt_range'][$i]) ? $pos_receipt_range = $data['pos_receipt_range'][$i] : $pos_receipt_range = '';
+
+               
+               Deposits::create(['company_id' => $company_id, 'station_id' => $station_id, 'amount' => $pos_amount, 'teller_date' => $teller_date, 'reading_date' => $reading_date, 'pos_receipt_range' => $pos_receipt_range, 'bank' => $pos_bank , 'payment_type' => 'POS Payment', 'created_by' => $created_by, 'note'=> $note]);
+             }
+             for($i= 0; $i < $data['cash_deposit_frequency']; $i++) {
+               isset($data['deposit_amount'][$i]) ? $deposit_amount = $data['deposit_amount'][$i] : $deposit_amount = 0;
+
+               isset($data['cash_deposit_bank'][$i]) ? $cash_deposit_bank = $data['cash_deposit_bank'][$i] : $cash_deposit_bank = '';
+
+               isset($data['teller_number'][$i]) ? $teller_number = $data['teller_number'][$i] : $teller_number = '';
+
+               isset($data['account_number'][$i]) ? $account_number = $data['account_number'][$i] : $account_number = '';
+
+
+               Deposits::create(['company_id' => $company_id, 'station_id' => $station_id, 'amount' => $deposit_amount, 'teller_date' => $teller_date, 'reading_date' => $reading_date, 'teller_number' => $teller_number , 'account_number' => $account_number , 'bank' => $cash_deposit_bank , 'payment_type' => 'Cash Deposit', 'created_by' => $created_by, 'note' => $note]);
+
+             }
+            
         }catch (Exception $exception){
             $this->database->rollBack();
             throw $exception;
         }
         $this->database->commit();
-         return Deposits::where('id', $deposits['id'])->with('creator')->with('approver')->get()->first();
+         return Deposits::where('station_id', $data['station_id'])->with('creator')->with('approver')->get();
     }
      public function update($deposit_id, array $data)
     {

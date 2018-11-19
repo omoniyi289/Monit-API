@@ -18,11 +18,11 @@ class DepositsController extends BaseController
     public function create(ApiDepositsRequest $request) {
          //return $request;
         $deposit_update_request = $request->get('deposits',[]);
-        if($deposit_update_request['payment_type'] == 'POS' and (!isset($deposit_update_request['pos_receipt_number']) or !isset($deposit_update_request['pos_receipt_range']))){
+       /* if($deposit_update_request['payment_type'] == 'POS' and (!isset($deposit_update_request['pos_receipt_number']) or !isset($deposit_update_request['pos_receipt_range']))){
             return $this->response(0, 8000, "error, missing parameter(s)", null, 400);
         }else if($deposit_update_request['payment_type'] == 'Cash Deposit' and (!isset($deposit_update_request['bank']) or !isset($deposit_update_request['account_number']) or !isset($deposit_update_request['teller_number']))){
             return $this->response(0, 8000, "error, missing parameter(s)", null, 400);
-        }
+        }*/
         $data = $this->deposits_service->create($deposit_update_request);
         return $this->response(1, 8000, "deposits successfully created", $data);
     }

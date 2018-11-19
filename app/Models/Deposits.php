@@ -9,7 +9,7 @@ class Deposits extends Model
 {
     //
     protected $table = 'cash_bank_deposits';
-    protected $fillable = ['date','created_by', 'payment_type', 'pos_receipt_number', 'pos_receipt_range','amount','teller_number','station_id', 'company_id', 'account_number', 'bank','verified_by','v1_id', 'teller_date', 'reading_date','created_at','upload_type'
+    protected $fillable = ['date','created_by', 'payment_type', 'pos_receipt_number', 'pos_receipt_range','amount','teller_number','station_id', 'company_id', 'account_number', 'bank','verified_by','v1_id', 'teller_date', 'reading_date','created_at','upload_type', 'note'
     ];
 
     public function station(){
