@@ -413,6 +413,14 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('/v1/rops', 'ROPSController@create');
     Route::patch('/v1/rops', 'ROPSController@update');
 
+
+    /*
+     * ROPS ENDPOINT
+     * */
+    Route::get('/v1/cops', 'COPSController@get_by_params');
+    Route::post('/v1/cops', 'COPSController@create');
+    Route::patch('/v1/cops', 'COPSController@update');
+
 /*
      *Velox Customers ENDPOINT
      * */

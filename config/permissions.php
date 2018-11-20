@@ -170,6 +170,13 @@ return [
                     "UI_slug" => "AMPS30"
                 ],             
         ],
+         "cops" => [
+                "cops" => [
+                    "name" => "Add and Manage Commercial Online Pricing Surveys",
+                    "description" => "permission to Add and Manage Commercial Online Pricing Surveys",
+                    "UI_slug" => "AMCOPS30"
+                ],             
+        ],
          "velox_customer_management" => [
                 "vcm" => [
                     "name" => "Velox Customer Management",

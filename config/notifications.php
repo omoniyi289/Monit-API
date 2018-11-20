@@ -56,6 +56,10 @@ return [
                  "tank_diagostic_report" => [
                     "name" => "Tank Diagnostic Report",
                     "UI_slug" => "TDRe"
+                ],
+                 "commercial_online_pricing_report" => [
+                    "name" => "Commercial Online Pricing Report",
+                    "UI_slug" => "COPR"
                 ]
 
     ],

@@ -22,12 +22,12 @@ class ROPSController extends BaseController
        // $survey_date = date_format(date_create($rops_request['survey_date']),"Y-m-d");
         $surveys = $this->rops_service->get_by_params($rops_request);
         if(count($surveys) > 0){
-             return $this->response(0, 8000, "Oops! survey already submitted for today",null,400);
+             return $this->response(0, 8000, "Oops! survey already submitted for selected date",null,400);
           }
 
         $data = $this->rops_service->create($rops_request);
         //return $this->response(0, 8000,$data,null,400);
-        return $this->response(1, 8000, "deposits successfully created", $data);
+        return $this->response(1, 8000, "rops successfully created", $data);
     }
 
     public function get_all(){

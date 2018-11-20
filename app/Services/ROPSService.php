@@ -54,11 +54,16 @@ class ROPSService
   
       public function get_by_params($params)
     {
-       // return $params;
-        if($params['station_id'] !=null && $params['survey_date'] != null){
+    
+       if($params['station_id'] !=null && isset($params['survey_date'])  && $params['survey_date'] != null){
             $survey_date = date_format(date_create($params['survey_date']),"Y-m-d");
-            return ROPS::where('survey_date',$survey_date)->where('station_id',$params['station_id'])->get();
+            return ROPS::whereDate('survey_date',$survey_date)->where('station_id',$params['station_id'])->get();
             }
+
+        else if($params['station_id'] !=null && isset($params['request_type']) && $params['request_type'] == 'summary'){
+          
+            return ROPS::where('station_id',$params['station_id'])->distinct()->select('survey_date', 'created_at', 'uploaded_by')->with('uploader:id,fullname')->get();
+        }
     }
 
 
