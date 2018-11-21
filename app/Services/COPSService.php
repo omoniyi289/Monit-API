@@ -127,7 +127,6 @@ class COPSService
                    'receiver_data'=> $survey,
                     'date' => $survey_date
                 ];
-                
                 //event(new COPSGenerated($mail_data));
               }
 
