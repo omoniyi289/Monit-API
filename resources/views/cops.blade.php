@@ -27,126 +27,165 @@
                 </tr>
 
                 <tr >
-                    <th>{{$finale['survey_date']}}</th>                  
-                    <th>{{$finale->station['name']}}</th>
-                    <th>{{$finale->uploader['fullname']}}</th>
-                    <th>{{$finale['created_at']}} </th>
+                    <th>{{$finale[0]->survey_date}}</th>                  
+                    <th>{{$finale[0]->station['name']}}</th>
+                    <th>{{$finale[0]->uploader['fullname']}}</th>
+                    <th>{{$finale[0]->created_at}} </th>
                 </tr>
             </table>
     </div>
     
-    <div class="col-sm-12 ">
-   
-        <div class ="bg-info"  align="center"></div>
-        <div class="alert-info" style="font-size: 17px; ">Primary competition within 600m
-radius, in order of proximity </div>
-            <table class="table  table-striped" >       
-                   <tr>
-                   
-                        <td></td>
-                        <th>Competitor's Name</th>
-                        <th>PMS</th>
-                        <th>AGO</th>
-                        <th>HHK</th>
-                    </tr>
-                    <tr>   
-                         <th> 1</th>
-                        <td>{{$finale['pc1_name']}}</td>
-                        <td>{{$finale['pc1_price_pms']}}</td>
-                        <td>{{$finale['pc1_price_ago']}}</td> 
-                        <td>{{$finale['pc1_price_dpk']}}</td>        
-                    </tr>
-                    <tr>   
-                        <th> 2</th>
-                        <td>{{$finale['pc2_name']}}</td>
-                        <td>{{$finale['pc2_price_pms']}}</td>
-                        <td>{{$finale['pc2_price_ago']}}</td> 
-                        <td>{{$finale['pc2_price_dpk']}}</td>           
-                    </tr>
-                    <tr>   
-                        <th> 3</th>
-                        <td>{{$finale['pc3_name']}}</td>
-                        <td>{{$finale['pc3_price_pms']}}</td>
-                        <td>{{$finale['pc3_price_ago']}}</td> 
-                        <td>{{$finale['pc3_price_dpk']}}</td>         
-                    </tr>            
-            </table>        
+    <div class="col-sm-12" >
+                  <br><br>
+                  <table class="table  table-striped" >
+                      <tr   style="font-size: 20px;">
+                          <th colspan="4" style="text-align: left; background-color: #FF8000" >B2B</th>
+                          <th colspan="2" style="text-align: center; background-color: #3399FF" >PMS</th>
+                          <th colspan="2" class="ago" style="text-align: center ;background-color: #99FF99" >AGO</th>
+                          <th colspan="2" class="dpk" style="text-align: center; background-color: #FFFF00">DPK</th>
+                          <th colspan="2"  style="text-align: center; background-color: #FF0000" >LUBES</th>
+                          <th colspan="2"  style="text-align: center; background-color: #808080" >LPG</th>
+                      </tr>
+                      <tr style="text-align: center">
+                          <th colspan="4" ></th>
+                          <th class="pms">OMP</th>
+                          <th class="pms">COMPANY</th>
+                          
+                          <th class="ago">OMP</th>
+                          <th class="ago">COMPANY</th>
+                          
+                          <th class="dpk">OMP</th>
+                          <th class="dpk">COMPANY</th>
+                          
+                          <th >OMP</th>
+                          <th >COMPANY</th>
 
-            <div class="alert-info" style="font-size: 17px; ">Secondary competition within 600m - 2.5km radius, in order of proximity</div>
-            <table class="table  table-striped" >       
-                   <tr>
-                   
-                        <td></td>
-                        <th>Competitor's Name</th>
-                        <th>PMS</th>
-                        <th>AGO</th>
-                        <th>HHK</th>
-                    </tr>
-                    <tr>   
-                        <th> 1</th>
-                        <td>{{$finale['sc1_name']}}</td>
-                        <td>{{$finale['sc1_price_pms']}}</td>
-                        <td>{{$finale['sc1_price_ago']}}</td> 
-                        <td>{{$finale['sc1_price_dpk']}}</td>          
-                    </tr>
-                    <tr>   
-                        <th> 2</th>
-                        <td>{{$finale['sc2_name']}}</td>
-                        <td>{{$finale['sc2_price_pms']}}</td>
-                        <td>{{$finale['sc2_price_ago']}}</td> 
-                        <td>{{$finale['sc2_price_dpk']}}</td>        
-                    </tr>
-                    <tr>   
-                        <th> 3</th>
-                        <td>{{$finale['sc3_name']}}</td>
-                        <td>{{$finale['sc3_price_pms']}}</td>
-                        <td>{{$finale['sc3_price_ago']}}</td> 
-                        <td>{{$finale['sc3_price_dpk']}}</td>          
-                    </tr>            
-            </table>            
-             <div class="alert-info" style="font-size: 17px; ">Nearest Depot</div>
-            <table class="table  table-striped" >       
-                   <tr>
-                        <th>Depot Name</th>
-                        <th>PMS</th>
-                        <th>AGO</th>
-                        <th>HHK</th>
-                    </tr>
-                    <tr>   
-                        <td>{{$finale['nearest_depot_name']}}</td>
-                        <td>{{$finale['nearest_depot_pms']}}</td>
-                        <td>{{$finale['nearest_depot_ago']}}</td> 
-                        <td>{{$finale['nearest_depot_dpk']}}</td>                        
-                    </tr>                         
-            </table> 
-             <div class="alert-info" style="font-size: 17px; ">Current Selling Price</div>
-            
-            <table class="table  table-striped" >       
-                   <tr>
-                        <th>PMS</th>
-                        <th>AGO</th>
-                        <th>HHK</th>
-                    </tr>
-                    <tr>   
-                         <td>{{$finale['current_selling_price_pms']}}</td>
-                         <td>{{$finale['current_selling_price_ago']}}</td> 
-                         <td>{{$finale['current_selling_price_dpk']}}</td>                         
-                    </tr>                         
-            </table> 
-            <div class="alert-info" style="font-size: 17px; ">Recommended Selling Price</div>
-            <table class="table  table-striped" >       
-                   <tr>
-                        <th>PMS</th>
-                        <th>AGO</th>
-                        <th>HHK</th>
-                    </tr>
-                    <tr>   
-                         <td>{{$finale['recommended_selling_price_pms']}}</td>
-                         <td>{{$finale['recommended_selling_price_ago']}}</td> 
-                         <td>{{$finale['recommended_selling_price_dpk']}}</td>                     
-                    </tr>                         
-            </table>                           
-    </div>
+                          <th >OMP</th>
+                          <th >COMPANY</th>
+                      </tr> 
+
+                      <tr >
+                          <th colspan="4"  style=" background-color: #E0E0E0">LOCATION</th>
+                          
+                          <th ></th>
+                          <th ></th>
+                          <th ></th>
+                          <th ></th>
+                          
+                          <th ></th>
+                          <th ></th>
+                          
+                          <th ></th>
+                          <th ></th>
+
+                          <th ></th>
+                          <th ></th>
+                      </tr> 
+                      @foreach($finale as $data)
+                        @if($data->location != null )
+                      <tr > 
+                          <td colspan="4"  > {{$data->location}} </td>
+                          <td > {{$data->omp_pms}} </td>
+                          <td >{{$data->company_pms}} </td>
+
+                          <td >{{$data->omp_ago}}  </td>
+                          <td > {{$data->company_ago}} </td>
+                          <td >{{$data->omp_dpk}} </td>
+                          <td >{{$data->company_dpk}} </td>
+                          <td >{{$data->omp_lube}} </td>
+                          <td > {{$data->company_lube}} </td>
+
+                          <td > {{$data->omp_lpg}} </td>
+                          <td > {{$data->company_lpg}} </td>
+                          
+                         
+                      </tr>    
+                      @endif
+                      @endforeach
+
+                      <tr >
+                          <th colspan="4" style="font-size: 10px; background-color: #FF9999" >COMPETITORS PRICE</th>
+                          
+                          <th ></th>
+                          
+                          <th ></th>
+                          <th ></th>
+                          <th ></th>
+                          <th ></th>
+                          <th ></th>
+                          
+                          <th ></th>
+                          <th ></th>
+
+                          <th ></th>
+                          <th ></th>
+                      </tr> 
+
+                      @foreach($finale as $data)
+                        @if($data->competitor != null )
+                      <tr > 
+                          <td colspan="4"  > {{$data->competitor}} </td>
+                          <td > {{$data->omp_pms}} </td>
+                          <td >{{$data->company_pms}} </td>
+
+                          <td >{{$data->omp_ago}}  </td>
+                          <td > {{$data->company_ago}} </td>
+                          <td >{{$data->omp_dpk}} </td>
+                          <td >{{$data->company_dpk}} </td>
+                          <td >{{$data->omp_lube}} </td>
+                          <td > {{$data->company_lube}} </td>
+
+                          <td > {{$data->omp_lpg}} </td>
+                          <td > {{$data->company_lpg}} </td>
+                          
+                         
+                      </tr>    
+                      @endif
+                      @endforeach  
+
+                      <tr >
+                          <th colspan="4" style="background-color: #FF8000" >D2D</th>
+                        
+                          <th ></th>
+                          <th ></th>
+                          <th ></th>
+                          <th ></th>
+                          
+                          <th ></th>
+                          <th ></th>
+                          
+                          <th ></th>
+                          <th ></th>
+
+                          <th ></th>
+                          <th ></th>
+                      </tr> 
+
+                      @foreach($finale as $data)
+                        @if($data->d2d != null )
+                      <tr > 
+                          <td colspan="4"  > {{$data->d2d}} </td>
+                          <td > {{$data->omp_pms}} </td>
+                          <td >{{$data->company_pms}} </td>
+
+                          <td >{{$data->omp_ago}}  </td>
+                          <td > {{$data->company_ago}} </td>
+                          <td >{{$data->omp_dpk}} </td>
+                          <td >{{$data->company_dpk}} </td>
+                          <td >{{$data->omp_lube}} </td>
+                          <td > {{$data->company_lube}} </td>
+
+                          <td > {{$data->omp_lpg}} </td>
+                          <td > {{$data->company_lpg}} </td>
+                          
+                         
+                      </tr>    
+                      @endif
+                      @endforeach               
+                      
+
+                  </table>
+                </div>
     <br >
 
 </div>

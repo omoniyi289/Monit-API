@@ -25,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ROPSGenerated' => [
           'App\Listeners\SendROPSMail'
         ],
+         'App\Events\COPSGenerated' => [
+          'App\Listeners\SendCOPSMail'
+        ],
         'App\Events\VeloxPaymentRequestGenerated' => [
           'App\Listeners\SendVeloxPaymentApprovalMail'
         ],
