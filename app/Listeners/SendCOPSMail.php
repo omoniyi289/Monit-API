@@ -64,9 +64,9 @@ class SendCOPSMail implements ShouldQueue
                   ]; 
 
                if(isset($value[0]['email'])){
-                 //   Mail::to([$value[0]['email'], "support@e360africa.com", "omoniyi.o@e360africa.com"])->send(new COPSReportMail($mail_data, $value));
+                    Mail::to([$value[0]['email'], "support@e360africa.com", "omoniyi.o@e360africa.com"])->send(new COPSReportMail($mail_data, $value));
                 }
-              Mail::to("omoniyi.o@e360africa.com")->send(new COPSReportMail($mail_data, $value ));
+                //Mail::to("omoniyi.o@e360africa.com")->send(new COPSReportMail($mail_data, $value ));
               }
     }
 
