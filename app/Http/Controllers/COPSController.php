@@ -27,6 +27,9 @@ class COPSController extends BaseController
 
         $data = $this->cops_service->create($cops_request);
         //return $this->response(0, 8000,$data,null,400);
+        if(count($data) > 0){
+             return $this->response(0, 8000, "Oops! No records saved, please check inputs",null,400);
+          }
         return $this->response(1, 8000, "cops successfully created", $data);
     }
 

@@ -28,6 +28,7 @@ class COPSService
     public function create(array $data) {
         $this->database->beginTransaction();
         $inserted_COPS = '';
+        $survey = '';
         try{
                // return $data;
                 $survey_date = date_format(date_create($data['survey_date']),"Y-m-d");
@@ -141,7 +142,7 @@ class COPSService
             throw $exception;
         }
         $this->database->commit();
-        return $inserted_COPS;
+        return $survey;
     }
 
     
