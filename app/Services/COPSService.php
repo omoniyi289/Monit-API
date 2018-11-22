@@ -124,12 +124,14 @@ class COPSService
 
                 $survey =  COPS::whereDate('survey_date', $survey_date)->with('uploader:id,fullname')->with('station:id,name')->get();
                 ///generate pdf and send report
+                if( count($survey) > 0 ){
                 $mail_data = [
                    'receiver_data'=> $survey,
                     'date' => $survey_date
                 ];
 
                 event(new COPSGenerated($mail_data));
+                  }
               }
 
         catch (Exception $exception){
