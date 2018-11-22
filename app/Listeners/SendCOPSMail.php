@@ -44,7 +44,7 @@ class SendCOPSMail implements ShouldQueue
             $station_id = $data[0]->station['id'];
             SendCOPSMail::$full_data = $data;
             $finale= SendCOPSMail::$full_data;
-            $pdf = PDF::setPaper('a4', 'landscape');
+            $pdf = PDF::setPaper('a4', 'portrait');
               ///delete previous
             Storage::delete('app/cops_reports/'.$name.'.pdf');
                //store new
@@ -64,9 +64,9 @@ class SendCOPSMail implements ShouldQueue
                   ]; 
 
                if(isset($value[0]['email'])){
-                   // Mail::to([$value[0]['email'], "support@e360africa.com"])->send(new COPSReportMail($mail_data, $value));
+                    Mail::to([$value[0]['email'], "support@e360africa.com"])->send(new COPSReportMail($mail_data, $value));
                 }
-              Mail::to("omoniyi.o@e360africa.com")->send(new COPSReportMail($mail_data, $value ));
+              //Mail::to("omoniyi.o@e360africa.com")->send(new COPSReportMail($mail_data, $value ));
               }
     }
 

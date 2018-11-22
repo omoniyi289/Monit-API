@@ -14,11 +14,10 @@
 <div class="col-sm-12">
      <div class="col-sm-12 text-center" style="background-color: ">
         <br>
-         <b style="font-size: 18px">E360 COMMERCIAL ONLINE PRICING REPORT</b><br><br>
+         <b style="font-size: 12px">E360 COMMERCIAL ONLINE PRICING REPORT</b><br><br>
           </div>
-    <br>
-    <div class="col-sm-12" >
-            <table class="table  table-striped" style="font-size: 15px">
+     <div class="col-sm-12" >
+            <table class="table  table-striped" style="font-size: 10px">
                 <tr>
                     <th>DATE IN VIEW</th>
                     <th>STATION NAME</th>
@@ -36,9 +35,8 @@
     </div>
     
     <div class="col-sm-12" >
-                  <br><br>
-                  <table class="table  table-striped" >
-                      <tr   style="font-size: 20px;">
+                   <table class="table  table-striped" >
+                      <tr   style="font-size: 10px;">
                           <th colspan="4" style="text-align: left; background-color: #FF8000" >B2B</th>
                           <th colspan="2" style="text-align: center; background-color: #3399FF" >PMS</th>
                           <th colspan="2" class="ago" style="text-align: center ;background-color: #99FF99" >AGO</th>
@@ -65,7 +63,7 @@
                       </tr> 
 
                       <tr >
-                          <th colspan="4"  style=" background-color: #E0E0E0">LOCATION</th>
+                          <th colspan="4"  style="font-size: 8px; background-color: #E0E0E0">LOCATION</th>
                           
                           <th ></th>
                           <th ></th>
@@ -104,7 +102,7 @@
                       @endforeach
 
                       <tr >
-                          <th colspan="4" style="font-size: 10px; background-color: #FF9999" >COMPETITORS PRICE</th>
+                          <th colspan="4" style="font-size: 8px; background-color: #FF9999" >COMPETITORS PRICE</th>
                           
                           <th ></th>
                           
@@ -144,7 +142,7 @@
                       @endforeach  
 
                       <tr >
-                          <th colspan="4" style="background-color: #FF8000" >D2D</th>
+                          <th colspan="4" style="font-size: 8px; background-color: #FF8000" >D2D</th>
                         
                           <th ></th>
                           <th ></th>
