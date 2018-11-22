@@ -59,8 +59,9 @@ class COPSService
                isset($data['competitor_company_lube'][$i]) ? $competitor_company_lube = $data['competitor_company_lube'][$i] : $competitor_company_lube = '';
 
                isset($data['competitor_company_lpg'][$i]) ? $competitor_company_lpg = $data['competitor_company_lpg'][$i] : $competitor_company_lpg = '';
-
+               if($competitor_name != ''){
                COPS::create(['company_id' => $company_id, 'station_id' => $station_id, 'uploaded_by' => $uploaded_by, 'survey_date' => $survey_date, 'competitor' => $competitor_name, 'omp_pms' => $competitor_omp_pms , 'company_pms' => $competitor_company_pms , 'omp_ago' => $competitor_omp_ago , 'company_ago' => $competitor_company_ago, 'omp_dpk' => $competitor_omp_dpk, 'company_dpk' => $competitor_company_dpk, 'omp_lube' => $competitor_omp_lube , 'company_lube' => $competitor_company_lube, 'omp_lpg' => $competitor_omp_lpg, 'company_lpg' => $competitor_company_lpg]);
+                }
 
              }
 
@@ -87,9 +88,9 @@ class COPSService
                isset($data['d2d_company_lube'][$i]) ? $d2d_company_lube = $data['d2d_company_lube'][$i] : $d2d_company_lube = '';
 
                isset($data['d2d_company_lpg'][$i]) ? $d2d_company_lpg = $data['d2d_company_lpg'][$i] : $d2d_company_lpg = '';
-
+                if($d2d_name != ''){
                COPS::create(['company_id' => $company_id, 'station_id' => $station_id, 'uploaded_by' => $uploaded_by, 'survey_date' => $survey_date, 'd2d' => $d2d_name, 'omp_pms' => $d2d_omp_pms , 'company_pms' => $d2d_company_pms , 'omp_ago' => $d2d_omp_ago , 'company_ago' => $d2d_company_ago, 'omp_dpk' => $d2d_omp_dpk, 'company_dpk' => $d2d_company_dpk, 'omp_lube' => $d2d_omp_lube , 'company_lube' => $d2d_company_lube, 'omp_lpg' => $d2d_omp_lpg, 'company_lpg' => $d2d_company_lpg]);
-
+                }
              }
 
              for($i= 0; $i < $data['location_frequency']; $i++) {
@@ -115,9 +116,9 @@ class COPSService
                isset($data['location_company_lube'][$i]) ? $location_company_lube = $data['location_company_lube'][$i] : $location_company_lube = '';
 
                isset($data['location_company_lpg'][$i]) ? $location_company_lpg = $data['location_company_lpg'][$i] : $location_company_lpg = '';
-
+                if($location_name != ''){
                COPS::create(['company_id' => $company_id, 'station_id' => $station_id, 'uploaded_by' => $uploaded_by, 'survey_date' => $survey_date, 'location' => $location_name, 'omp_pms' => $location_omp_pms , 'company_pms' => $location_company_pms , 'omp_ago' => $location_omp_ago , 'company_ago' => $location_company_ago, 'omp_dpk' => $location_omp_dpk, 'company_dpk' => $location_company_dpk, 'omp_lube' => $location_omp_lube , 'company_lube' => $location_company_lube, 'omp_lpg' => $location_omp_lpg, 'company_lpg' => $location_company_lpg]);
-
+                }
              }
 
 
