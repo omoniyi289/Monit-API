@@ -7,7 +7,7 @@
 
 <div>
     Dear {{$firstname}}, <br><br>Please find attached the Commercial Online Pricing Report
- for {{$station}} on {{$date}}.
+ for {{$company}} on {{$date}}.
     <br><br>Regards
 
     <br/>

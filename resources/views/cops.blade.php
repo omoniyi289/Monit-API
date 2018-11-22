@@ -20,14 +20,14 @@
             <table class="table  table-striped" style="font-size: 10px">
                 <tr>
                     <th>DATE IN VIEW</th>
-                    <th>STATION NAME</th>
+                    <th>COMPANY NAME</th>
                     <th>SURVEY SUBMITTED BY</th>
                      <th>SUBMITTED ON</th>
                 </tr>
 
                 <tr >
                     <th>{{$finale[0]->survey_date}}</th>                  
-                    <th>{{$finale[0]->station['name']}}</th>
+                    <th>{{$finale[0]->company['name']}}</th>
                     <th>{{$finale[0]->uploader['fullname']}}</th>
                     <th>{{$finale[0]->created_at}} </th>
                 </tr>

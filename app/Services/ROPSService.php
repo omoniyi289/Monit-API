@@ -48,9 +48,9 @@ class ROPSService
         return $inserted_rops;
     }
 
-    public function get_by_date($date){
-        return ROPS::where('survey_date',$date)->get();
-    }
+    // public function get_by_date($date){
+    //     return ROPS::where('survey_date',$date)->get();
+    // }
   
       public function get_by_params($params)
     {

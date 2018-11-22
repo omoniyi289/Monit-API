@@ -44,15 +44,15 @@ class COPSReportMail extends Mailable
             ->with([
                  'date' => $date,
                  'firstname' => $this->pdf[0]['firstname'],
-                 'station' => $this->pdf[0]['station']
+                 'company' => $this->pdf[0]['companyname']
 
             ]);
    
            foreach ($this->pdf as $value) {
-            $file = storage_path('app/cops_reports/'.$value['station'].'.pdf');
+            $file = storage_path('app/cops_reports/'.$value['companyname'].'.pdf');
 
             $mail_build = $mail_build->attach($file, [
-                'as' => $value['station'].'_'.$date.'.pdf',
+                'as' => $value['companyname'].'_'.$date.'.pdf',
                 'mime' => 'application/pdf'
             ]);
         }
