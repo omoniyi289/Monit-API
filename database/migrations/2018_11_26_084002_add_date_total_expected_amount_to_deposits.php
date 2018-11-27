@@ -18,7 +18,6 @@ class AddDateTotalExpectedAmountToDeposits extends Migration
             $table->string('date_total_expected_amount')->nullable();   
         });
     }
-
     /**
      * Reverse the migrations.
      *
