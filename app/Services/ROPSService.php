@@ -31,7 +31,7 @@ class ROPSService
                 $data['survey_date']= date_format(date_create($data['survey_date']),"Y-m-d");
                 //date_format(date_create($params['selected_date']),"Y-m-d")
                 $survey = ROPS::create($data);
-                $inserted_rops =  ROPS::where('id', $survey['id'])->with('uploader:fullname')->with('station:name')->get()->first();
+                $inserted_rops =  ROPS::where('id', $survey['id'])->with('uploader:id,fullname')->with('station:id,name')->get()->first();
                 ///generate pdf and send report
                 $mail_data = [
                    'receiver_data'=> $survey,
