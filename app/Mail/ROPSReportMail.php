@@ -44,15 +44,15 @@ class ROPSReportMail extends Mailable
             ->with([
                  'date' => $date,
                  'firstname' => $this->pdf[0]['firstname'],
-                 'companyname' => $this->pdf[0]['companyname']
+                 'station' => $this->pdf[0]['station']
 
             ]);
    
            foreach ($this->pdf as $value) {
-            $file = storage_path('app/rops_reports/'.$value['companyname'].'.pdf');
+            $file = storage_path('app/rops_reports/'.$value['station'].'.pdf');
 
             $mail_build = $mail_build->attach($file, [
-                'as' => $value['companyname'].'_'.$date.'.pdf',
+                'as' => $value['station'].'_'.$date.'.pdf',
                 'mime' => 'application/pdf'
             ]);
         }
