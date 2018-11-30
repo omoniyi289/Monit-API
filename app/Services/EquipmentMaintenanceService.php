@@ -367,6 +367,9 @@ class EquipmentMaintenanceService
                $combined_pump['past_log']['D_maintenenance_date']  = '';
                $combined_pump['past_log']['MD_maintenenance_date']  = '';
                $combined_pump['past_log']['MMD_maintenenance_date']  = '';
+               $combined_pump['past_log']['D_payment_status']  = '';
+               $combined_pump['past_log']['MD_payment_status']  = '';
+               $combined_pump['past_log']['MMD_payment_status']  = '';
                
                $pump_split_array =  explode(" ",  $value['nozzle_code']);
 
