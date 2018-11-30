@@ -183,6 +183,9 @@ class EquipmentMaintenanceService
                $combined_pump['past_log']['D_maintenenance_date']  = '';
                $combined_pump['past_log']['MD_maintenenance_date']  = '';
                $combined_pump['past_log']['MMD_maintenenance_date']  = '';
+               $combined_pump['past_log']['D_payment_status']  = '';
+               $combined_pump['past_log']['MD_payment_status']  = '';
+               $combined_pump['past_log']['MMD_payment_status']  = '';
                
                $pump_split_array =  explode(" ",  $value['pump_nozzle_code']);
 
@@ -276,6 +279,9 @@ class EquipmentMaintenanceService
                $combined_pump['past_log']['D_maintenenance_date']  = '';
                $combined_pump['past_log']['MD_maintenenance_date']  = '';
                $combined_pump['past_log']['MMD_maintenenance_date']  = '';
+               $combined_pump['past_log']['D_payment_status']  = '';
+               $combined_pump['past_log']['MD_payment_status']  = '';
+               $combined_pump['past_log']['MMD_payment_status']  = '';
                
                $pump_split_array =  explode(" ",  $value['nozzle_code']);
 
@@ -463,15 +469,15 @@ class EquipmentMaintenanceService
                     $combined_pump_nozzle_code = $value['combined_pump_nozzle_code'];
                     $D_issue_date = $value['D_issue_date'] == null ? '' : date_format(date_create($value['D_issue_date']),"Y-m-d").' 00:00:00';      
                     $D_invoice_number = $value['D_invoice_number'];
-                    $D_payment_status = $value['D_payment_status'];
+                    $D_payment_status =  isset( $value['D_payment_status']) ?  $value['D_payment_status'] : '';
                     $D_maintenenance_date = $value['D_maintenenance_date'];
                     $MD_issue_date = $value['MD_issue_date'] == null ? '' : date_format(date_create($value['MD_issue_date']),"Y-m-d").' 00:00:00';
                     $MD_invoice_number = $value['MD_invoice_number'];
-                    $MD_payment_status = $value['MD_payment_status'];
+                    $MD_payment_status = isset( $value['MD_payment_status']) ?  $value['MD_payment_status'] : '';
                     $MD_maintenenance_date = $value['MD_maintenenance_date'];
                     $MMD_issue_date = $value['MMD_issue_date'] == null ? '' : date_format(date_create($value['MMD_issue_date']),"Y-m-d").' 00:00:00';
                     $MMD_invoice_number = $value['MMD_invoice_number'];
-                    $MMD_payment_status = $value['MMD_payment_status'];
+                    $MMD_payment_status =  isset( $value['MMD_payment_status']) ?  $value['MMD_payment_status'] : '';
                     $MMD_maintenenance_date = $value['MMD_maintenenance_date'];
                     $note = $value['note'];
 
