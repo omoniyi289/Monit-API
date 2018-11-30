@@ -54,7 +54,7 @@ class DepositsService
             $reading_date = $data['reading_date'];
             $created_by = $data['created_by'];
             $note = $data['note'];
-
+            $date_total_expected_amount = $data['expected_amount'];
            
              for($i= 0; $i < $data['pos_frequency']; $i++) {
                isset($data['pos_amount'][$i]) ? $pos_amount = $data['pos_amount'][$i] : $pos_amount = 0;
@@ -62,7 +62,7 @@ class DepositsService
                isset($data['pos_receipt_range'][$i]) ? $pos_receipt_range = $data['pos_receipt_range'][$i] : $pos_receipt_range = '';
 
                
-               Deposits::create(['company_id' => $company_id, 'station_id' => $station_id, 'amount' => $pos_amount, 'teller_date' => $teller_date, 'reading_date' => $reading_date, 'pos_receipt_range' => $pos_receipt_range, 'bank' => $pos_bank , 'payment_type' => 'POS Payment', 'created_by' => $created_by, 'note'=> $note]);
+               Deposits::create(['company_id' => $company_id, 'station_id' => $station_id, 'amount' => $pos_amount, 'teller_date' => $teller_date, 'reading_date' => $reading_date, 'pos_receipt_range' => $pos_receipt_range, 'bank' => $pos_bank , 'payment_type' => 'POS Payment', 'created_by' => $created_by, 'note'=> $note, 'date_total_expected_amount' => $date_total_expected_amount ]);
              }
              for($i= 0; $i < $data['cash_deposit_frequency']; $i++) {
                isset($data['deposit_amount'][$i]) ? $deposit_amount = $data['deposit_amount'][$i] : $deposit_amount = 0;
@@ -74,7 +74,7 @@ class DepositsService
                isset($data['account_number'][$i]) ? $account_number = $data['account_number'][$i] : $account_number = '';
 
 
-               Deposits::create(['company_id' => $company_id, 'station_id' => $station_id, 'amount' => $deposit_amount, 'teller_date' => $teller_date, 'reading_date' => $reading_date, 'teller_number' => $teller_number , 'account_number' => $account_number , 'bank' => $cash_deposit_bank , 'payment_type' => 'Cash Deposit', 'created_by' => $created_by, 'note' => $note]);
+               Deposits::create(['company_id' => $company_id, 'station_id' => $station_id, 'amount' => $deposit_amount, 'teller_date' => $teller_date, 'reading_date' => $reading_date, 'teller_number' => $teller_number , 'account_number' => $account_number , 'bank' => $cash_deposit_bank , 'payment_type' => 'Cash Deposit', 'created_by' => $created_by, 'note' => $note, 'date_total_expected_amount' => $date_total_expected_amount]);
 
              }
             

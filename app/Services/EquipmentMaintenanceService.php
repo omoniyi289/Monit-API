@@ -143,9 +143,27 @@ class EquipmentMaintenanceService
 
           public function get_pump_maintenance_log($params)
     {   
+       
+      if(isset($params['company_id']))
+        {
+          $company_id = $params['company_id'];
+          $result = PumpMaintenanceLog::with('station:id,name,company_id')->where('company_id',$company_id);
 
-       $result = PumpMaintenanceLog::with('station:id,name,company_id')->where('station_id',$params['station_id']);
-        $result->orderBy('id', 'desc');
+        }
+      else if( isset($params['station_id']) ){
+       $station_ids = explode(",", $params['station_id']);
+       $result = PumpMaintenanceLog::with('station:id,name,company_id')->whereIn('station_id',$station_ids);
+         }
+
+      //  if( $params['payment_status'] != ''){
+
+      //   $result->where(function($q) use ($params){
+      //     $q->where('D_payment_status', $params['payment_status'])
+      //       ->orWhere('MD_payment_status', $params['payment_status'])->orWhere('MMD_payment_status', $params['payment_status']);
+      // })
+      //->get();
+       // }
+
         return $result->get();      
     }
        public function combine_pump_totalizer_readings_for_maintenance_query($pumps)
@@ -442,12 +460,15 @@ class EquipmentMaintenanceService
                     $combined_pump_nozzle_code = $value['combined_pump_nozzle_code'];
                     $D_issue_date = $value['D_issue_date'] == null ? '' : date_format(date_create($value['D_issue_date']),"Y-m-d").' 00:00:00';      
                     $D_invoice_number = $value['D_invoice_number'];
+                    $D_payment_status = $value['D_payment_status'];
                     $D_maintenenance_date = $value['D_maintenenance_date'];
                     $MD_issue_date = $value['MD_issue_date'] == null ? '' : date_format(date_create($value['MD_issue_date']),"Y-m-d").' 00:00:00';
                     $MD_invoice_number = $value['MD_invoice_number'];
+                    $MD_payment_status = $value['MD_payment_status'];
                     $MD_maintenenance_date = $value['MD_maintenenance_date'];
                     $MMD_issue_date = $value['MMD_issue_date'] == null ? '' : date_format(date_create($value['MMD_issue_date']),"Y-m-d").' 00:00:00';
                     $MMD_invoice_number = $value['MMD_invoice_number'];
+                    $MMD_payment_status = $value['MMD_payment_status'];
                     $MMD_maintenenance_date = $value['MMD_maintenenance_date'];
                     $note = $value['note'];
 
@@ -459,12 +480,11 @@ class EquipmentMaintenanceService
                     $pump_log = PumpMaintenanceLog::where('station_id', $station_id)->where('combined_pump_nozzle_code', $combined_pump_nozzle_code)->get()->first();
 
                     if(count($pump_log) ==1 ){
-                        $pump =  PumpMaintenanceLog::where('id', $pump_log['id'])->update(['company_id' => $company_id, 'station_id' => $station_id,'combined_pump_nozzle_code' => $combined_pump_nozzle_code,'combined_totalizer_reading' => $combined_totalizer_reading, 'D_issue_date' => $D_issue_date, 'MD_issue_date' => $MD_issue_date,'MMD_issue_date' => $MMD_issue_date, 'D_invoice_number' => $D_invoice_number, 'MD_invoice_number' => $MD_invoice_number,'MMD_invoice_number' => $MMD_invoice_number,'totalizer_1_reading' =>$totalizer_1_reading, 'totalizer_2_reading' =>$totalizer_2_reading, 'pump_1_nozzle_code' =>$pump_1_nozzle_code, 'pump_2_nozzle_code' =>$pump_2_nozzle_code, 'product'=> $product,
-                            'note'=>$note,'created_by'=>$created_by]);
+                        $pump =  PumpMaintenanceLog::where('id', $pump_log['id'])->update(['company_id' => $company_id, 'station_id' => $station_id,'combined_pump_nozzle_code' => $combined_pump_nozzle_code,'combined_totalizer_reading' => $combined_totalizer_reading, 'D_issue_date' => $D_issue_date, 'MD_issue_date' => $MD_issue_date,'MMD_issue_date' => $MMD_issue_date, 'D_invoice_number' => $D_invoice_number, 'MD_invoice_number' => $MD_invoice_number,'MMD_invoice_number' => $MMD_invoice_number,'totalizer_1_reading' =>$totalizer_1_reading, 'totalizer_2_reading' =>$totalizer_2_reading, 'pump_1_nozzle_code' =>$pump_1_nozzle_code, 'pump_2_nozzle_code' =>$pump_2_nozzle_code, 'product'=> $product,'note'=>$note,'created_by'=>$created_by ,'D_payment_status' => $D_payment_status,'MD_payment_status' => $MD_payment_status,'MMD_payment_status' => $MMD_payment_status ]);
                     }
                     else{
                         $pump =  PumpMaintenanceLog::create(['company_id' => $company_id, 'station_id' => $station_id,'combined_pump_nozzle_code' => $combined_pump_nozzle_code,'combined_totalizer_reading' => $combined_totalizer_reading, 'D_issue_date' => $D_issue_date, 'MD_issue_date' => $MD_issue_date,'MMD_issue_date' => $MMD_issue_date, 'D_invoice_number' => $D_invoice_number, 'MD_invoice_number' => $MD_invoice_number,'MMD_invoice_number' => $MMD_invoice_number,'totalizer_1_reading' =>$totalizer_1_reading, 'totalizer_2_reading' =>$totalizer_2_reading, 'pump_1_nozzle_code' =>$pump_1_nozzle_code, 'pump_2_nozzle_code' =>$pump_2_nozzle_code, 'product'=> $product,
-                            'note'=>$note,'created_by'=>$created_by]);
+                            'note'=>$note,'created_by'=>$created_by ,'D_payment_status' => $D_payment_status,'MD_payment_status' => $MD_payment_status,'MMD_payment_status' => $MMD_payment_status]);
                         }
 
                    //keep a log here as well for reference

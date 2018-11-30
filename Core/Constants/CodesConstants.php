@@ -25,6 +25,7 @@ class CodesConstants
             8011 => 'password must be more than six characters',
             8012 => 'this role already exist',
             8013 => 'price already set, make a change request instead',
+            8014 => 'this region already exist',
         ];
         return $code_array;
     }

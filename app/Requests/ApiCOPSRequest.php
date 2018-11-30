@@ -18,7 +18,6 @@ class ApiCOPSRequest extends APIRequest
     public function rules(){
         return [
             'cops' => 'array|required',
-            'cops.station_id' => 'required|integer',
             'cops.company_id' => 'required|integer',
             'cops.uploaded_by' => 'required|integer',
             'cops.survey_date' => 'required|string'

@@ -26,7 +26,7 @@ class RegionController extends BaseController
         $region_request = $request->get('region',[]);
         $region_name_exit = $this->region_service->get_region_by_name($region_request['name'], $region_request['company_id']);
         if (count($region_name_exit) == 1){
-            return $this->response(0, 8012, null, null, 400);
+            return $this->response(0, 8014, null, null, 400);
         }
         $data = $this->region_service->create($region_request);
         return $this->response(1, 8000, "region successfully created", $data, 201);
