@@ -421,6 +421,16 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('/v1/cops', 'COPSController@create');
     Route::patch('/v1/cops', 'COPSController@update');
 
+    /*
+     * ROLE ENDPOINT
+     * */
+    Route::get('/v1/cops_lcd_config', 'COPSlcdconfigController@get_all');
+    Route::post('/v1/cops_lcd_config', 'COPSlcdconfigController@create');
+    Route::get('/v1/cops_lcd_config/{rol_id}', 'COPSlcdconfigController@get_by_id');
+    Route::get('/v1/cops_lcd_config/by_company/{company}', 'COPSlcdconfigController@get_by_company_id');
+    Route::patch('/v1/cops_lcd_config/{config_id}', 'COPSlcdconfigController@update');
+    Route::delete('/v1/cops_lcd_config/{config_id}', 'COPSlcdconfigController@delete');
+
 /*
      *Velox Customers ENDPOINT
      * */
