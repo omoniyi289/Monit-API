@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
      * */
 Route::get('/v1/velox_product_prices', 'VeloxProductPriceController@get_by_params');
 Route::get('/v1/velox_pumps', 'VeloxPumpController@get_by_params');
+Route::get('/v1/velox_fcc_transactions', 'FCCTransactionController@get_by_params');
 
 
 
