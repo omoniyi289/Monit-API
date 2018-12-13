@@ -51,6 +51,6 @@ class FCCTransactionService
         $master_seq_no = $params['master_seq_no'];
         $pump_id = $params['pump_id'];
 
-        return FCCTransaction::where('master_seq_no', $master_seq_no)->where('pumpid', $pump_id)->where('stationid', $oem_station_id)->get()->first();
+        return FCCTransaction::where('masterseq', $master_seq_no)->where('pumpid', $pump_id)->where('stationid', $oem_station_id)->get()->first();
     }
 }
