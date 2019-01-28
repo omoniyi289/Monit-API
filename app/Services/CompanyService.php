@@ -10,6 +10,8 @@ use App\RolePermission;
 use App\Models\CompanyPermission;
 use App\Models\CompanyNotification;
 use App\Models\UserNotifications;
+use App\User;
+
 
 class CompanyService
 {
@@ -137,9 +139,10 @@ class CompanyService
         
         return Company::where('user_id', $user_id)->get();
     }
-    public function delete($user_id, array $options = [])
+    public function delete($company_id, array $options = [])
     {
-        return  Company::where('id',$user_id)->delete();
+        User::where('company_id', $company_id)->delete();
+        return  Company::where('id',$company_id)->delete();
     }
     public function get_company_by_reg_no($reg_no)
     {

@@ -9,7 +9,7 @@ return [
                 ],
 
                 "cash_control" => [
-                    "name" => "Cash Control Report",
+                    "name" => "Cash Control League Table Report",
                     "UI_slug" => "CCRe"
                 ],
 

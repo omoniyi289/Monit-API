@@ -35,7 +35,7 @@ class SendCOPSMail implements ShouldQueue
      */
     public function handle(COPSGenerated $event)
     {
-        
+            $send_once = true;
             $emailData = $event->getData();
             $data = $emailData["receiver_data"];
             $date = $emailData["date"];
@@ -51,23 +51,40 @@ class SendCOPSMail implements ShouldQueue
             $pdf->loadView('cops',  compact('finale'))->save(storage_path('app/cops_reports/'.$name.'.pdf'));
             SendCOPSMail::$final_pdfs[$name] =  'app/cops_reports/'.$name.'.pdf';
 
-            //send mail
-            $users_in_stations_details =  UsersInStations_Details::where('companyid', $company_id)->where('hasaccess', 1)->where('notification_module', 'Commercial Online Pricing Report')->where('NotificationAllowed', 1)->distinct()->get(['firstname','companyname', 'station_name', 'email']);
-              
-            $grouped_users= array();
-            $grouped_users= $this->sortbyUserInStation($users_in_stations_details);
-              
-            foreach ($grouped_users as $value) {
-                 $mail_data = [
-                   'receiver_data'=> $value,
-                    'date' => $date
-                  ]; 
 
-               if(isset($value[0]['email'])){
-                    Mail::to([$value[0]['email'], "support@e360africa.com", "omoniyi.o@e360africa.com"])->send(new COPSReportMail($mail_data, $value));
+            if($send_once){
+              
+              $receiver_data = array(['companyname' => $name, 'pdf' => SendCOPSMail::$final_pdfs[$name]]);
+              $mail_data = ['receiver_data'=>  $receiver_data,'date' => $date];
+
+              Mail::to(["omoniyi.o@e360africa.com","salesandmarketing@enyoretail.com"
+                            ,"leads@enyoretail.com","supply@enyoretail.com","ops@enyoretail.com"])->send(new COPSReportMail($mail_data, $receiver_data));          
+              
+              $send_once = false;
+
                 }
-               // Mail::to("omoniyi.o@e360africa.com")->send(new COPSReportMail($mail_data, $value ));
-              }
+
+            //send mail
+            // $users_in_stations_details =  UsersInStations_Details::where('companyid', $company_id)->where('hasaccess', 1)->where('notification_module', 'Commercial Online Pricing Report')->where('NotificationAllowed', 1)->distinct()->get(['firstname','companyname', 'station_name', 'email']);
+              
+            // $grouped_users= array();
+            // $grouped_users= $this->sortbyUserInStation($users_in_stations_details);
+              
+            // foreach ($grouped_users as $value) {
+            //      $mail_data = [
+            //        'receiver_data'=> $value,
+            //         'date' => $date
+            //       ]; 
+
+            //    if(isset($value[0]['email'])){
+
+            //        Mail::to([$value[0]['email'], "support@e360africa.com"])->send(new COPSReportMail($mail_data, $value));
+            //     }             
+            //   }
+
+              
+
+
     }
 
     private function sortbyUserInStation($users_in_stations_details){

@@ -41,8 +41,8 @@
                           <th colspan="2" style="text-align: center; background-color: #3399FF" >PMS</th>
                           <th colspan="2" class="ago" style="text-align: center ;background-color: #99FF99" >AGO</th>
                           <th colspan="2" class="dpk" style="text-align: center; background-color: #FFFF00">DPK</th>
-                          <th colspan="2"  style="text-align: center; background-color: #FF0000" >LUBES</th>
-                          <th colspan="2"  style="text-align: center; background-color: #808080" >LPG</th>
+                          <!-- <th colspan="2"  style="text-align: center; background-color: #FF0000" >LUBES</th> -->
+                          <th colspan="2"  style="text-align: center; background-color: #808080" >LPG(12.5)KG</th>
                       </tr>
                       <tr style="text-align: center">
                           <th colspan="4" ></th>
@@ -55,8 +55,8 @@
                           <th class="dpk">OMP</th>
                           <th class="dpk">COMPANY</th>
                           
-                          <th >OMP</th>
-                          <th >COMPANY</th>
+                         <!--  <th >OMP</th>
+                          <th >COMPANY</th> -->
 
                           <th >OMP</th>
                           <th >COMPANY</th>
@@ -73,8 +73,8 @@
                           <th ></th>
                           <th ></th>
                           
-                          <th ></th>
-                          <th ></th>
+                          <!-- <th ></th>
+                          <th ></th> -->
 
                           <th ></th>
                           <th ></th>
@@ -88,10 +88,12 @@
 
                           <td >{{$data->omp_ago}}  </td>
                           <td > {{$data->company_ago}} </td>
+                          
                           <td >{{$data->omp_dpk}} </td>
                           <td >{{$data->company_dpk}} </td>
-                          <td >{{$data->omp_lube}} </td>
-                          <td > {{$data->company_lube}} </td>
+                          
+                          <!-- <td >{{$data->omp_lube}} </td>
+                          <td > {{$data->company_lube}} </td> -->
 
                           <td > {{$data->omp_lpg}} </td>
                           <td > {{$data->company_lpg}} </td>
@@ -112,8 +114,8 @@
                           <th ></th>
                           <th ></th>
                           
-                          <th ></th>
-                          <th ></th>
+                          <!-- <th ></th>
+                          <th ></th> -->
 
                           <th ></th>
                           <th ></th>
@@ -128,11 +130,13 @@
 
                           <td >{{$data->omp_ago}}  </td>
                           <td > {{$data->company_ago}} </td>
+                          
                           <td >{{$data->omp_dpk}} </td>
                           <td >{{$data->company_dpk}} </td>
-                          <td >{{$data->omp_lube}} </td>
+                          
+                          <!-- <td >{{$data->omp_lube}} </td>
                           <td > {{$data->company_lube}} </td>
-
+ -->
                           <td > {{$data->omp_lpg}} </td>
                           <td > {{$data->company_lpg}} </td>
                           
@@ -152,9 +156,9 @@
                           <th ></th>
                           <th ></th>
                           
+                          <!-- <th ></th>
                           <th ></th>
-                          <th ></th>
-
+ -->
                           <th ></th>
                           <th ></th>
                       </tr> 
@@ -168,11 +172,13 @@
 
                           <td >{{$data->omp_ago}}  </td>
                           <td > {{$data->company_ago}} </td>
+                          
                           <td >{{$data->omp_dpk}} </td>
                           <td >{{$data->company_dpk}} </td>
-                          <td >{{$data->omp_lube}} </td>
+                          
+                          <!-- <td >{{$data->omp_lube}} </td>
                           <td > {{$data->company_lube}} </td>
-
+ -->
                           <td > {{$data->omp_lpg}} </td>
                           <td > {{$data->company_lpg}} </td>
                           

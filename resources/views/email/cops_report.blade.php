@@ -6,7 +6,7 @@
 <body>
 
 <div>
-    Dear {{$firstname}}, <br><br>Please find attached the Commercial Online Pricing Report
+    Hello, <br><br>Please find attached the Commercial Online Pricing Report
  for {{$company}} on {{$date}}.
     <br><br>Regards
 

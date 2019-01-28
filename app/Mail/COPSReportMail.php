@@ -43,7 +43,6 @@ class COPSReportMail extends Mailable
             ->subject($subject)
             ->with([
                  'date' => $date,
-                 'firstname' => $this->pdf[0]['firstname'],
                  'company' => $this->pdf[0]['companyname']
 
             ]);
